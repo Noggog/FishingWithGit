@@ -12,6 +12,7 @@ namespace FishingWithGit
     {
         const string TargetPath = "C:\\Program Files\\Git2\\";
         const string SourcePath = "C:\\Program Files\\Git\\";
+        static StringBuilder sb = new StringBuilder();
 
         static void Main(string[] args)
         {
@@ -75,24 +76,24 @@ namespace FishingWithGit
             catch (Exception ex)
             {
                 WriteLine("An error occurred!!!: " + ex.Message);
-                return;
             }
 
-        }
-
-        static void WriteLine(string line)
-        {
             try
             {
                 DirectoryInfo curDir = new DirectoryInfo(Directory.GetCurrentDirectory());
                 using (StreamWriter sw = File.AppendText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + $"/Temp/FishingWithGit-{curDir.Name}.log"))
                 {
-                    sw.WriteLine(line);
+                    sw.WriteLine(sb.ToString());
                 }
             }
             catch (Exception)
             {
             }
+        }
+
+        static void WriteLine(string line)
+        {
+            sb.AppendLine(line);
         }
     }
 }
