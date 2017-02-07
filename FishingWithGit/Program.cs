@@ -17,14 +17,16 @@ namespace FishingWithGit
         {
             try
             {
-                //System.Console.WriteLine("Fishing With Git, " + string.Join(" ", args));
-                //System.Console.WriteLine("Working directory " + Directory.GetCurrentDirectory());
-                //System.Console.WriteLine("Running exe from " + System.Reflection.Assembly.GetEntryAssembly().Location);
+                WriteLine("Arguments:");
+                WriteLine("  " + string.Join(" ", args));
+                WriteLine("");
+                WriteLine("Working directory " + Directory.GetCurrentDirectory());
+                WriteLine("Running exe from " + System.Reflection.Assembly.GetEntryAssembly().Location);
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 var trimIndex = System.Reflection.Assembly.GetEntryAssembly().Location.IndexOf(SourcePath);
                 var trim = System.Reflection.Assembly.GetEntryAssembly().Location.Substring(trimIndex + SourcePath.Length);
                 trim = TargetPath + trim;
-                //System.Console.WriteLine("Target exe " + trim);
+                WriteLine("Target exe " + trim);
                 startInfo.FileName = trim;
                 startInfo.RedirectStandardError = true;
                 startInfo.RedirectStandardInput = true;
@@ -34,32 +36,63 @@ namespace FishingWithGit
                 startInfo.UseShellExecute = false;
                 using (var process = Process.Start(startInfo))
                 {
+                    bool first = true;
                     using (StreamReader reader = process.StandardOutput)
                     {
                         string result = reader.ReadToEnd();
-                        Console.Write(result);
+                        if (!string.IsNullOrWhiteSpace(result))
+                        {
+                            if (first)
+                            {
+                                WriteLine("--------- Standard Output :");
+                                first = false;
+                            }
+                            Console.Write(result);
+                            WriteLine(result);
+                        }
                     }
+                    first = true;
                     using (StreamReader reader = process.StandardError)
                     {
                         string result = reader.ReadToEnd();
-                        Console.Write(result);
+                        if (!string.IsNullOrWhiteSpace(result))
+                        {
+                            if (first)
+                            {
+                                WriteLine("--------- Standard Error :");
+                                first = false;
+                            }
+                            Console.Error.Write(result);
+                            WriteLine(result);
+                        }
                     }
                     process.WaitForExit();
-                    //System.Console.WriteLine(process.ExitCode);
+                    WriteLine("Exit Code: " + process.ExitCode);
                 }
-                if (startInfo.Arguments.Contains("checkout"))
-                {
-                    System.Console.WriteLine("Fishing!");
-                }
-                //System.Console.WriteLine("Fishing With Git Done. ");
+                WriteLine("--------------------------------------------------------------------------------------------------------- Fishing With Git call done.");
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine("An error occurred!!!: " + ex.Message);
+                WriteLine("An error occurred!!!: " + ex.Message);
                 return;
             }
 
+        }
+
+        static void WriteLine(string line)
+        {
+            try
+            {
+                DirectoryInfo curDir = new DirectoryInfo(Directory.GetCurrentDirectory());
+                using (StreamWriter sw = File.AppendText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + $"/Temp/FishingWithGit-{curDir.Name}.log"))
+                {
+                    sw.WriteLine(line);
+                }
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }
