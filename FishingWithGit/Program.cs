@@ -13,17 +13,24 @@ namespace FishingWithGit
         const string TargetPath = "C:\\Program Files\\Git2\\";
         const string SourcePath = "C:\\Program Files\\Git\\";
         static StringBuilder sb = new StringBuilder();
+        static bool shouldLog;
 
         static void Main(string[] args)
         {
             try
             {
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.Arguments = string.Join(" ", args);
+                WriteLine(DateTime.Now.ToString());
                 WriteLine("Arguments:");
-                WriteLine("  " + string.Join(" ", args));
+                WriteLine($"  {startInfo.Arguments}");
+                WriteLine("");
+                WriteLine("Arguments going in:");
+                startInfo.Arguments = ProcessCommand(startInfo.Arguments);
+                WriteLine($"  {startInfo.Arguments}");
                 WriteLine("");
                 WriteLine("Working directory " + Directory.GetCurrentDirectory());
                 WriteLine("Running exe from " + System.Reflection.Assembly.GetEntryAssembly().Location);
-                ProcessStartInfo startInfo = new ProcessStartInfo();
                 var trimIndex = System.Reflection.Assembly.GetEntryAssembly().Location.IndexOf(SourcePath);
                 var trim = System.Reflection.Assembly.GetEntryAssembly().Location.Substring(trimIndex + SourcePath.Length);
                 trim = TargetPath + trim;
@@ -33,7 +40,6 @@ namespace FishingWithGit
                 startInfo.RedirectStandardInput = true;
                 startInfo.WorkingDirectory = Directory.GetCurrentDirectory();
                 startInfo.RedirectStandardOutput = true;
-                startInfo.Arguments = string.Join(" ", args);
                 startInfo.UseShellExecute = false;
                 using (var process = Process.Start(startInfo))
                 {
@@ -75,11 +81,13 @@ namespace FishingWithGit
             }
             catch (Exception ex)
             {
+                shouldLog = true;
                 WriteLine("An error occurred!!!: " + ex.Message);
             }
 
             try
             {
+                if (!shouldLog) return;
                 DirectoryInfo curDir = new DirectoryInfo(Directory.GetCurrentDirectory());
                 using (StreamWriter sw = File.AppendText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + $"/Temp/FishingWithGit-{curDir.Name}.log"))
                 {
@@ -89,6 +97,39 @@ namespace FishingWithGit
             catch (Exception)
             {
             }
+        }
+
+        static string ProcessCommand(string str)
+        {
+            return EnsureFormatIsQuoted(str);
+        }
+
+        static string EnsureFormatIsQuoted(string str)
+        {
+            var toReplace = " --format=";
+            int index = 0;
+            while ((index = str.IndexOf(toReplace, index)) != -1)
+            {
+                index += toReplace.Length;
+                bool insertQuote = str.Length > index + 1 && str[index + 1] != '\"';
+                if (!insertQuote)
+                {
+                    continue;
+                }
+                shouldLog = true;
+                WriteLine("Need to insert quotes for format at index " + index);
+                str = str.Insert(index, "\"");
+                var endIndex = str.IndexOf(" -", index);
+                if (endIndex == -1)
+                { // no parameter after format, just append
+                    str += "\"";
+                }
+                else
+                {
+                    str = str.Insert(endIndex, "\"");
+                }
+            }
+            return str;
         }
 
         static void WriteLine(string line)
