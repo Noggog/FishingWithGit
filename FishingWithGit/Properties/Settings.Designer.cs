@@ -49,5 +49,14 @@ namespace FishingWithGit.Properties {
                 return ((bool)(this["ShouldLog"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public byte WipeLogsOlderThanDays {
+            get {
+                return ((byte)(this["WipeLogsOlderThanDays"]));
+            }
+        }
     }
 }

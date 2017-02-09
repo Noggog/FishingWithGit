@@ -143,13 +143,22 @@ namespace FishingWithGit
         {
             sb.AppendLine(line);
         }
-
+        
         void LogResults()
         {
             try
             {
                 DirectoryInfo curDir = new DirectoryInfo(Directory.GetCurrentDirectory());
-                using (StreamWriter sw = File.AppendText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + $"/Temp/FishingWithGit-{curDir.Name}.log"))
+                var filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + $"/Temp/FishingWithGit-{curDir.Name}.log";
+
+                FileInfo file = new FileInfo(filePath);
+                if (file.Exists 
+                    && (DateTime.Now - file.LastWriteTime).TotalDays > Properties.Settings.Default.WipeLogsOlderThanDays)
+                {
+                    file.Delete();
+                }
+
+                using (StreamWriter sw = File.AppendText(filePath))
                 {
                     sw.WriteLine(sb.ToString());
                 }
