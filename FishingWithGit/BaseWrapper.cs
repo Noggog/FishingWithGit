@@ -25,7 +25,7 @@ namespace FishingWithGit
                 shouldLog = true;
                 WriteLine("An error occurred!!!: " + ex.Message);
             }
-            
+
             if (this.shouldLog)
             {
                 LogResults();
@@ -49,7 +49,7 @@ namespace FishingWithGit
             WriteLine("Running exe from " + exePath);
             var sourcePath = GetSourcePath();
             var trimIndex = exePath.IndexOf(sourcePath);
-            var trim = exePath .Substring(trimIndex + sourcePath.Length);
+            var trim = exePath.Substring(trimIndex + sourcePath.Length);
             trim = Properties.Settings.Default.RealGitProgramFolder + trim;
             WriteLine("Target exe " + trim);
             startInfo.FileName = trim;
@@ -66,7 +66,7 @@ namespace FishingWithGit
             return Properties.Settings.Default.BackupSourcePath;
         }
 
-        void RunGitProcess( ProcessStartInfo startInfo)
+        void RunGitProcess(ProcessStartInfo startInfo)
         {
             using (var process = Process.Start(startInfo))
             {
@@ -143,7 +143,7 @@ namespace FishingWithGit
         {
             sb.AppendLine(line);
         }
-        
+
         void LogResults()
         {
             try
@@ -152,7 +152,7 @@ namespace FishingWithGit
                 var filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + $"/Temp/FishingWithGit-{curDir.Name}.log";
 
                 FileInfo file = new FileInfo(filePath);
-                if (file.Exists 
+                if (file.Exists
                     && (DateTime.Now - file.LastWriteTime).TotalDays > Properties.Settings.Default.WipeLogsOlderThanDays)
                 {
                     file.Delete();
