@@ -12,13 +12,23 @@ namespace FishingWithGit
     {
         StringBuilder sb = new StringBuilder();
         bool shouldLog = Properties.Settings.Default.ShouldLog;
+        HookManager hookMgr = new HookManager();
 
         public void Wrap(string[] args)
         {
             try
             {
+                var hook = hookMgr.GetHook(args);
                 var startInfo = GetStartInfo(args);
+                if (hook?.PreCommand != null)
+                {
+                    hook.PreCommand();
+                }
                 RunGitProcess(startInfo);
+                if (hook?.PostCommand != null)
+                {
+                    hook.PostCommand();
+                }
             }
             catch (Exception ex)
             {
