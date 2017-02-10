@@ -28,7 +28,7 @@ namespace FishingWithGit
             CommandType type;
             if (!Enum.TryParse<CommandType>(cmdStr, out type)) return null;
 
-            wrapper.WriteLine("Command: " + cmdStr, writeToConsole: true);
+            wrapper.WriteLine($"Command: {cmdStr}", writeToConsole: true);
             switch (type)
             {
                 case CommandType.checkout:
@@ -104,11 +104,11 @@ namespace FishingWithGit
                 path += "/.git";
             }
             path += "/hooks";
-            FileInfo file = new FileInfo(path + "/" + commandType.HookName());
-            wrapper.WriteLine("Looking for hook file " + file.FullName);
+            FileInfo file = new FileInfo($"{path}/{commandType.HookName()}");
+            wrapper.WriteLine("Looking for hook file " + file.FullName, writeToConsole: true);
             if (!file.Exists) return;
 
-            wrapper.WriteLine("Firing " + commandType.HookName() + " , " + hookType, writeToConsole: true);
+            wrapper.WriteLine($"Firing {hookType} {commandType.HookName()}", writeToConsole: true);
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.Arguments = string.Join(" ", args);
             startInfo.FileName = file.FullName;
@@ -116,10 +116,7 @@ namespace FishingWithGit
             startInfo.RedirectStandardOutput = true;
             startInfo.WorkingDirectory = Directory.GetCurrentDirectory();
             startInfo.UseShellExecute = false;
-            using (Process p = Process.Start(startInfo))
-            {
-                p.WaitForExit();
-            }
+            this.wrapper.RunProcess(startInfo);
         }
     }
 }

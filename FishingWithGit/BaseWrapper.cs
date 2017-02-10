@@ -30,16 +30,18 @@ namespace FishingWithGit
                     hook = hookMgr.GetHook(args);
                     WriteLine("Firing prehooks.");
                     hook?.PreCommand?.Invoke();
+                    WriteLine("Fired prehooks.");
                 }
                 else
                 {
                     WriteLine("Fire hook logic is off.");
                 }
-                RunGitProcess(startInfo);
+                RunProcess(startInfo);
                 if (Properties.Settings.Default.FireHookLogic)
                 {
                     WriteLine("Firing posthooks.");
                     hook?.PostCommand?.Invoke();
+                    WriteLine("Fired posthooks.");
                 }
             }
             catch (Exception ex)
@@ -92,7 +94,7 @@ namespace FishingWithGit
             return Properties.Settings.Default.BackupSourcePath;
         }
 
-        void RunGitProcess(ProcessStartInfo startInfo)
+        public void RunProcess(ProcessStartInfo startInfo)
         {
             using (var process = Process.Start(startInfo))
             {
