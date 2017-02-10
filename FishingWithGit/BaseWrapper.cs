@@ -12,7 +12,12 @@ namespace FishingWithGit
     {
         StringBuilder sb = new StringBuilder();
         bool shouldLog = Properties.Settings.Default.ShouldLog;
-        HookManager hookMgr = new HookManager();
+        HookManager hookMgr;
+
+        public BaseWrapper()
+        {
+            hookMgr = new HookManager(this);
+        }
 
         public void Wrap(string[] args)
         {
@@ -20,15 +25,11 @@ namespace FishingWithGit
             {
                 var hook = hookMgr.GetHook(args);
                 var startInfo = GetStartInfo(args);
-                if (hook?.PreCommand != null)
-                {
-                    hook.PreCommand();
-                }
+                WriteLine("Firing prehooks.");
+                hook?.PreCommand?.Invoke();
                 RunGitProcess(startInfo);
-                if (hook?.PostCommand != null)
-                {
-                    hook.PostCommand();
-                }
+                WriteLine("Firing posthooks.");
+                hook?.PostCommand?.Invoke();
             }
             catch (Exception ex)
             {
@@ -149,8 +150,12 @@ namespace FishingWithGit
             return str;
         }
 
-        void WriteLine(string line)
+        public void WriteLine(string line, bool writeToConsole = false)
         {
+            if (writeToConsole)
+            {
+                System.Console.WriteLine(line);
+            }
             sb.AppendLine(line);
         }
 
