@@ -19,21 +19,21 @@ namespace FishingWithGit
         public HookPair GetHook(string[] args)
         {
             int index;
-            string cmd = GetMainCommand(args, out index);
+            string cmdStr = GetMainCommand(args, out index);
             if (index == -1)
             {
                 wrapper.WriteLine("No command found.");
                 return null;
             }
-            else
+            CommandType type;
+            if (!Enum.TryParse<CommandType>(cmdStr, out type)) return null;
+
+            wrapper.WriteLine("Command: " + cmdStr, writeToConsole: true);
+            switch (type)
             {
-                wrapper.WriteLine("Command: " + cmd, writeToConsole: true);
-            }
-            switch (cmd)
-            {
-                case "checkout":
+                case CommandType.checkout:
                     return CheckoutHooks(args);
-                case "rebase":
+                case CommandType.rebase:
                     return RebaseHooks(args);
                 default:
                     return null;
@@ -105,7 +105,7 @@ namespace FishingWithGit
             }
             path += "/hooks";
             FileInfo file = new FileInfo(path + "/" + commandType.HookName());
-            wrapper.WriteLine("Looking for hook file " + file.FullName, writeToConsole: true);
+            wrapper.WriteLine("Looking for hook file " + file.FullName);
             if (!file.Exists) return;
 
             wrapper.WriteLine("Firing " + commandType.HookName() + " , " + hookType, writeToConsole: true);
