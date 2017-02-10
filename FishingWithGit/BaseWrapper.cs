@@ -23,13 +23,24 @@ namespace FishingWithGit
         {
             try
             {
-                var hook = hookMgr.GetHook(args);
                 var startInfo = GetStartInfo(args);
-                WriteLine("Firing prehooks.");
-                hook?.PreCommand?.Invoke();
+                HookPair hook = null;
+                if (Properties.Settings.Default.FireHookLogic)
+                {
+                    hook = hookMgr.GetHook(args);
+                    WriteLine("Firing prehooks.");
+                    hook?.PreCommand?.Invoke();
+                }
+                else
+                {
+                    WriteLine("Fire hook logic is off.");
+                }
                 RunGitProcess(startInfo);
-                WriteLine("Firing posthooks.");
-                hook?.PostCommand?.Invoke();
+                if (Properties.Settings.Default.FireHookLogic)
+                {
+                    WriteLine("Firing posthooks.");
+                    hook?.PostCommand?.Invoke();
+                }
             }
             catch (Exception ex)
             {

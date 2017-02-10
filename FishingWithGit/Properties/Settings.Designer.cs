@@ -58,5 +58,14 @@ namespace FishingWithGit.Properties {
                 return ((byte)(this["WipeLogsOlderThanDays"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FireHookLogic {
+            get {
+                return ((bool)(this["FireHookLogic"]));
+            }
+        }
     }
 }
