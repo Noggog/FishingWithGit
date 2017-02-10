@@ -109,14 +109,13 @@ namespace FishingWithGit
             if (!file.Exists) return;
 
             wrapper.WriteLine($"Firing {hookType} {commandType.HookName()}", writeToConsole: true);
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.Arguments = string.Join(" ", args);
-            startInfo.FileName = file.FullName;
-            startInfo.RedirectStandardError = true;
-            startInfo.RedirectStandardOutput = true;
-            startInfo.WorkingDirectory = Directory.GetCurrentDirectory();
-            startInfo.UseShellExecute = false;
-            this.wrapper.RunProcess(startInfo);
+            
+            var processInfo = new ProcessStartInfo("cmd.exe", "/c " + file.FullName + " " + string.Join(" ", args));
+            processInfo.CreateNoWindow = true;
+            processInfo.UseShellExecute = false;
+            processInfo.RedirectStandardError = true;
+            processInfo.RedirectStandardOutput = true;
+            this.wrapper.RunProcess(processInfo);
         }
     }
 }
