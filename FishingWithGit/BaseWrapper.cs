@@ -45,13 +45,16 @@ namespace FishingWithGit
             catch (Exception ex)
             {
                 shouldLog = true;
-                WriteLine("An error occurred!!!: " + ex.Message);
+                WriteLine("An error occurred!!!: " + ex.Message, writeToConsole: true);
+                throw;
             }
-
-            WriteLine("--------------------------------------------------------------------------------------------------------- Fishing With Git call done.");
-            if (this.shouldLog)
+            finally
             {
-                LogResults();
+                WriteLine("--------------------------------------------------------------------------------------------------------- Fishing With Git call done.");
+                if (this.shouldLog)
+                {
+                    LogResults();
+                }
             }
         }
 
