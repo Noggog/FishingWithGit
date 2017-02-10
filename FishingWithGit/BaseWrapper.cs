@@ -48,6 +48,7 @@ namespace FishingWithGit
                 WriteLine("An error occurred!!!: " + ex.Message);
             }
 
+            WriteLine("--------------------------------------------------------------------------------------------------------- Fishing With Git call done.");
             if (this.shouldLog)
             {
                 LogResults();
@@ -125,7 +126,6 @@ namespace FishingWithGit
                 process.WaitForExit();
                 WriteLine("Exit Code: " + process.ExitCode);
             }
-            WriteLine("--------------------------------------------------------------------------------------------------------- Fishing With Git call done.");
         }
 
         string ProcessCommand(string str)

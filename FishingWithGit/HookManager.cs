@@ -68,12 +68,12 @@ namespace FishingWithGit
             {
                 PreCommand = () =>
                 {
-                    FireHook(CommandType.Pre_Checkout, HookType.InRepo);
-                    FireHook(CommandType.Pre_Checkout, HookType.Normal);
+                    FireHook(HookType.Pre_Checkout, HookLocation.InRepo);
+                    FireHook(HookType.Pre_Checkout, HookLocation.Normal);
                 },
                 PostCommand = () =>
                 {
-                    FireHook(CommandType.Post_Checkout, HookType.InRepo);
+                    FireHook(HookType.Post_Checkout, HookLocation.InRepo);
                     // Normal already exists.
                 }
             };
@@ -85,21 +85,21 @@ namespace FishingWithGit
             {
                 PreCommand = () =>
                 {
-                    FireHook(CommandType.Pre_Rebase, HookType.InRepo);
+                    FireHook(HookType.Pre_Rebase, HookLocation.InRepo);
                     // Normal already exists.
                 },
                 PostCommand = () =>
                 {
-                    FireHook(CommandType.Post_Rebase, HookType.InRepo);
-                    FireHook(CommandType.Post_Rebase, HookType.Normal);
+                    FireHook(HookType.Post_Rebase, HookLocation.InRepo);
+                    FireHook(HookType.Post_Rebase, HookLocation.Normal);
                 }
             };
         }
 
-        public void FireHook(CommandType commandType, HookType hookType, params string[] args)
+        public void FireHook(HookType commandType, HookLocation hookType, params string[] args)
         {
             var path = Directory.GetCurrentDirectory();
-            if (hookType == HookType.Normal)
+            if (hookType == HookLocation.Normal)
             {
                 path += "/.git";
             }
@@ -109,17 +109,17 @@ namespace FishingWithGit
             if (!file.Exists) return;
 
             wrapper.WriteLine("Firing " + commandType.HookName() + " , " + hookType, writeToConsole: true);
-            //ProcessStartInfo startInfo = new ProcessStartInfo();
-            //startInfo.Arguments = string.Join(" ", args);
-            //startInfo.FileName = file.FullName;
-            //startInfo.RedirectStandardError = true;
-            //startInfo.RedirectStandardOutput = true;
-            //startInfo.WorkingDirectory = Directory.GetCurrentDirectory();
-            //startInfo.UseShellExecute = false;
-            //using (Process p = Process.Start(startInfo))
-            //{
-            //    p.WaitForExit();
-            //}
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.Arguments = string.Join(" ", args);
+            startInfo.FileName = file.FullName;
+            startInfo.RedirectStandardError = true;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.WorkingDirectory = Directory.GetCurrentDirectory();
+            startInfo.UseShellExecute = false;
+            using (Process p = Process.Start(startInfo))
+            {
+                p.WaitForExit();
+            }
         }
     }
 }
