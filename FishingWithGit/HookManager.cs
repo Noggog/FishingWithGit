@@ -34,8 +34,10 @@ namespace FishingWithGit
             {
                 case CommandType.checkout:
                     return CheckoutHooks(args, index);
-                case CommandType.rebase:
-                    return RebaseHooks(args);
+                //case CommandType.rebase:
+                //    return RebaseHooks(args);
+                case CommandType.reset:
+                    return ResetHooks(args, index);
                 default:
                     return null;
             }
@@ -69,7 +71,7 @@ namespace FishingWithGit
             {
                 throw new ArgumentException("Cannot run checkout hooks, as args are invald.  No content was found after checkout command.");
             }
-            
+
             string curSha, targetSha;
             using (var repo = new Repository(Directory.GetCurrentDirectory()))
             {
@@ -111,6 +113,71 @@ namespace FishingWithGit
                 {
                     FireHook(HookType.Post_Rebase, HookLocation.InRepo);
                     FireHook(HookType.Post_Rebase, HookLocation.Normal);
+                }
+            };
+        }
+
+        public HookPair ResetHooks(string[] args, int commandIndex)
+        {
+            string sha = null;
+            string type = null;
+            for (int i = commandIndex + 1; i < args.Length; i++)
+            {
+                if (!args[i].StartsWith("-")
+                    && args[i].Length == 40)
+                {
+                    sha = args[i];
+                }
+                if (args[i].StartsWith("--"))
+                {
+                    type = args[i].Substring(2);
+                }
+            }
+
+            if (sha == null)
+            {
+                throw new ArgumentException("Cannot run reset hooks, as args are invald.  No sha could be found.");
+            }
+
+            if (type == null)
+            {
+                throw new ArgumentException("Cannot run reset hooks, as args are invald.  No type could be found.");
+            }
+
+            switch (type)
+            {
+                case "soft":
+                case "mixed":
+                case "hard":
+                    break;
+                default:
+                    throw new ArgumentException($"Cannot run reset hooks, as args are invalid.  Type was invalid: {type}");
+            }
+
+            string curBranch;
+            using (var repo = new Repository(Directory.GetCurrentDirectory()))
+            {
+                curBranch = repo.Head.FriendlyName;
+            }
+
+            var newArgs = new string[]
+            {
+                curBranch,
+                sha,
+                type
+            };
+
+            return new HookPair()
+            {
+                PreCommand = () =>
+                {
+                    FireHook(HookType.Pre_Reset, HookLocation.InRepo, newArgs);
+                    FireHook(HookType.Pre_Reset, HookLocation.Normal, newArgs);
+                },
+                PostCommand = () =>
+                {
+                    FireHook(HookType.Post_Reset, HookLocation.InRepo, newArgs);
+                    FireHook(HookType.Post_Reset, HookLocation.Normal, newArgs);
                 }
             };
         }

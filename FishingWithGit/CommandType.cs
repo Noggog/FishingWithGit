@@ -9,6 +9,7 @@ namespace FishingWithGit
     enum CommandType
     {
         checkout,
-        rebase
+        rebase,
+        reset
     }
 }
