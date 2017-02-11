@@ -10,10 +10,10 @@ namespace FishingWithGit
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             BaseWrapper wrapper = new BaseWrapper();
-            wrapper.Wrap(args);
+            return wrapper.Wrap(args);
         }
     }
 }

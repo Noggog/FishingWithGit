@@ -19,7 +19,7 @@ namespace FishingWithGit
             hookMgr = new HookManager(this);
         }
 
-        public void Wrap(string[] args)
+        public int Wrap(string[] args)
         {
             try
             {
@@ -36,13 +36,14 @@ namespace FishingWithGit
                 {
                     WriteLine("Fire hook logic is off.");
                 }
-                RunProcess(startInfo);
+                var exitCode = RunProcess(startInfo);
                 if (Properties.Settings.Default.FireHookLogic)
                 {
                     WriteLine("Firing posthooks.");
                     hook?.PostCommand?.Invoke();
                     WriteLine("Fired posthooks.");
                 }
+                return exitCode;
             }
             catch (Exception ex)
             {
@@ -94,7 +95,7 @@ namespace FishingWithGit
             return Properties.Settings.Default.BackupSourcePath;
         }
 
-        public void RunProcess(ProcessStartInfo startInfo)
+        public int RunProcess(ProcessStartInfo startInfo)
         {
             using (var process = Process.Start(startInfo))
             {
@@ -129,7 +130,7 @@ namespace FishingWithGit
                     }
                 }
                 process.WaitForExit();
-                WriteLine("Exit Code: " + process.ExitCode);
+                return process.ExitCode;
             }
         }
 
