@@ -182,26 +182,77 @@ namespace FishingWithGit
             };
         }
 
-        public void FireHook(HookType commandType, HookLocation hookType, params string[] args)
+        public void FireHook(HookType type, HookLocation location, params string[] args)
+        {
+            FireBashHook(type, location, args);
+            FireExeHooks(type, location, args);
+        }
+
+        private string GetHookFolder(HookLocation location)
         {
             var path = Directory.GetCurrentDirectory();
-            if (hookType == HookLocation.Normal)
+            if (location == HookLocation.Normal)
             {
                 path += "/.git";
             }
             path += "/hooks";
-            FileInfo file = new FileInfo($"{path}/{commandType.HookName()}");
+            return path;
+        }
+
+        private void FireBashHook(HookType type, HookLocation location, params string[] args)
+        {
+            var path = GetHookFolder(location);
+            FileInfo file = new FileInfo($"{path}/{type.HookName()}");
             wrapper.WriteLine("Looking for hook file " + file.FullName);
             if (!file.Exists) return;
 
-            wrapper.WriteLine($"Firing {hookType} {commandType.HookName()}", writeToConsole: true);
+            wrapper.WriteLine($"Firing Bash Hook {location} {type.HookName()}", writeToConsole: true);
+            
+            this.wrapper.RunProcess(
+                SetArgumentsOnStartInfo(
+                    new ProcessStartInfo(file.FullName, string.Join(" ", args))));
 
-            var processInfo = new ProcessStartInfo("cmd.exe", "/c " + file.FullName + " " + string.Join(" ", args));
-            processInfo.CreateNoWindow = true;
-            processInfo.UseShellExecute = false;
-            processInfo.RedirectStandardError = true;
-            processInfo.RedirectStandardOutput = true;
-            this.wrapper.RunProcess(processInfo);
+            wrapper.WriteLine($"Fired Bash Hook {location} {type.HookName()}", writeToConsole: true);
+        }
+
+        private void FireExeHooks(HookType type, HookLocation location, params string[] args)
+        {
+            var path = GetHookFolder(location);
+            DirectoryInfo dir = new DirectoryInfo(path);
+            wrapper.WriteLine("Looking for dir " + path);
+            if (!dir.Exists) return;
+
+            wrapper.WriteLine("Looking for exe files to run.");
+            foreach (var file in dir.EnumerateFiles())
+            {
+                wrapper.WriteLine("Looking at " + file.Name);
+                if (!file.Extension.ToUpper().Equals(".EXE")) continue;
+                var rawName = Path.GetFileNameWithoutExtension(file.Name);
+                if (HookTypeExt.IsCommandString(rawName)
+                    && !rawName.Equals(type.CommandString())) continue;
+
+                wrapper.WriteLine($"Firing Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: true);
+
+                var newArgs = new string[args.Length + 1];
+                newArgs[0] = type.CommandString();
+                Array.Copy(args, 0, newArgs, 1, args.Length);
+
+                this.wrapper.RunProcess(
+                    SetArgumentsOnStartInfo(
+                        new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))));
+
+                wrapper.WriteLine($"Fired Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: true);
+
+            }
+        }
+
+        private ProcessStartInfo SetArgumentsOnStartInfo(ProcessStartInfo startInfo)
+        {
+            startInfo.CreateNoWindow = true;
+            startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardError = true;
+            startInfo.RedirectStandardOutput = true;
+            return startInfo;
         }
     }
 }

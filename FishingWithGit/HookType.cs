@@ -28,6 +28,28 @@ namespace FishingWithGit
 
     public static class HookTypeExt
     {
+        private static Lazy<HashSet<string>> commandStrings = new Lazy<HashSet<string>>(
+            () =>
+            {
+                var ret = new HashSet<string>();
+                foreach (HookType type in Enum.GetValues(typeof(HookType)))
+                {
+                    try
+                    {
+                        ret.Add(type.CommandString());
+                    }
+                    catch
+                    {
+                    }
+                }
+                return ret;
+            });
+
+        public static bool IsCommandString(string str)
+        {
+            return commandStrings.Value.Contains(str);
+        }
+
         public static bool Stock(this HookType type)
         {
             switch (type)
