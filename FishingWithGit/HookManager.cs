@@ -233,9 +233,10 @@ namespace FishingWithGit
 
                 wrapper.WriteLine($"Firing Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: true);
 
-                var newArgs = new string[args.Length + 1];
-                newArgs[0] = type.CommandString();
-                Array.Copy(args, 0, newArgs, 1, args.Length);
+                var newArgs = new string[args.Length + 2];
+                newArgs[0] = type.HookName();
+                newArgs[1] = type.CommandString();
+                Array.Copy(args, 0, newArgs, 2, args.Length);
 
                 this.wrapper.RunProcess(
                     SetArgumentsOnStartInfo(
