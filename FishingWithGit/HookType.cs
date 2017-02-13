@@ -100,8 +100,9 @@ namespace FishingWithGit
                 case HookType.Pre_ApplyPatch:
                 case HookType.Post_ApplyPatch:
                     return "apply";
-                case HookType.Prepare_Commit_Msg:
                 case HookType.Commit_Msg:
+                    return "commit-msg";
+                case HookType.Prepare_Commit_Msg:
                 default:
                     throw new NotImplementedException();
             }

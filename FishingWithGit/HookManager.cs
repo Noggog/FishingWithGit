@@ -27,7 +27,7 @@ namespace FishingWithGit
                 return null;
             }
             CommandType type;
-            if (!Enum.TryParse<CommandType>(cmdStr, out type)) return null;
+            if (!CommandTypeExt.TryParse(cmdStr, out type)) return null;
 
             wrapper.WriteLine($"Command: {cmdStr}", writeToConsole: true);
             switch (type)
@@ -38,6 +38,8 @@ namespace FishingWithGit
                 //    return RebaseHooks(args);
                 case CommandType.reset:
                     return ResetHooks(args, index);
+                case CommandType.commitmsg:
+                    return CommitMsgHooks(args, index);
                 default:
                     return null;
             }
@@ -178,6 +180,28 @@ namespace FishingWithGit
                 {
                     FireHook(HookType.Post_Reset, HookLocation.InRepo, newArgs);
                     FireHook(HookType.Post_Reset, HookLocation.Normal, newArgs);
+                }
+            };
+        }
+
+        public HookPair CommitMsgHooks(string[] args, int commandIndex)
+        {
+            if (args.Length <= commandIndex + 1)
+            {
+                throw new ArgumentException("Cannot run checkout hooks, as args are invald.  No content was found after checkout command.");
+            }
+
+            var newArgs = new string[]
+            {
+                args[commandIndex + 1]
+            };
+
+            return new HookPair()
+            {
+                PreCommand = () =>
+                {
+                    FireHook(HookType.Commit_Msg, HookLocation.InRepo, newArgs);
+                    FireExeHooks(HookType.Commit_Msg, HookLocation.Normal, newArgs);
                 }
             };
         }

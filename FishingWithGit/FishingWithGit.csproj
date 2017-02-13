@@ -79,7 +79,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>del git.exe /Q
-rename "$(ProjectDir)$(OutDir)$(TargetFileName)" git.exe</PostBuildEvent>
+copy "$(ProjectDir)$(OutDir)$(TargetFileName)" "$(ProjectDir)$(OutDir)git.exe"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
