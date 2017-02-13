@@ -172,14 +172,20 @@ namespace FishingWithGit
                 WriteLine("Need to insert quotes for format at index " + index);
                 str = str.Insert(index, "\"");
                 var endIndex = str.IndexOf(" -", index);
-                if (endIndex == -1)
-                { // no parameter after format, just append
-                    str += "\"";
-                }
-                else
+                if (endIndex != -1)
                 {
                     str = str.Insert(endIndex, "\"");
+                    continue;
                 }
+                endIndex = str.IndexOf("@STEND@");
+                if (endIndex != -1)
+                {
+                    str = str.Insert(endIndex, "\"");
+                    continue;
+                }
+
+                // no parameter after format, just append
+                str += "\"";
             }
             return str;
         }
