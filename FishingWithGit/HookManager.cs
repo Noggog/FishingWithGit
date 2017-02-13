@@ -26,11 +26,11 @@ namespace FishingWithGit
                 wrapper.WriteLine("No command found.");
                 return null;
             }
-            CommandType type;
-            if (!CommandTypeExt.TryParse(cmdStr, out type)) return null;
+            CommandType command;
+            if (!CommandTypeExt.TryParse(cmdStr, out command)) return null;
 
-            wrapper.WriteLine($"Command: {cmdStr}", writeToConsole: true);
-            switch (type)
+            wrapper.WriteLine($"Command: {cmdStr}", writeToConsole: !command.Silent());
+            switch (command)
             {
                 case CommandType.checkout:
                     return CheckoutHooks(args, index);
@@ -42,6 +42,8 @@ namespace FishingWithGit
                     return CommitMsgHooks(args, index);
                 case CommandType.commit:
                     return CommitHooks(args, index);
+                case CommandType.status:
+                    return StatusHooks(args);
                 default:
                     return null;
             }
@@ -186,6 +188,23 @@ namespace FishingWithGit
             };
         }
 
+        public HookPair StatusHooks(string[] args)
+        {
+            return new HookPair()
+            {
+                PreCommand = () =>
+                {
+                    FireHook(HookType.Pre_Status, HookLocation.InRepo, args);
+                    FireHook(HookType.Pre_Status, HookLocation.Normal, args);
+                },
+                PostCommand = () =>
+                {
+                    FireHook(HookType.Post_Status, HookLocation.InRepo, args);
+                    FireHook(HookType.Post_Status, HookLocation.Normal, args);
+                }
+            };
+        }
+
         public HookPair CommitMsgHooks(string[] args, int commandIndex)
         {
             if (args.Length <= commandIndex + 1)
@@ -249,13 +268,13 @@ namespace FishingWithGit
             wrapper.WriteLine("Looking for hook file " + file.FullName);
             if (!file.Exists) return;
 
-            wrapper.WriteLine($"Firing Bash Hook {location} {type.HookName()}", writeToConsole: true);
+            wrapper.WriteLine($"Firing Bash Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
             
             this.wrapper.RunProcess(
                 SetArgumentsOnStartInfo(
                     new ProcessStartInfo(file.FullName, string.Join(" ", args))));
 
-            wrapper.WriteLine($"Fired Bash Hook {location} {type.HookName()}", writeToConsole: true);
+            wrapper.WriteLine($"Fired Bash Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
         }
 
         private void FireExeHooks(HookType type, HookLocation location, params string[] args)
@@ -274,7 +293,7 @@ namespace FishingWithGit
                 if (HookTypeExt.IsCommandString(rawName)
                     && !rawName.Equals(type.CommandString())) continue;
 
-                wrapper.WriteLine($"Firing Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: true);
+                wrapper.WriteLine($"Firing Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
 
                 var newArgs = new string[args.Length + 2];
                 newArgs[0] = type.HookName();
@@ -285,7 +304,7 @@ namespace FishingWithGit
                     SetArgumentsOnStartInfo(
                         new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))));
 
-                wrapper.WriteLine($"Fired Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: true);
+                wrapper.WriteLine($"Fired Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
 
             }
         }

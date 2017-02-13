@@ -23,7 +23,9 @@ namespace FishingWithGit
         Pre_Push,
         Post_Push,
         Pre_Reset,
-        Post_Reset
+        Post_Reset,
+        Pre_Status,
+        Post_Status,
     }
 
     public static class HookTypeExt
@@ -102,6 +104,9 @@ namespace FishingWithGit
                     return "apply";
                 case HookType.Commit_Msg:
                     return "commit-msg";
+                case HookType.Pre_Status:
+                case HookType.Post_Status:
+                    return "status";
                 case HookType.Prepare_Commit_Msg:
                 default:
                     throw new NotImplementedException();
@@ -144,6 +149,47 @@ namespace FishingWithGit
                     return "pre-reset";
                 case HookType.Post_Reset:
                     return "post-reset";
+                case HookType.Pre_Status:
+                    return "pre-status";
+                case HookType.Post_Status:
+                    return "post-status";
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public static CommandType AssociatedCommand(this HookType type)
+        {
+            switch (type)
+            {
+                case HookType.Pre_Checkout:
+                case HookType.Post_Checkout:
+                    return CommandType.checkout;
+                case HookType.Pre_ApplyPatch:
+                case HookType.Post_ApplyPatch:
+                    throw new NotImplementedException();
+                case HookType.Pre_Commit:
+                case HookType.Post_Commit:
+                    return CommandType.commit;
+                case HookType.Prepare_Commit_Msg:
+                    throw new NotImplementedException();
+                case HookType.Commit_Msg:
+                    return CommandType.commitmsg;
+                case HookType.Pre_Rebase:
+                case HookType.Post_Rebase:
+                    return CommandType.rebase;
+                case HookType.Pre_Merge:
+                case HookType.Post_Merge:
+                    return CommandType.merge;
+                case HookType.Pre_Push:
+                case HookType.Post_Push:
+                    return CommandType.push;
+                case HookType.Pre_Reset:
+                case HookType.Post_Reset:
+                    return CommandType.reset;
+                case HookType.Pre_Status:
+                case HookType.Post_Status:
+                    return CommandType.status;
                 default:
                     throw new NotImplementedException();
             }

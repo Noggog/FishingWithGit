@@ -12,6 +12,9 @@ namespace FishingWithGit
         rebase,
         reset,
         commit,
+        status,
+        merge,
+        push,
         commitmsg
     }
 
@@ -29,6 +32,17 @@ namespace FishingWithGit
                 return true;
             }
             return false;
+        }
+
+        public static bool Silent(this CommandType command)
+        {
+            switch (command)
+            {
+                case CommandType.status:
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }
