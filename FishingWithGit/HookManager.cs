@@ -78,11 +78,30 @@ namespace FishingWithGit
                 throw new ArgumentException("Cannot run checkout hooks, as args are invald.  No content was found after checkout command.");
             }
 
+            var extraCommand = args[commandIndex + 1];
+            if (extraCommand.Trim().Equals("--"))
+            {
+                return DiscardHooks(args, commandIndex);
+            }
+            else
+            {
+                return NormalCheckoutHooks(extraCommand);
+            }
+        }
+
+        private HookPair NormalCheckoutHooks(string branchName)
+        {
             string curSha, targetSha;
             using (var repo = new Repository(Directory.GetCurrentDirectory()))
             {
                 curSha = repo.Head.Tip.Sha;
-                targetSha = repo.Branches[args[commandIndex + 1]].Tip.Sha;
+                var targetBranchName = branchName;
+                var targetBranch = repo.Branches[targetBranchName];
+                if (targetBranch == null)
+                {
+                    this.wrapper.WriteLine($"Could not branch named {targetBranchName}");
+                }
+                targetSha = targetBranch.Tip.Sha;
             }
 
             var newArgs = new string[]
@@ -184,6 +203,27 @@ namespace FishingWithGit
                 {
                     FireHook(HookType.Post_Reset, HookLocation.InRepo, newArgs);
                     FireHook(HookType.Post_Reset, HookLocation.Normal, newArgs);
+                }
+            };
+        }
+
+        public HookPair DiscardHooks(string[] args, int commandIndex)
+        {
+            commandIndex += 2;
+            string[] newArgs = new string[args.Length - commandIndex];
+            Array.Copy(args, commandIndex, newArgs, 0, newArgs.Length);
+
+            return new HookPair()
+            {
+                PreCommand = () =>
+                {
+                    FireHook(HookType.Pre_Discard, HookLocation.InRepo, newArgs);
+                    FireHook(HookType.Pre_Discard, HookLocation.Normal, newArgs);
+                },
+                PostCommand = () =>
+                {
+                    FireHook(HookType.Post_Discard, HookLocation.InRepo, newArgs);
+                    FireHook(HookType.Post_Discard, HookLocation.Normal, newArgs);
                 }
             };
         }

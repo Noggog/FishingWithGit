@@ -26,6 +26,8 @@ namespace FishingWithGit
         Post_Reset,
         Pre_Status,
         Post_Status,
+        Pre_Discard,
+        Post_Discard,
     }
 
     public static class HookTypeExt
@@ -107,6 +109,9 @@ namespace FishingWithGit
                 case HookType.Pre_Status:
                 case HookType.Post_Status:
                     return "status";
+                case HookType.Pre_Discard:
+                case HookType.Post_Discard:
+                    return "discard";
                 case HookType.Prepare_Commit_Msg:
                 default:
                     throw new NotImplementedException();
@@ -153,6 +158,10 @@ namespace FishingWithGit
                     return "pre-status";
                 case HookType.Post_Status:
                     return "post-status";
+                case HookType.Pre_Discard:
+                    return "pre-discard";
+                case HookType.Post_Discard:
+                    return "post-discard";
                 default:
                     throw new NotImplementedException();
             }
@@ -164,6 +173,8 @@ namespace FishingWithGit
             {
                 case HookType.Pre_Checkout:
                 case HookType.Post_Checkout:
+                case HookType.Pre_Discard:
+                case HookType.Post_Discard:
                     return CommandType.checkout;
                 case HookType.Pre_ApplyPatch:
                 case HookType.Post_ApplyPatch:
