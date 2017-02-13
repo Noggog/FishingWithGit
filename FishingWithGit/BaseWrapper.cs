@@ -36,7 +36,15 @@ namespace FishingWithGit
                 {
                     WriteLine("Fire hook logic is off.");
                 }
-                var exitCode = RunProcess(startInfo);
+                int exitCode;
+                if (args.Contains("-NO_PASSING_FISH"))
+                {
+                    exitCode = 0;
+                }
+                else
+                {
+                    exitCode = RunProcess(startInfo);
+                }
                 if (Properties.Settings.Default.FireHookLogic)
                 {
                     WriteLine("Firing posthooks.");
