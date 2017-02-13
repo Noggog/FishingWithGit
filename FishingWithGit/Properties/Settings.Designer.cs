@@ -25,7 +25,7 @@ namespace FishingWithGit.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\Git2\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\Git\\RealGit")]
         public string RealGitProgramFolder {
             get {
                 return ((string)(this["RealGitProgramFolder"]));

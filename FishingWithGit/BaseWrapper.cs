@@ -83,6 +83,10 @@ namespace FishingWithGit
             WriteLine("");
             WriteLine("Working directory " + Directory.GetCurrentDirectory());
             var exePath = System.Reflection.Assembly.GetEntryAssembly().Location;
+            if (exePath.EndsWith("FishingWithGit.exe"))
+            {
+                exePath = exePath.Replace("FishingWithGit.exe", "git.exe");
+            }
             WriteLine("Running exe from " + exePath);
             var sourcePath = GetSourcePath();
             var trimIndex = exePath.IndexOf(sourcePath);
@@ -105,6 +109,11 @@ namespace FishingWithGit
 
         public int RunProcess(ProcessStartInfo startInfo)
         {
+            FileInfo file = new FileInfo(startInfo.FileName);
+            if (!file.Exists)
+            {
+                throw new ArgumentException("File does not exist: " + file.FullName);
+            }
             using (var process = Process.Start(startInfo))
             {
                 bool first = true;
