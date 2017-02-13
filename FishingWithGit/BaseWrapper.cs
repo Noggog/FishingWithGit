@@ -28,9 +28,12 @@ namespace FishingWithGit
                 if (Properties.Settings.Default.FireHookLogic)
                 {
                     hook = hookMgr.GetHook(args);
-                    WriteLine("Firing prehooks.");
-                    hook?.PreCommand?.Invoke();
-                    WriteLine("Fired prehooks.");
+                    if (hook?.PreCommand != null)
+                    {
+                        WriteLine("Firing prehooks.");
+                        hook?.PreCommand?.Invoke();
+                        WriteLine("Fired prehooks.");
+                    }
                 }
                 else
                 {
@@ -45,7 +48,8 @@ namespace FishingWithGit
                 {
                     exitCode = RunProcess(startInfo);
                 }
-                if (Properties.Settings.Default.FireHookLogic)
+                if (Properties.Settings.Default.FireHookLogic
+                    && hook?.PostCommand != null)
                 {
                     WriteLine("Firing posthooks.");
                     hook?.PostCommand?.Invoke();
