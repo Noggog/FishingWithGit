@@ -11,6 +11,7 @@ namespace FishingWithGit
         checkout,
         rebase,
         reset,
+        commit,
         commitmsg
     }
 

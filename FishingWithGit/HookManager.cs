@@ -40,6 +40,8 @@ namespace FishingWithGit
                     return ResetHooks(args, index);
                 case CommandType.commitmsg:
                     return CommitMsgHooks(args, index);
+                case CommandType.commit:
+                    return CommitHooks(args, index);
                 default:
                     return null;
             }
@@ -97,7 +99,7 @@ namespace FishingWithGit
                 PostCommand = () =>
                 {
                     FireHook(HookType.Post_Checkout, HookLocation.InRepo, newArgs);
-                    // Normal already exists.
+                    FireExeHooks(HookType.Post_Checkout, HookLocation.Normal, newArgs);
                 }
             };
         }
@@ -109,7 +111,7 @@ namespace FishingWithGit
                 PreCommand = () =>
                 {
                     FireHook(HookType.Pre_Rebase, HookLocation.InRepo);
-                    // Normal already exists.
+                    FireExeHooks(HookType.Pre_Rebase, HookLocation.Normal);
                 },
                 PostCommand = () =>
                 {
@@ -202,6 +204,23 @@ namespace FishingWithGit
                 {
                     FireHook(HookType.Commit_Msg, HookLocation.InRepo, newArgs);
                     FireExeHooks(HookType.Commit_Msg, HookLocation.Normal, newArgs);
+                }
+            };
+        }
+
+        public HookPair CommitHooks(string[] args, int commandIndex)
+        {
+            return new HookPair()
+            {
+                PreCommand = () =>
+                {
+                    FireHook(HookType.Pre_Commit, HookLocation.InRepo);
+                    FireExeHooks(HookType.Pre_Commit, HookLocation.Normal);
+                },
+                PostCommand = () =>
+                {
+                    FireHook(HookType.Post_Commit, HookLocation.InRepo);
+                    FireExeHooks(HookType.Post_Commit, HookLocation.Normal);
                 }
             };
         }
