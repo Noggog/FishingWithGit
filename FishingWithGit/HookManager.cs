@@ -265,7 +265,6 @@ namespace FishingWithGit
         {
             var path = GetHookFolder(location);
             FileInfo file = new FileInfo($"{path}/{type.HookName()}");
-            wrapper.WriteLine("Looking for hook file " + file.FullName);
             if (!file.Exists) return;
 
             wrapper.WriteLine($"Firing Bash Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
@@ -281,13 +280,10 @@ namespace FishingWithGit
         {
             var path = GetHookFolder(location);
             DirectoryInfo dir = new DirectoryInfo(path);
-            wrapper.WriteLine("Looking for dir " + path);
             if (!dir.Exists) return;
-
-            wrapper.WriteLine("Looking for exe files to run.");
+            
             foreach (var file in dir.EnumerateFiles())
             {
-                wrapper.WriteLine("Looking at " + file.Name);
                 if (!file.Extension.ToUpper().Equals(".EXE")) continue;
                 var rawName = Path.GetFileNameWithoutExtension(file.Name);
                 if (HookTypeExt.IsCommandString(rawName)
