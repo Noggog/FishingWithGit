@@ -91,8 +91,10 @@ namespace FishingWithGit
                 throw new ArgumentException("Cannot run checkout hooks, as args are invald.  No content was found after checkout command.");
             }
 
-            var extraCommand = args[commandIndex + 1];
-            if (extraCommand.Trim().Equals("--"))
+            var extraCommand = args[commandIndex + 1].Trim();
+            if (extraCommand.Equals("--")
+                || extraCommand.Equals("--theirs")
+                || extraCommand.Equals("--ours"))
             {
                 return DiscardHooks(args, commandIndex);
             }
