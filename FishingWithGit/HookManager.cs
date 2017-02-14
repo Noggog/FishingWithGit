@@ -96,7 +96,7 @@ namespace FishingWithGit
                 || extraCommand.Equals("--theirs")
                 || extraCommand.Equals("--ours"))
             {
-                return DiscardHooks(args, commandIndex);
+                return TakeHooks(args, commandIndex);
             }
             else
             {
@@ -171,7 +171,7 @@ namespace FishingWithGit
             var extraCommand = args[commandIndex + 1];
             if (extraCommand.Trim().Equals("-q"))
             {
-                return DiscardHooks(args, commandIndex);
+                return TakeHooks(args, commandIndex);
             }
             else
             {
@@ -246,7 +246,7 @@ namespace FishingWithGit
             };
         }
 
-        public HookPair DiscardHooks(string[] args, int commandIndex)
+        public HookPair TakeHooks(string[] args, int commandIndex)
         {
             var argsList = args.ToList();
             commandIndex = argsList.IndexOf("--", commandIndex);
@@ -262,14 +262,14 @@ namespace FishingWithGit
                 PreCommand = () =>
                 {
                     return RunCommands(
-                        () => FireHook(HookType.Pre_Discard, HookLocation.InRepo, newArgs),
-                        () => FireHook(HookType.Pre_Discard, HookLocation.Normal, newArgs));
+                        () => FireHook(HookType.Pre_Take, HookLocation.InRepo, newArgs),
+                        () => FireHook(HookType.Pre_Take, HookLocation.Normal, newArgs));
                 },
                 PostCommand = () =>
                 {
                     return RunCommands(
-                        () => FireHook(HookType.Post_Discard, HookLocation.InRepo, newArgs),
-                        () => FireHook(HookType.Post_Discard, HookLocation.Normal, newArgs));
+                        () => FireHook(HookType.Post_Take, HookLocation.InRepo, newArgs),
+                        () => FireHook(HookType.Post_Take, HookLocation.Normal, newArgs));
                 }
             };
         }
