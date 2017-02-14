@@ -71,6 +71,19 @@ namespace FishingWithGit
             return null;
         }
 
+        public int RunCommands(params Func<int>[] funcs)
+        {
+            foreach (var func in funcs)
+            {
+                var code = func();
+                if (code != 0)
+                {
+                    return code;
+                }
+            }
+            return 0;
+        }
+
         public HookPair CheckoutHooks(string[] args, int commandIndex)
         {
             if (args.Length <= commandIndex + 1)
@@ -114,13 +127,15 @@ namespace FishingWithGit
             {
                 PreCommand = () =>
                 {
-                    FireHook(HookType.Pre_Checkout, HookLocation.InRepo, newArgs);
-                    FireHook(HookType.Pre_Checkout, HookLocation.Normal, newArgs);
+                    return RunCommands(
+                        () => FireHook(HookType.Pre_Checkout, HookLocation.InRepo, newArgs),
+                        () => FireHook(HookType.Pre_Checkout, HookLocation.Normal, newArgs));
                 },
                 PostCommand = () =>
                 {
-                    FireHook(HookType.Post_Checkout, HookLocation.InRepo, newArgs);
-                    FireExeHooks(HookType.Post_Checkout, HookLocation.Normal, newArgs);
+                    return RunCommands(
+                        () => FireHook(HookType.Post_Checkout, HookLocation.InRepo, newArgs),
+                        () => FireExeHooks(HookType.Post_Checkout, HookLocation.Normal, newArgs));
                 }
             };
         }
@@ -131,13 +146,15 @@ namespace FishingWithGit
             {
                 PreCommand = () =>
                 {
-                    FireHook(HookType.Pre_Rebase, HookLocation.InRepo);
-                    FireExeHooks(HookType.Pre_Rebase, HookLocation.Normal);
+                    return RunCommands(
+                        () => FireHook(HookType.Pre_Rebase, HookLocation.InRepo),
+                        () => FireExeHooks(HookType.Pre_Rebase, HookLocation.Normal));
                 },
                 PostCommand = () =>
                 {
-                    FireHook(HookType.Post_Rebase, HookLocation.InRepo);
-                    FireHook(HookType.Post_Rebase, HookLocation.Normal);
+                    return RunCommands(
+                        () => FireHook(HookType.Post_Rebase, HookLocation.InRepo),
+                        () => FireHook(HookType.Post_Rebase, HookLocation.Normal));
                 }
             };
         }
@@ -196,13 +213,15 @@ namespace FishingWithGit
             {
                 PreCommand = () =>
                 {
-                    FireHook(HookType.Pre_Reset, HookLocation.InRepo, newArgs);
-                    FireHook(HookType.Pre_Reset, HookLocation.Normal, newArgs);
+                    return RunCommands(
+                        () => FireHook(HookType.Pre_Reset, HookLocation.InRepo, newArgs),
+                        () => FireHook(HookType.Pre_Reset, HookLocation.Normal, newArgs));
                 },
                 PostCommand = () =>
                 {
-                    FireHook(HookType.Post_Reset, HookLocation.InRepo, newArgs);
-                    FireHook(HookType.Post_Reset, HookLocation.Normal, newArgs);
+                    return RunCommands(
+                        () => FireHook(HookType.Post_Reset, HookLocation.InRepo, newArgs),
+                        () => FireHook(HookType.Post_Reset, HookLocation.Normal, newArgs));
                 }
             };
         }
@@ -217,13 +236,15 @@ namespace FishingWithGit
             {
                 PreCommand = () =>
                 {
-                    FireHook(HookType.Pre_Discard, HookLocation.InRepo, newArgs);
-                    FireHook(HookType.Pre_Discard, HookLocation.Normal, newArgs);
+                    return RunCommands(
+                        () => FireHook(HookType.Pre_Discard, HookLocation.InRepo, newArgs),
+                        () => FireHook(HookType.Pre_Discard, HookLocation.Normal, newArgs));
                 },
                 PostCommand = () =>
                 {
-                    FireHook(HookType.Post_Discard, HookLocation.InRepo, newArgs);
-                    FireHook(HookType.Post_Discard, HookLocation.Normal, newArgs);
+                    return RunCommands(
+                        () => FireHook(HookType.Post_Discard, HookLocation.InRepo, newArgs),
+                        () => FireHook(HookType.Post_Discard, HookLocation.Normal, newArgs));
                 }
             };
         }
@@ -234,13 +255,15 @@ namespace FishingWithGit
             {
                 PreCommand = () =>
                 {
-                    FireHook(HookType.Pre_Status, HookLocation.InRepo, args);
-                    FireHook(HookType.Pre_Status, HookLocation.Normal, args);
+                    return RunCommands(
+                        () => FireHook(HookType.Pre_Status, HookLocation.InRepo, args),
+                        () => FireHook(HookType.Pre_Status, HookLocation.Normal, args));
                 },
                 PostCommand = () =>
                 {
-                    FireHook(HookType.Post_Status, HookLocation.InRepo, args);
-                    FireHook(HookType.Post_Status, HookLocation.Normal, args);
+                    return RunCommands(
+                        () => FireHook(HookType.Post_Status, HookLocation.InRepo, args),
+                        () => FireHook(HookType.Post_Status, HookLocation.Normal, args));
                 }
             };
         }
@@ -261,8 +284,9 @@ namespace FishingWithGit
             {
                 PreCommand = () =>
                 {
-                    FireHook(HookType.Commit_Msg, HookLocation.InRepo, newArgs);
-                    FireExeHooks(HookType.Commit_Msg, HookLocation.Normal, newArgs);
+                    return RunCommands(
+                        () => FireHook(HookType.Commit_Msg, HookLocation.InRepo, newArgs),
+                        () => FireExeHooks(HookType.Commit_Msg, HookLocation.Normal, newArgs));
                 }
             };
         }
@@ -273,21 +297,24 @@ namespace FishingWithGit
             {
                 PreCommand = () =>
                 {
-                    FireHook(HookType.Pre_Commit, HookLocation.InRepo);
-                    FireExeHooks(HookType.Pre_Commit, HookLocation.Normal);
+                    return RunCommands(
+                        () => FireHook(HookType.Pre_Commit, HookLocation.InRepo),
+                        () => FireExeHooks(HookType.Pre_Commit, HookLocation.Normal));
                 },
                 PostCommand = () =>
                 {
-                    FireHook(HookType.Post_Commit, HookLocation.InRepo);
-                    FireExeHooks(HookType.Post_Commit, HookLocation.Normal);
+                    return RunCommands(
+                        () => FireHook(HookType.Post_Commit, HookLocation.InRepo),
+                        () => FireExeHooks(HookType.Post_Commit, HookLocation.Normal));
                 }
             };
         }
 
-        public void FireHook(HookType type, HookLocation location, params string[] args)
+        public int FireHook(HookType type, HookLocation location, params string[] args)
         {
-            FireBashHook(type, location, args);
-            FireExeHooks(type, location, args);
+            return RunCommands(
+                () => FireBashHook(type, location, args),
+                () => FireExeHooks(type, location, args));
         }
 
         private string GetHookFolder(HookLocation location)
@@ -301,27 +328,28 @@ namespace FishingWithGit
             return path;
         }
 
-        private void FireBashHook(HookType type, HookLocation location, params string[] args)
+        private int FireBashHook(HookType type, HookLocation location, params string[] args)
         {
             var path = GetHookFolder(location);
             FileInfo file = new FileInfo($"{path}/{type.HookName()}");
-            if (!file.Exists) return;
+            if (!file.Exists) return 0;
 
             wrapper.WriteLine($"Firing Bash Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
-            
+
             this.wrapper.RunProcess(
                 SetArgumentsOnStartInfo(
                     new ProcessStartInfo(file.FullName, string.Join(" ", args))));
 
             wrapper.WriteLine($"Fired Bash Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
+            return 0;
         }
 
-        private void FireExeHooks(HookType type, HookLocation location, params string[] args)
+        private int FireExeHooks(HookType type, HookLocation location, params string[] args)
         {
             var path = GetHookFolder(location);
             DirectoryInfo dir = new DirectoryInfo(path);
-            if (!dir.Exists) return;
-            
+            if (!dir.Exists) return 0;
+
             foreach (var file in dir.EnumerateFiles())
             {
                 if (!file.Extension.ToUpper().Equals(".EXE")) continue;
@@ -336,13 +364,18 @@ namespace FishingWithGit
                 newArgs[1] = type.CommandString();
                 Array.Copy(args, 0, newArgs, 2, args.Length);
 
-                this.wrapper.RunProcess(
+                var exitCode = this.wrapper.RunProcess(
                     SetArgumentsOnStartInfo(
                         new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))));
 
                 wrapper.WriteLine($"Fired Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
-
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
             }
+
+            return 0;
         }
 
         private ProcessStartInfo SetArgumentsOnStartInfo(ProcessStartInfo startInfo)

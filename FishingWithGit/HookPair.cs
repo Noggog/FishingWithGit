@@ -8,7 +8,7 @@ namespace FishingWithGit
 {
     class HookPair
     {
-        public Action PreCommand;
-        public Action PostCommand;
+        public Func<int> PreCommand;
+        public Func<int> PostCommand;
     }
 }

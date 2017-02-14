@@ -31,8 +31,13 @@ namespace FishingWithGit
                     if (hook?.PreCommand != null)
                     {
                         WriteLine("Firing prehooks.");
-                        hook?.PreCommand?.Invoke();
+                        int? hookExitCode = hook?.PreCommand?.Invoke();
                         WriteLine("Fired prehooks.");
+                        if (0 != (hookExitCode ?? 0))
+                        {
+                            WriteLine("Exiting early because of hook failure.");
+                            return hookExitCode.Value;
+                        }
                     }
                 }
                 else
@@ -52,8 +57,13 @@ namespace FishingWithGit
                     && hook?.PostCommand != null)
                 {
                     WriteLine("Firing posthooks.");
-                    hook?.PostCommand?.Invoke();
+                    int? hookExitCode = hook?.PostCommand?.Invoke();
                     WriteLine("Fired posthooks.");
+                    if (0 != (hookExitCode ?? 0))
+                    {
+                        WriteLine("Exiting early because of hook failure.");
+                        return hookExitCode.Value;
+                    }
                 }
                 return exitCode;
             }
