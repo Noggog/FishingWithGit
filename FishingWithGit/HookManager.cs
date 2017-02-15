@@ -167,15 +167,17 @@ namespace FishingWithGit
             {
                 throw new ArgumentException("Cannot run reset hooks, as args are invald.  No content was found after checkout command.");
             }
-
+            var argsList = args.ToList();
             var extraCommand = args[commandIndex + 1];
-            if (extraCommand.Trim().Equals("-q"))
+            if (args.Contains("--soft")
+                || args.Contains("--mixed")
+                || args.Contains("--hard"))
             {
-                return TakeHooks(args, commandIndex);
+                return NormalResetHooks(args, commandIndex);
             }
             else
             {
-                return NormalResetHooks(args, commandIndex);
+                return TakeHooks(args, commandIndex);
             }
         }
 
@@ -252,7 +254,7 @@ namespace FishingWithGit
             commandIndex = argsList.IndexOf("--", commandIndex);
             if (commandIndex == -1)
             {
-                throw new ArgumentException("Could not run discard hooks.  Args invalid and missing '--'.");
+                throw new ArgumentException("Could not run take hooks.  Args invalid and missing '--'.");
             }
             string[] newArgs = new string[args.Length - commandIndex];
             Array.Copy(args, commandIndex, newArgs, 0, newArgs.Length);
