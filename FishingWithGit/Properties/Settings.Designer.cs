@@ -25,7 +25,7 @@ namespace FishingWithGit.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\Git\\RealGit")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\Git\\RealGit\\")]
         public string RealGitProgramFolder {
             get {
                 return ((string)(this["RealGitProgramFolder"]));
@@ -65,6 +65,15 @@ namespace FishingWithGit.Properties {
         public bool FireHookLogic {
             get {
                 return ((bool)(this["FireHookLogic"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CleanCArguments {
+            get {
+                return ((bool)(this["CleanCArguments"]));
             }
         }
     }

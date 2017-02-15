@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="RealGitProgramFolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Program Files\Git\RealGit</Value>
+      <Value Profile="(Default)">C:\Program Files\Git\RealGit\</Value>
     </Setting>
     <Setting Name="BackupSourcePath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">C:\Program Files\Git\</Value>
@@ -15,6 +15,9 @@
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="FireHookLogic" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="CleanCArguments" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>

@@ -86,6 +86,7 @@ namespace FishingWithGit
         ProcessStartInfo GetStartInfo(string[] args)
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
+            args = StripCArguments(args);
             startInfo.Arguments = string.Join(" ", args);
             WriteLine(DateTime.Now.ToString());
             WriteLine("Arguments:");
@@ -168,6 +169,19 @@ namespace FishingWithGit
         string ProcessCommand(string str)
         {
             return EnsureFormatIsQuoted(str);
+        }
+
+        string[] StripCArguments(string[] args)
+        {
+            if (!Properties.Settings.Default.CleanCArguments) return args;
+            List<string> argsList = args.ToList();
+            int index;
+            while ((index = argsList.IndexOf("-c")) != -1)
+            {
+                argsList.RemoveAt(index);
+                argsList.RemoveAt(index);
+            }
+            return argsList.ToArray();
         }
 
         string EnsureFormatIsQuoted(string str)
