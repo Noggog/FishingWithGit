@@ -85,15 +85,14 @@ namespace FishingWithGit
 
         ProcessStartInfo GetStartInfo(string[] args)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            args = StripCArguments(args);
-            startInfo.Arguments = string.Join(" ", args);
             WriteLine(DateTime.Now.ToString());
+            ProcessStartInfo startInfo = new ProcessStartInfo();
             WriteLine("Arguments:");
-            WriteLine($"  {startInfo.Arguments}");
+            WriteLine($"  {string.Join(" ", args)}");
             WriteLine("");
+            args = ProcessCommand(args);
+            startInfo.Arguments = string.Join(" ", args);
             WriteLine("Arguments going in:");
-            startInfo.Arguments = ProcessCommand(startInfo.Arguments);
             WriteLine($"  {startInfo.Arguments}");
             WriteLine("");
             WriteLine("Working directory " + Directory.GetCurrentDirectory());
@@ -166,9 +165,10 @@ namespace FishingWithGit
             }
         }
 
-        string ProcessCommand(string str)
+        string[] ProcessCommand(string[] args)
         {
-            return EnsureFormatIsQuoted(str);
+            args = StripCArguments(args);
+            return EnsureFormatIsQuoted(args);
         }
 
         string[] StripCArguments(string[] args)
@@ -184,38 +184,22 @@ namespace FishingWithGit
             return argsList.ToArray();
         }
 
-        string EnsureFormatIsQuoted(string str)
+        string[] EnsureFormatIsQuoted(string[] args)
         {
-            var toReplace = " --format=";
-            int index = 0;
-            while ((index = str.IndexOf(toReplace, index)) != -1)
+            var formatStr = "--format=";
+            for (int i = 0; i < args.Length; i++)
             {
-                index += toReplace.Length;
-                bool insertQuote = str.Length > index + 1 && str[index + 1] != '\"';
-                if (!insertQuote)
+                var arg = args[i];
+                if (arg.StartsWith(formatStr))
                 {
-                    continue;
+                    if (arg.Length <= formatStr.Length) continue;
+                    if (arg[formatStr.Length + 1] == '\"') continue;
+                    if (arg[arg.Length - 1] == '\"') continue;
+                    WriteLine("Need to insert quotes for format.");
+                    args[i] = $"\"{arg}\"";
                 }
-                shouldLog = true;
-                WriteLine("Need to insert quotes for format at index " + index);
-                str = str.Insert(index, "\"");
-                var endIndex = str.IndexOf(" -", index);
-                if (endIndex != -1)
-                {
-                    str = str.Insert(endIndex, "\"");
-                    continue;
-                }
-                endIndex = str.IndexOf("@STEND@");
-                if (endIndex != -1)
-                {
-                    str = str.Insert(endIndex, "\"");
-                    continue;
-                }
-
-                // no parameter after format, just append
-                str += "\"";
             }
-            return str;
+            return args;
         }
 
         public void WriteLine(string line, bool writeToConsole = false)
