@@ -86,22 +86,31 @@ namespace FishingWithGit
 
         public HookPair CheckoutHooks(string[] args, int commandIndex)
         {
-            if (args.Length <= commandIndex + 1)
-            {
-                throw new ArgumentException("Cannot run checkout hooks, as args are invald.  No content was found after checkout command.");
-            }
-
-            var extraCommand = args[commandIndex + 1].Trim();
-            if (extraCommand.Equals("--")
-                || extraCommand.Equals("--theirs")
-                || extraCommand.Equals("--ours"))
+            if (args.Contains("--")
+                || args.Contains("--theirs")
+                || args.Contains("--ours"))
             {
                 return TakeHooks(args, commandIndex);
             }
             else
             {
-                return NormalCheckoutHooks(extraCommand);
+                commandIndex = Skip(args, commandIndex + 1, "-b");
+                if (commandIndex >= args.Length)
+                {
+                    throw new ArgumentException("Cannot run checkout hooks, as args are invald.  No branch name was found.");
+                }
+                return NormalCheckoutHooks(args[commandIndex]);
             }
+        }
+
+        public int Skip(string[] args, int startIndex, params string[] commands)
+        {
+            for (; startIndex < args.Length; startIndex++)
+            {
+                if (commands.Contains(args[startIndex])) continue;
+                return startIndex;
+            }
+            return startIndex;
         }
 
         private HookPair NormalCheckoutHooks(string branchName)
@@ -114,7 +123,11 @@ namespace FishingWithGit
                 var targetBranch = repo.Branches[targetBranchName];
                 if (targetBranch == null)
                 {
-                    this.wrapper.WriteLine($"Could not branch named {targetBranchName}");
+                    this.wrapper.WriteLine($"Could not locate branch named {targetBranchName} in repo {repo}", writeToConsole: true);
+                }
+                if (targetBranch.Tip == null)
+                {
+                    this.wrapper.WriteLine($"Branch named {targetBranchName} did not point to a commit in repo {repo}.", writeToConsole: true);
                 }
                 targetSha = targetBranch.Tip.Sha;
             }
