@@ -79,7 +79,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>del git.exe /Q
-copy "$(ProjectDir)$(OutDir)$(TargetFileName)" "$(ProjectDir)$(OutDir)git.exe"</PostBuildEvent>
+del git.pdb /Q
+copy "$(ProjectDir)$(OutDir)$(TargetFileName)" "$(ProjectDir)$(OutDir)git.exe"
+copy "$(ProjectDir)$(OutDir)$(TargetName).pdb" "$(ProjectDir)$(OutDir)git.pdb"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
