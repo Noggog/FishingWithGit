@@ -123,11 +123,11 @@ namespace FishingWithGit
                 var targetBranch = repo.Branches[targetBranchName];
                 if (targetBranch == null)
                 {
-                    this.wrapper.WriteLine($"Could not locate branch named {targetBranchName} in repo {repo}", writeToConsole: true);
+                    throw new ArgumentException($"Could not locate branch named {targetBranchName} in repo {repo.Info.Path}");
                 }
                 if (targetBranch.Tip == null)
                 {
-                    this.wrapper.WriteLine($"Branch named {targetBranchName} did not point to a commit in repo {repo}.", writeToConsole: true);
+                    throw new ArgumentException($"Branch named {targetBranchName} did not point to a commit in repo {repo.Info.Path}.");
                 }
                 targetSha = targetBranch.Tip.Sha;
             }
