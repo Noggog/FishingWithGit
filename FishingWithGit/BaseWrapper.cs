@@ -12,7 +12,7 @@ namespace FishingWithGit
     {
         StringBuilder sb = new StringBuilder();
         bool shouldLog = Properties.Settings.Default.ShouldLog;
-        
+
         public int Wrap(string[] args)
         {
             try
@@ -316,21 +316,81 @@ namespace FishingWithGit
 
         private int FireBashHook(HookType type, HookLocation location, params string[] args)
         {
+            return CommonFunctions.RunCommands(
+               () => FireNamedBashHook(type, location, args),
+               () => FireUntiedBashHook(type, location, args));
+        }
+
+        private int FireNamedBashHook(HookType type, HookLocation location, params string[] args)
+        {
             var path = GetHookFolder(location);
             FileInfo file = new FileInfo($"{path}/{type.HookName()}");
             if (!file.Exists) return 0;
 
-            WriteLine($"Firing Bash Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
+            WriteLine($"Firing Named Bash Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
 
-            RunProcess(
+            var exitCode = RunProcess(
                 SetArgumentsOnStartInfo(
                     new ProcessStartInfo(file.FullName, string.Join(" ", args))));
 
-            WriteLine($"Fired Bash Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
+            WriteLine($"Fired Named Bash Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
+            return exitCode;
+        }
+
+        private int FireUntiedBashHook(HookType type, HookLocation location, params string[] args)
+        {
+            var path = GetHookFolder(location);
+            DirectoryInfo dir = new DirectoryInfo(path);
+            if (!dir.Exists) return 0;
+
+            foreach (var file in dir.EnumerateFiles())
+            {
+                if (!file.Extension.ToUpper().Equals(string.Empty)) continue;
+                var rawName = Path.GetFileNameWithoutExtension(file.Name);
+                if (HookTypeExt.IsCommandString(rawName)
+                    && !rawName.Equals(type.CommandString())) continue;
+
+                WriteLine($"Firing Untied Bash Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
+
+                var exitCode = this.RunProcess(
+                    SetArgumentsOnStartInfo(
+                        new ProcessStartInfo(file.FullName, string.Join(" ", args))));
+
+                WriteLine($"Fired Untied Bash Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
+            }
+
             return 0;
         }
 
+
         public int FireExeHooks(HookType type, HookLocation location, params string[] args)
+        {
+            return CommonFunctions.RunCommands(
+               () => FireNamedExeHooks(type, location, args),
+               () => FireUntiedExeHooks(type, location, args));
+        }
+
+        private int FireNamedExeHooks(HookType type, HookLocation location, params string[] args)
+        {
+            var path = GetHookFolder(location);
+            FileInfo file = new FileInfo($"{path}/{type.HookName()}");
+            if (!file.Exists) return 0;
+
+            WriteLine($"Firing Named Exe Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
+
+            this.RunProcess(
+                SetArgumentsOnStartInfo(
+                    new ProcessStartInfo(file.FullName, string.Join(" ", args))));
+
+            WriteLine($"Fired Named Exe Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
+            return 0;
+        }
+
+        private int FireUntiedExeHooks(HookType type, HookLocation location, params string[] args)
         {
             var path = GetHookFolder(location);
             DirectoryInfo dir = new DirectoryInfo(path);
@@ -343,7 +403,7 @@ namespace FishingWithGit
                 if (HookTypeExt.IsCommandString(rawName)
                     && !rawName.Equals(type.CommandString())) continue;
 
-                WriteLine($"Firing Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
+                WriteLine($"Firing Untied Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
 
                 var newArgs = new string[args.Length + 2];
                 newArgs[0] = type.HookName();
@@ -354,7 +414,7 @@ namespace FishingWithGit
                     SetArgumentsOnStartInfo(
                         new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))));
 
-                WriteLine($"Fired Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
+                WriteLine($"Fired Untied Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
                 if (exitCode != 0)
                 {
                     return exitCode;
