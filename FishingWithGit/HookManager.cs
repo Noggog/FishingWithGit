@@ -99,7 +99,7 @@ namespace FishingWithGit
                 {
                     throw new ArgumentException("Cannot run checkout hooks, as args are invald.  No branch name was found.");
                 }
-                return NormalCheckoutHooks(args[commandIndex]);
+                return NormalCheckoutHooks(args[commandIndex], args, commandIndex);
             }
         }
 
@@ -113,13 +113,12 @@ namespace FishingWithGit
             return startIndex;
         }
 
-        private HookPair NormalCheckoutHooks(string branchName)
+        private HookPair NormalCheckoutHooks(string targetBranchName, string[] args, int commandIndex)
         {
             string curSha, targetSha;
             using (var repo = new Repository(Directory.GetCurrentDirectory()))
             {
                 curSha = repo.Head.Tip.Sha;
-                var targetBranchName = branchName;
                 var targetBranch = repo.Branches[targetBranchName];
                 if (targetBranch == null)
                 {
