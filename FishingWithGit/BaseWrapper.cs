@@ -28,7 +28,11 @@ namespace FishingWithGit
                 if (Properties.Settings.Default.FireHookLogic)
                 {
                     hook = hookMgr.GetHook(args);
-                    if (hook?.PreCommand != null)
+                    if (hook == null)
+                    {
+                        this.WriteLine("No hooks for this command.");
+                    }
+                    else if (hook.PreCommand != null)
                     {
                         WriteLine("Firing prehooks.");
                         int? hookExitCode = hook?.PreCommand?.Invoke();
@@ -168,6 +172,7 @@ namespace FishingWithGit
         string[] ProcessCommand(string[] args)
         {
             args = StripCArguments(args);
+            args = StripTemplateArguments(args);
             return EnsureFormatIsQuoted(args);
         }
 
@@ -182,6 +187,15 @@ namespace FishingWithGit
                 argsList.RemoveAt(index);
             }
             return argsList.ToArray();
+        }
+
+        string[] StripTemplateArguments(string[] args)
+        {
+            if (!Properties.Settings.Default.RemoveTemplateFromClone) return args;
+            if (!args.Contains("clone")) return args;
+            return args
+                .Where((arg) => !arg.StartsWith("--template"))
+                .ToArray();
         }
 
         string[] EnsureFormatIsQuoted(string[] args)
