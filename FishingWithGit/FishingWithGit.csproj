@@ -51,11 +51,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseWrapper.cs" />
-    <Compile Include="CommandType.cs" />
-    <Compile Include="HookType.cs" />
-    <Compile Include="HookManager.cs" />
-    <Compile Include="HookPair.cs" />
-    <Compile Include="HookLocation.cs" />
+    <Compile Include="Enums\CommandType.cs" />
+    <Compile Include="CommonFunctions.cs" />
+    <Compile Include="Hooks\CheckoutHooks.cs" />
+    <Compile Include="Hooks\CommitHooks.cs" />
+    <Compile Include="Hooks\CommitMsgHooks.cs" />
+    <Compile Include="Hooks\RebaseHooks.cs" />
+    <Compile Include="Hooks\ResetHooks.cs" />
+    <Compile Include="Hooks\StatusHooks.cs" />
+    <Compile Include="Hooks\TakeHooks.cs" />
+    <Compile Include="Enums\HookType.cs" />
+    <Compile Include="Hooks\HookSet.cs" />
+    <Compile Include="Enums\HookLocation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

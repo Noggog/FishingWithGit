@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FishingWithGit
 {
-    class HookPair
+    public enum HookLocation
     {
-        public Func<int> PreCommand;
-        public Func<int> PostCommand;
+        Normal,
+        InRepo
     }
 }
