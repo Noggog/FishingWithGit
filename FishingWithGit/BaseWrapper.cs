@@ -347,8 +347,7 @@ namespace FishingWithGit
             {
                 if (!file.Extension.ToUpper().Equals(string.Empty)) continue;
                 var rawName = Path.GetFileNameWithoutExtension(file.Name);
-                if (HookTypeExt.IsCommandString(rawName)
-                    && !rawName.Equals(type.CommandString())) continue;
+                if (HookTypeExt.IsHookName(rawName)) continue;
 
                 WriteLine($"Firing Untied Bash Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
 
@@ -400,8 +399,7 @@ namespace FishingWithGit
             {
                 if (!file.Extension.ToUpper().Equals(".EXE")) continue;
                 var rawName = Path.GetFileNameWithoutExtension(file.Name);
-                if (HookTypeExt.IsCommandString(rawName)
-                    && !rawName.Equals(type.CommandString())) continue;
+                if (HookTypeExt.IsHookName(rawName)) continue;
 
                 WriteLine($"Firing Untied Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
 

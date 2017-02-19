@@ -54,6 +54,28 @@ namespace FishingWithGit
             return commandStrings.Value.Contains(str);
         }
 
+        private static Lazy<HashSet<string>> hookStrings = new Lazy<HashSet<string>>(
+            () =>
+            {
+                var ret = new HashSet<string>();
+                foreach (HookType type in Enum.GetValues(typeof(HookType)))
+                {
+                    try
+                    {
+                        ret.Add(type.HookName());
+                    }
+                    catch
+                    {
+                    }
+                }
+                return ret;
+            });
+
+        public static bool IsHookName(string name)
+        {
+            return hookStrings.Value.Contains(name);
+        }
+
         public static bool Stock(this HookType type)
         {
             switch (type)
