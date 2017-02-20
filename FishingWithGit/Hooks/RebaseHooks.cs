@@ -13,7 +13,7 @@ namespace FishingWithGit
         {
         }
 
-        public static HookSet Factory(BaseWrapper wrapper, string[] args, int commandIndex)
+        public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
         {
             return new RebaseHooks(wrapper);
         }

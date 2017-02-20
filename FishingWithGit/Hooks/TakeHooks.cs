@@ -10,7 +10,7 @@ namespace FishingWithGit
     {
         string[] newArgs;
 
-        private TakeHooks(BaseWrapper wrapper, string[] args, int commandIndex)
+        private TakeHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
             : base(wrapper)
         {
             var argsList = args.ToList();
@@ -19,11 +19,11 @@ namespace FishingWithGit
             {
                 throw new ArgumentException("Could not run take hooks.  Args invalid and missing '--'.");
             }
-            newArgs = new string[args.Length - commandIndex];
-            Array.Copy(args, commandIndex, newArgs, 0, newArgs.Length);
+            newArgs = new string[args.Count - commandIndex];
+            Array.Copy(args.ToArray(), commandIndex, newArgs, 0, newArgs.Length);
         }
 
-        public static HookSet Factory(BaseWrapper wrapper, string[] args, int commandIndex)
+        public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
         {
             return new TakeHooks(wrapper, args, commandIndex);
         }

@@ -12,12 +12,12 @@ namespace FishingWithGit
     {
         string[] newArgs;
 
-        private ResetHooks(BaseWrapper wrapper, string[] args, int commandIndex)
+        private ResetHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
             : base(wrapper)
         {
             string sha = null;
             string type = null;
-            for (int i = commandIndex + 1; i < args.Length; i++)
+            for (int i = commandIndex + 1; i < args.Count; i++)
             {
                 if (!args[i].StartsWith("-")
                     && args[i].Length == 40)
@@ -64,9 +64,9 @@ namespace FishingWithGit
             };
         }
 
-        public static HookSet Factory(BaseWrapper wrapper, string[] args, int commandIndex)
+        public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
         {
-            if (args.Length <= commandIndex + 1)
+            if (args.Count <= commandIndex + 1)
             {
                 throw new ArgumentException("Cannot run reset hooks, as args are invald.  No content was found after checkout command.");
             }

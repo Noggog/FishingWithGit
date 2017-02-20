@@ -10,10 +10,10 @@ namespace FishingWithGit
     {
         string[] newArgs;
 
-        private CommitMsgHooks(BaseWrapper wrapper, string[] args, int commandIndex)
+        private CommitMsgHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
             : base(wrapper)
         {
-            if (args.Length <= commandIndex + 1)
+            if (args.Count <= commandIndex + 1)
             {
                 throw new ArgumentException("Cannot run checkout hooks, as args are invald.  No content was found after checkout command.");
             }
@@ -24,7 +24,7 @@ namespace FishingWithGit
             };
         }
 
-        public static HookSet Factory(BaseWrapper wrapper, string[] args, int commandIndex)
+        public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
         {
             return new CommitMsgHooks(wrapper, args, commandIndex);
         }

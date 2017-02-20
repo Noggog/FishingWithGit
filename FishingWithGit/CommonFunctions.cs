@@ -21,9 +21,9 @@ namespace FishingWithGit
             return 0;
         }
 
-        public static int Skip(string[] args, int startIndex, params string[] commands)
+        public static int Skip(List<string> args, int startIndex, params string[] commands)
         {
-            for (; startIndex < args.Length; startIndex++)
+            for (; startIndex < args.Count; startIndex++)
             {
                 if (commands.Contains(args[startIndex])) continue;
                 return startIndex;

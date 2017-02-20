@@ -12,13 +12,13 @@ namespace FishingWithGit
     {
         string[] newArgs;
 
-        private CheckoutHooks(BaseWrapper wrapper, string[] args, int commandIndex)
+        private CheckoutHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
             : base(wrapper)
         {
             this.newArgs = RetrieveNewArgs(args, commandIndex);
         }
 
-        public static HookSet Factory(BaseWrapper wrapper, string[] args, int commandIndex)
+        public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
         {
             if (args.Contains("--")
                 || args.Contains("--theirs")
@@ -32,7 +32,7 @@ namespace FishingWithGit
             }
         }
 
-        private string[] RetrieveNewArgs(string[] args, int commandIndex)
+        private string[] RetrieveNewArgs(List<string> args, int commandIndex)
         {
             string curSha, targetSha;
             var argsList = args.ToList();
@@ -43,7 +43,7 @@ namespace FishingWithGit
                 if (trackIndex == -1)
                 { // Just checking out a local branch
                     var nameIndex = CommonFunctions.Skip(args, commandIndex + 1, "-b");
-                    if (nameIndex >= args.Length)
+                    if (nameIndex >= args.Count)
                     {
                         throw new ArgumentException("Cannot run checkout hooks, as args are invald.  No branch name was found.");
                     }
@@ -51,7 +51,7 @@ namespace FishingWithGit
                 }
                 else
                 { // Checking out a remote branch
-                    if (args.Length <= trackIndex + 1)
+                    if (args.Count <= trackIndex + 1)
                     {
                         throw new ArgumentException($"Could not locate target remote branch name.");
                     }

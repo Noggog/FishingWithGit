@@ -10,13 +10,13 @@ namespace FishingWithGit
     {
         string[] args;
 
-        private StatusHooks(BaseWrapper wrapper, string[] args)
+        private StatusHooks(BaseWrapper wrapper, List<string> args)
             : base(wrapper)
         {
-            this.args = args;
+            this.args = args.ToArray();
         }
 
-        public static HookSet Factory(BaseWrapper wrapper, string[] args, int commandIndex)
+        public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
         {
             return new StatusHooks(wrapper, args);
         }

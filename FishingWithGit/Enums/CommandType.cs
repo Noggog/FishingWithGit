@@ -8,6 +8,7 @@ namespace FishingWithGit
 {
     public enum CommandType
     {
+        unknown,
         checkout,
         rebase,
         reset,
@@ -15,7 +16,9 @@ namespace FishingWithGit
         status,
         merge,
         push,
-        commitmsg
+        commitmsg,
+        clone,
+        add
     }
 
     public static class CommandTypeExt
@@ -39,6 +42,7 @@ namespace FishingWithGit
             switch (command)
             {
                 case CommandType.status:
+                case CommandType.unknown:
                     return true;
                 default:
                     return false;

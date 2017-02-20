@@ -12,16 +12,32 @@ namespace FishingWithGit
     {
         StringBuilder sb = new StringBuilder();
         bool shouldLog = Properties.Settings.Default.ShouldLog;
+        CommandType commandType;
+        int commandIndex;
+        List<string> args;
 
-        public int Wrap(string[] args)
+        public BaseWrapper(string[] args)
+        {
+            this.args = args.ToList();
+        }
+
+        public int Wrap()
         {
             try
             {
-                var startInfo = GetStartInfo(args);
+                WriteLine(DateTime.Now.ToString());
+                WriteLine("Arguments:");
+                WriteLine($"  {string.Join(" ", args)}");
+                WriteLine("");
+                GetCommandInfo();
+                WriteLine($"Command: {commandType.ToString()}", writeToConsole: !commandType.Silent());
+                ProcessArgs();
+                GetMainCommand(out commandIndex);
+                var startInfo = GetStartInfo();
                 HookSet hook = null;
                 if (Properties.Settings.Default.FireHookLogic)
                 {
-                    hook = GetHook(args);
+                    hook = GetHook();
                     if (hook == null)
                     {
                         this.WriteLine("No hooks for this command.");
@@ -68,6 +84,8 @@ namespace FishingWithGit
             {
                 shouldLog = true;
                 WriteLine("An error occurred!!!: " + ex.Message, writeToConsole: true);
+                shouldLog = true;
+                WriteLine(ex.ToString(), writeToConsole: true);
                 throw;
             }
             finally
@@ -80,18 +98,32 @@ namespace FishingWithGit
             }
         }
 
-        ProcessStartInfo GetStartInfo(string[] args)
+        void GetCommandInfo(bool yell = false)
         {
-            WriteLine(DateTime.Now.ToString());
+            string cmdStr = GetMainCommand(out commandIndex);
+            if (commandIndex == -1)
+            {
+                commandType = CommandType.unknown;
+                if (yell)
+                {
+                    WriteLine("No command found.");
+                    throw new ArgumentException("No command found.");
+                }
+                else
+                {
+                    return;
+                }
+            }
+            if (!CommandTypeExt.TryParse(cmdStr, out commandType))
+            {
+                commandType = CommandType.unknown;
+            }
+        }
+
+        ProcessStartInfo GetStartInfo()
+        {
             ProcessStartInfo startInfo = new ProcessStartInfo();
-            WriteLine("Arguments:");
-            WriteLine($"  {string.Join(" ", args)}");
-            WriteLine("");
-            args = ProcessCommand(args);
             startInfo.Arguments = string.Join(" ", args);
-            WriteLine("Arguments going in:");
-            WriteLine($"  {startInfo.Arguments}");
-            WriteLine("");
             WriteLine("Working directory " + Directory.GetCurrentDirectory());
             var exePath = System.Reflection.Assembly.GetEntryAssembly().Location;
             if (exePath.EndsWith("FishingWithGit.exe"))
@@ -162,53 +194,40 @@ namespace FishingWithGit
             }
         }
 
-        string[] ProcessCommand(string[] args)
+        private void ProcessArgs()
         {
-            args = StripCArguments(args);
-            args = StripTemplateArguments(args);
-            return EnsureFormatIsQuoted(args);
-        }
+            this.WriteLine("Processing generic arguments.");
+            ArgProcessor.GenericProcessing(args);
+            ArgProcessor commandProcessor;
 
-        string[] StripCArguments(string[] args)
-        {
-            if (!Properties.Settings.Default.CleanCArguments) return args;
-            List<string> argsList = args.ToList();
-            int index;
-            while ((index = argsList.IndexOf("-c")) != -1)
+            try
             {
-                argsList.RemoveAt(index);
-                argsList.RemoveAt(index);
-            }
-            return argsList.ToArray();
-        }
-
-        string[] StripTemplateArguments(string[] args)
-        {
-            if (!Properties.Settings.Default.RemoveTemplateFromClone) return args;
-            if (!args.Contains("clone")) return args;
-            return args
-                .Where((arg) => !arg.StartsWith("--template"))
-                .ToArray();
-        }
-
-        string[] EnsureFormatIsQuoted(string[] args)
-        {
-            var formatStr = "--format=";
-            for (int i = 0; i < args.Length; i++)
-            {
-                var arg = args[i];
-                if (arg.StartsWith(formatStr))
+                switch (commandType)
                 {
-                    if (arg.Length <= formatStr.Length) continue;
-                    if (arg[formatStr.Length + 1] == '\"') continue;
-                    if (arg[arg.Length - 1] == '\"') continue;
-                    WriteLine("Need to insert quotes for format.");
-                    args[i] = $"\"{arg}\"";
+                    case CommandType.clone:
+                        commandProcessor = new CloneProcessor();
+                        break;
+                    case CommandType.add:
+                        commandProcessor = new AddProcessor();
+                        break;
+                    case CommandType.reset:
+                        commandProcessor = new ResetProcessor();
+                        break;
+                    default:
+                        return;
                 }
+                this.WriteLine("Processing specialized arguments.");
+                commandProcessor.Process(args);
             }
-            return args;
+            finally
+            {
+                WriteLine("Arguments going in:");
+                WriteLine($"  {string.Join(" ", args)}");
+                WriteLine("");
+            }
         }
 
+        #region Logging
         public void WriteLine(string line, bool writeToConsole = false)
         {
             if (writeToConsole)
@@ -241,42 +260,33 @@ namespace FishingWithGit
             {
             }
         }
+        #endregion
 
-        public HookSet GetHook(string[] args)
+        #region Getting Hooks
+        public HookSet GetHook()
         {
-            int index;
-            string cmdStr = GetMainCommand(args, out index);
-            if (index == -1)
-            {
-                WriteLine("No command found.");
-                return null;
-            }
-            CommandType command;
-            if (!CommandTypeExt.TryParse(cmdStr, out command)) return null;
-
-            WriteLine($"Command: {cmdStr}", writeToConsole: !command.Silent());
-            switch (command)
+            switch (commandType)
             {
                 case CommandType.checkout:
-                    return CheckoutHooks.Factory(this, args, index);
+                    return CheckoutHooks.Factory(this, args, commandIndex);
                 case CommandType.rebase:
-                    return RebaseHooks.Factory(this, args, index);
+                    return RebaseHooks.Factory(this, args, commandIndex);
                 case CommandType.reset:
-                    return ResetHooks.Factory(this, args, index);
+                    return ResetHooks.Factory(this, args, commandIndex);
                 case CommandType.commitmsg:
-                    return CommitMsgHooks.Factory(this, args, index);
+                    return CommitMsgHooks.Factory(this, args, commandIndex);
                 case CommandType.commit:
-                    return CommitHooks.Factory(this, args, index);
+                    return CommitHooks.Factory(this, args, commandIndex);
                 case CommandType.status:
-                    return StatusHooks.Factory(this, args, index);
+                    return StatusHooks.Factory(this, args, commandIndex);
                 default:
                     return null;
             }
         }
 
-        private string GetMainCommand(string[] args, out int index)
+        private string GetMainCommand(out int index)
         {
-            for (int i = 0; i < args.Length; i++)
+            for (int i = 0; i < args.Count; i++)
             {
                 if (args[i].StartsWith("--"))
                 {
@@ -295,7 +305,9 @@ namespace FishingWithGit
             index = -1;
             return null;
         }
+        #endregion
 
+        #region Firing Hooks
         public int FireHook(HookType type, HookLocation location, params string[] args)
         {
             return CommonFunctions.RunCommands(
@@ -364,8 +376,7 @@ namespace FishingWithGit
 
             return 0;
         }
-
-
+        
         public int FireExeHooks(HookType type, HookLocation location, params string[] args)
         {
             return CommonFunctions.RunCommands(
@@ -430,5 +441,6 @@ namespace FishingWithGit
             startInfo.RedirectStandardOutput = true;
             return startInfo;
         }
+        #endregion
     }
 }

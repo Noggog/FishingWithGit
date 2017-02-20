@@ -50,6 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arg Processors\AddProcessor.cs" />
+    <Compile Include="Arg Processors\ArgProcessor.cs" />
+    <Compile Include="Arg Processors\CloneProcessor.cs" />
+    <Compile Include="Arg Processors\ResetProcessor.cs" />
     <Compile Include="BaseWrapper.cs" />
     <Compile Include="Enums\CommandType.cs" />
     <Compile Include="CommonFunctions.cs" />
@@ -79,6 +83,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
