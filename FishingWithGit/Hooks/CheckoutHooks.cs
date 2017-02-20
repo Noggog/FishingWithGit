@@ -84,15 +84,15 @@ namespace FishingWithGit
         public override int PreCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireHook(HookType.Pre_Checkout, HookLocation.InRepo, newArgs),
-                () => this.Wrapper.FireHook(HookType.Pre_Checkout, HookLocation.Normal, newArgs));
+                () => this.Wrapper.FireAllHooks(HookType.Pre_Checkout, HookLocation.InRepo, newArgs),
+                () => this.Wrapper.FireAllHooks(HookType.Pre_Checkout, HookLocation.Normal, newArgs));
         }
 
         public override int PostCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireHook(HookType.Post_Checkout, HookLocation.InRepo, newArgs),
-                () => this.Wrapper.FireExeHooks(HookType.Post_Checkout, HookLocation.Normal, newArgs));
+                () => this.Wrapper.FireAllHooks(HookType.Post_Checkout, HookLocation.InRepo, newArgs),
+                () => this.Wrapper.FireUnnaturalHooks(HookType.Post_Checkout, HookLocation.Normal, newArgs));
         }
     }
 }

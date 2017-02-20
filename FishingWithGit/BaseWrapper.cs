@@ -45,7 +45,7 @@ namespace FishingWithGit
                     else
                     {
                         WriteLine("Firing prehooks.");
-                        int? hookExitCode = hook?.PreCommand();
+                        int? hookExitCode = hook.PreCommand();
                         WriteLine("Fired prehooks.");
                         if (0 != (hookExitCode ?? 0))
                         {
@@ -67,10 +67,11 @@ namespace FishingWithGit
                 {
                     exitCode = RunProcess(startInfo);
                 }
-                if (Properties.Settings.Default.FireHookLogic)
+                if (Properties.Settings.Default.FireHookLogic
+                    && hook != null)
                 {
                     WriteLine("Firing posthooks.");
-                    int? hookExitCode = hook?.PostCommand();
+                    int? hookExitCode = hook.PostCommand();
                     WriteLine("Fired posthooks.");
                     if (0 != (hookExitCode ?? 0))
                     {
@@ -308,10 +309,17 @@ namespace FishingWithGit
         #endregion
 
         #region Firing Hooks
-        public int FireHook(HookType type, HookLocation location, params string[] args)
+        public int FireAllHooks(HookType type, HookLocation location, params string[] args)
         {
             return CommonFunctions.RunCommands(
                 () => FireBashHook(type, location, args),
+                () => FireExeHooks(type, location, args));
+        }
+
+        public int FireUnnaturalHooks(HookType type, HookLocation location, params string[] args)
+        {
+            return CommonFunctions.RunCommands(
+                () => FireUntiedBashHook(type, location, args),
                 () => FireExeHooks(type, location, args));
         }
 

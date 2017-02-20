@@ -32,8 +32,8 @@ namespace FishingWithGit
         public override int PreCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireHook(HookType.Commit_Msg, HookLocation.InRepo, newArgs),
-                () => this.Wrapper.FireExeHooks(HookType.Commit_Msg, HookLocation.Normal, newArgs));
+                () => this.Wrapper.FireAllHooks(HookType.Commit_Msg, HookLocation.InRepo, newArgs),
+                () => this.Wrapper.FireUnnaturalHooks(HookType.Commit_Msg, HookLocation.Normal, newArgs));
         }
 
         public override int PostCommand()
