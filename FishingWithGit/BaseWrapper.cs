@@ -395,7 +395,7 @@ namespace FishingWithGit
         private int FireNamedExeHooks(HookType type, HookLocation location, params string[] args)
         {
             var path = GetHookFolder(location);
-            FileInfo file = new FileInfo($"{path}/{type.HookName()}");
+            FileInfo file = new FileInfo($"{path}/{type.HookName()}.exe");
             if (!file.Exists) return 0;
 
             WriteLine($"Firing Named Exe Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
