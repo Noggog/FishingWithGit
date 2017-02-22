@@ -49,7 +49,7 @@ namespace FishingWithGit
                         WriteLine("Fired prehooks.");
                         if (0 != (hookExitCode ?? 0))
                         {
-                            WriteLine("Exiting early because of hook failure.");
+                            WriteLine($"Exiting early because of hook failure ({hookExitCode})", writeToConsole: true);
                             return hookExitCode.Value;
                         }
                     }
@@ -75,7 +75,7 @@ namespace FishingWithGit
                     WriteLine("Fired posthooks.");
                     if (0 != (hookExitCode ?? 0))
                     {
-                        WriteLine("Exiting early because of hook failure.");
+                        WriteLine($"Exiting early because of hook failure ({hookExitCode})", writeToConsole: true);
                         return hookExitCode.Value;
                     }
                 }
@@ -187,7 +187,7 @@ namespace FishingWithGit
                             first = false;
                         }
                         Console.Error.Write(result);
-                        WriteLine(result);
+                        WriteLine(result, writeToConsole: true);
                     }
                 }
                 process.WaitForExit();
