@@ -10,7 +10,9 @@ namespace FishingWithGit
     {
         public override void Process(List<string> args)
         {
-            if (args.Contains("--mixed")) return;
+            if (args.Contains("--mixed")
+                || args.Contains("--hard")
+                || args.Contains("--soft")) return;
             ProcessAfterSplitterFileList(args);
         }
     }
