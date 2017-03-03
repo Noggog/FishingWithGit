@@ -349,9 +349,12 @@ namespace FishingWithGit
 
             WriteLine($"Firing Named Bash Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
 
+            var tmpPathName = Path.GetTempFileName() + ".bat";
+            File.Copy(file.FullName, tmpPathName, true);
             var exitCode = RunProcess(
                 SetArgumentsOnStartInfo(
-                    new ProcessStartInfo(file.FullName, string.Join(" ", args))));
+                    new ProcessStartInfo(@"C:\Windows\System32\cmd.exe", "/c " + tmpPathName + " " + string.Join(" ", args))));
+            File.Delete(tmpPathName);
 
             WriteLine($"Fired Named Bash Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
             return exitCode;
@@ -371,9 +374,12 @@ namespace FishingWithGit
 
                 WriteLine($"Firing Untied Bash Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
 
+                var tmpPathName = Path.GetTempFileName() + ".bat";
+                File.Copy(file.FullName, tmpPathName, true);
                 var exitCode = this.RunProcess(
                     SetArgumentsOnStartInfo(
-                        new ProcessStartInfo(file.FullName, string.Join(" ", args))));
+                        new ProcessStartInfo(@"C:\Windows\System32\cmd.exe", "/c " + tmpPathName + " " + string.Join(" ", args))));
+                File.Delete(tmpPathName);
 
                 WriteLine($"Fired Untied Bash Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
                 if (exitCode != 0)
@@ -446,6 +452,7 @@ namespace FishingWithGit
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardError = true;
+            startInfo.WorkingDirectory = Directory.GetCurrentDirectory();
             startInfo.RedirectStandardOutput = true;
             return startInfo;
         }
