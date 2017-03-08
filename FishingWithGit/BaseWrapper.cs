@@ -160,37 +160,44 @@ namespace FishingWithGit
             }
             using (var process = Process.Start(startInfo))
             {
-                bool first = true;
-                using (StreamReader reader = process.StandardOutput)
-                {
-                    string result = reader.ReadToEnd();
-                    if (!string.IsNullOrWhiteSpace(result))
+                await Task.WhenAll(
+                    Task.Run(() => process.WaitForExit()),
+                    Task.Run(() =>
                     {
-                        if (first)
+                        bool first = true;
+                        using (StreamReader reader = process.StandardOutput)
                         {
-                            WriteLine("--------- Standard Output :");
-                            first = false;
+                            string result = reader.ReadToEnd();
+                            if (!string.IsNullOrWhiteSpace(result))
+                            {
+                                if (first)
+                                {
+                                    WriteLine("--------- Standard Output :");
+                                    first = false;
+                                }
+                                Console.Write(result);
+                                WriteLine(result);
+                            }
                         }
-                        Console.Write(result);
-                        WriteLine(result);
-                    }
-                }
-                first = true;
-                using (StreamReader reader = process.StandardError)
-                {
-                    string result = reader.ReadToEnd();
-                    if (!string.IsNullOrWhiteSpace(result))
+                    }),
+                    Task.Run(() =>
                     {
-                        if (first)
+                        first = true;
+                        using (StreamReader reader = process.StandardError)
                         {
-                            WriteLine("--------- Standard Error :");
-                            first = false;
+                            string result = reader.ReadToEnd();
+                            if (!string.IsNullOrWhiteSpace(result))
+                            {
+                                if (first)
+                                {
+                                    WriteLine("--------- Standard Error :");
+                                    first = false;
+                                }
+                                Console.Error.Write(result);
+                                WriteLine(result, writeToConsole: true);
+                            }
                         }
-                        Console.Error.Write(result);
-                        WriteLine(result, writeToConsole: true);
-                    }
-                }
-                process.WaitForExit();
+                    }));
                 return process.ExitCode;
             }
         }
