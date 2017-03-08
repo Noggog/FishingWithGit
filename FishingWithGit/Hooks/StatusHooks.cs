@@ -21,14 +21,14 @@ namespace FishingWithGit
             return new StatusHooks(wrapper, args);
         }
 
-        public override int PreCommand()
+        public override Task<int> PreCommand()
         {
             return CommonFunctions.RunCommands(
                 () => this.Wrapper.FireAllHooks(HookType.Pre_Status, HookLocation.InRepo, args),
                 () => this.Wrapper.FireAllHooks(HookType.Pre_Status, HookLocation.Normal, args));
         }
 
-        public override int PostCommand()
+        public override Task<int> PostCommand()
         {
             return CommonFunctions.RunCommands(
                 () => this.Wrapper.FireAllHooks(HookType.Post_Status, HookLocation.InRepo, args),

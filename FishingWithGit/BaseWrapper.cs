@@ -21,7 +21,7 @@ namespace FishingWithGit
             this.args = args.ToList();
         }
 
-        public int Wrap()
+        public async Task<int> Wrap()
         {
             try
             {
@@ -45,7 +45,7 @@ namespace FishingWithGit
                     else
                     {
                         WriteLine("Firing prehooks.");
-                        int? hookExitCode = hook.PreCommand();
+                        int? hookExitCode = await hook.PreCommand();
                         WriteLine("Fired prehooks.");
                         if (0 != (hookExitCode ?? 0))
                         {
@@ -65,13 +65,13 @@ namespace FishingWithGit
                 }
                 else
                 {
-                    exitCode = RunProcess(startInfo);
+                    exitCode = await RunProcess(startInfo);
                 }
                 if (Properties.Settings.Default.FireHookLogic
                     && hook != null)
                 {
                     WriteLine("Firing posthooks.");
-                    int? hookExitCode = hook.PostCommand();
+                    int? hookExitCode = await hook.PostCommand();
                     WriteLine("Fired posthooks.");
                     if (0 != (hookExitCode ?? 0))
                     {
@@ -151,7 +151,7 @@ namespace FishingWithGit
             return Properties.Settings.Default.BackupSourcePath;
         }
 
-        public int RunProcess(ProcessStartInfo startInfo)
+        public async Task<int> RunProcess(ProcessStartInfo startInfo)
         {
             FileInfo file = new FileInfo(startInfo.FileName);
             if (!file.Exists)
@@ -309,14 +309,14 @@ namespace FishingWithGit
         #endregion
 
         #region Firing Hooks
-        public int FireAllHooks(HookType type, HookLocation location, params string[] args)
+        public Task<int> FireAllHooks(HookType type, HookLocation location, params string[] args)
         {
             return CommonFunctions.RunCommands(
                 () => FireBashHook(type, location, args),
                 () => FireExeHooks(type, location, args));
         }
 
-        public int FireUnnaturalHooks(HookType type, HookLocation location, params string[] args)
+        public Task<int> FireUnnaturalHooks(HookType type, HookLocation location, params string[] args)
         {
             return CommonFunctions.RunCommands(
                 () => FireUntiedBashHook(type, location, args),
@@ -334,14 +334,14 @@ namespace FishingWithGit
             return path;
         }
 
-        private int FireBashHook(HookType type, HookLocation location, params string[] args)
+        private Task<int> FireBashHook(HookType type, HookLocation location, params string[] args)
         {
             return CommonFunctions.RunCommands(
                () => FireNamedBashHook(type, location, args),
                () => FireUntiedBashHook(type, location, args));
         }
 
-        private int FireNamedBashHook(HookType type, HookLocation location, params string[] args)
+        private async Task<int> FireNamedBashHook(HookType type, HookLocation location, params string[] args)
         {
             var path = GetHookFolder(location);
             FileInfo file = new FileInfo($"{path}/{type.HookName()}");
@@ -349,7 +349,7 @@ namespace FishingWithGit
 
             WriteLine($"Firing Named Bash Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
 
-            var exitCode = RunProcess(
+            var exitCode = await RunProcess(
                 SetArgumentsOnStartInfo(
                     new ProcessStartInfo(file.FullName, string.Join(" ", args))));
 
@@ -357,7 +357,7 @@ namespace FishingWithGit
             return exitCode;
         }
 
-        private int FireUntiedBashHook(HookType type, HookLocation location, params string[] args)
+        private async Task<int> FireUntiedBashHook(HookType type, HookLocation location, params string[] args)
         {
             var path = GetHookFolder(location);
             DirectoryInfo dir = new DirectoryInfo(path);
@@ -371,7 +371,7 @@ namespace FishingWithGit
 
                 WriteLine($"Firing Untied Bash Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
 
-                var exitCode = this.RunProcess(
+                var exitCode = await this.RunProcess(
                     SetArgumentsOnStartInfo(
                         new ProcessStartInfo(file.FullName, string.Join(" ", args))));
 
@@ -385,14 +385,14 @@ namespace FishingWithGit
             return 0;
         }
         
-        public int FireExeHooks(HookType type, HookLocation location, params string[] args)
+        public Task<int> FireExeHooks(HookType type, HookLocation location, params string[] args)
         {
             return CommonFunctions.RunCommands(
                () => FireNamedExeHooks(type, location, args),
                () => FireUntiedExeHooks(type, location, args));
         }
 
-        private int FireNamedExeHooks(HookType type, HookLocation location, params string[] args)
+        private async Task<int> FireNamedExeHooks(HookType type, HookLocation location, params string[] args)
         {
             var path = GetHookFolder(location);
             FileInfo file = new FileInfo($"{path}/{type.HookName()}.exe");
@@ -400,7 +400,7 @@ namespace FishingWithGit
 
             WriteLine($"Firing Named Exe Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
 
-            this.RunProcess(
+            await this.RunProcess(
                 SetArgumentsOnStartInfo(
                     new ProcessStartInfo(file.FullName, string.Join(" ", args))));
 
@@ -408,7 +408,7 @@ namespace FishingWithGit
             return 0;
         }
 
-        private int FireUntiedExeHooks(HookType type, HookLocation location, params string[] args)
+        private async Task<int> FireUntiedExeHooks(HookType type, HookLocation location, params string[] args)
         {
             var path = GetHookFolder(location);
             DirectoryInfo dir = new DirectoryInfo(path);
@@ -427,7 +427,7 @@ namespace FishingWithGit
                 newArgs[1] = type.CommandString();
                 Array.Copy(args, 0, newArgs, 2, args.Length);
 
-                var exitCode = RunProcess(
+                var exitCode = await RunProcess(
                     SetArgumentsOnStartInfo(
                         new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))));
 

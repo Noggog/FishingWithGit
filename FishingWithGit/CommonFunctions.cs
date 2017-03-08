@@ -8,11 +8,11 @@ namespace FishingWithGit
 {
     public static class CommonFunctions
     {
-        public static int RunCommands(params Func<int>[] funcs)
+        public static async Task<int> RunCommands(params Func<Task<int>>[] funcs)
         {
             foreach (var func in funcs)
             {
-                var code = func();
+                var code = await func();
                 if (code != 0)
                 {
                     return code;

@@ -29,14 +29,14 @@ namespace FishingWithGit
             return new CommitMsgHooks(wrapper, args, commandIndex);
         }
 
-        public override int PreCommand()
+        public override Task<int> PreCommand()
         {
             return CommonFunctions.RunCommands(
                 () => this.Wrapper.FireAllHooks(HookType.Commit_Msg, HookLocation.InRepo, newArgs),
                 () => this.Wrapper.FireUnnaturalHooks(HookType.Commit_Msg, HookLocation.Normal, newArgs));
         }
 
-        public override int PostCommand()
+        public override async Task<int> PostCommand()
         {
             return 0;
         }

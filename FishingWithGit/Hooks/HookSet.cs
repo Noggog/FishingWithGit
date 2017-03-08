@@ -9,8 +9,8 @@ namespace FishingWithGit
     public abstract class HookSet
     {
         public BaseWrapper Wrapper { get; private set; }
-        public abstract int PreCommand();
-        public abstract int PostCommand();
+        public abstract Task<int> PreCommand();
+        public abstract Task<int> PostCommand();
 
         public HookSet(BaseWrapper wrapper)
         {

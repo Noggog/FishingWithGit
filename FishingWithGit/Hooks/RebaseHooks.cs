@@ -18,14 +18,14 @@ namespace FishingWithGit
             return new RebaseHooks(wrapper);
         }
 
-        public override int PreCommand()
+        public override Task<int> PreCommand()
         {
             return CommonFunctions.RunCommands(
                 () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase, HookLocation.InRepo),
                 () => this.Wrapper.FireUnnaturalHooks(HookType.Pre_Rebase, HookLocation.Normal));
         }
 
-        public override int PostCommand()
+        public override Task<int> PostCommand()
         {
             return CommonFunctions.RunCommands(
                 () => this.Wrapper.FireAllHooks(HookType.Post_Rebase, HookLocation.InRepo),
