@@ -160,7 +160,7 @@ namespace FishingWithGit
             }
             using (var process = Process.Start(startInfo))
             {
-                await Task.WhenAll(
+                var task = Task.WhenAll(
                     Task.Run(() => process.WaitForExit()),
                     Task.Run(() =>
                     {
@@ -182,7 +182,7 @@ namespace FishingWithGit
                     }),
                     Task.Run(() =>
                     {
-                        first = true;
+                        var first = true;
                         using (StreamReader reader = process.StandardError)
                         {
                             string result = reader.ReadToEnd();
@@ -198,6 +198,12 @@ namespace FishingWithGit
                             }
                         }
                     }));
+                if (task != Task.WhenAny(task, Task.Delay(Properties.Settings.Default.ProcessTimeoutWarning)))
+                {
+                    this.WriteLine("Process taking a long time: " + startInfo.FileName + " " + startInfo.Arguments);
+                }
+                await task;
+
                 return process.ExitCode;
             }
         }
@@ -391,7 +397,7 @@ namespace FishingWithGit
 
             return 0;
         }
-        
+
         public Task<int> FireExeHooks(HookType type, HookLocation location, params string[] args)
         {
             return CommonFunctions.RunCommands(

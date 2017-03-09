@@ -85,5 +85,14 @@ namespace FishingWithGit.Properties {
                 return ((bool)(this["RemoveTemplateFromClone"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
+        public int ProcessTimeoutWarning {
+            get {
+                return ((int)(this["ProcessTimeoutWarning"]));
+            }
+        }
     }
 }
