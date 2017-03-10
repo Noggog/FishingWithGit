@@ -118,6 +118,7 @@ namespace FishingWithGit
             if (!CommandTypeExt.TryParse(cmdStr, out commandType))
             {
                 commandType = CommandType.unknown;
+                WriteLine("Unknown command: " + cmdStr);
             }
         }
 
@@ -293,6 +294,8 @@ namespace FishingWithGit
                     return CommitHooks.Factory(this, args, commandIndex);
                 case CommandType.status:
                     return StatusHooks.Factory(this, args, commandIndex);
+                case CommandType.cherry:
+                    return CherryPickHook.Factory(this, args, commandIndex);
                 default:
                     return null;
             }

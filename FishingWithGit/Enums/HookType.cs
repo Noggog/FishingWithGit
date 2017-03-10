@@ -14,6 +14,8 @@ namespace FishingWithGit
         Post_ApplyPatch,
         Pre_Commit,
         Post_Commit,
+        Pre_CherryPick,
+        Post_CherryPick,
         Prepare_Commit_Msg,
         Commit_Msg,
         Pre_Rebase,
@@ -134,6 +136,9 @@ namespace FishingWithGit
                 case HookType.Pre_Take:
                 case HookType.Post_Take:
                     return "take";
+                case HookType.Pre_CherryPick:
+                case HookType.Post_CherryPick:
+                    return "cherry-pick";
                 case HookType.Prepare_Commit_Msg:
                 default:
                     throw new NotImplementedException();
@@ -184,6 +189,10 @@ namespace FishingWithGit
                     return "pre-take";
                 case HookType.Post_Take:
                     return "post-take";
+                case HookType.Pre_CherryPick:
+                    return "pre-cherry-pick";
+                case HookType.Post_CherryPick:
+                    return "post-cherry-pick";
                 default:
                     throw new NotImplementedException();
             }
@@ -223,6 +232,9 @@ namespace FishingWithGit
                 case HookType.Pre_Status:
                 case HookType.Post_Status:
                     return CommandType.status;
+                case HookType.Pre_CherryPick:
+                case HookType.Post_CherryPick:
+                    return CommandType.cherry;
                 default:
                     throw new NotImplementedException();
             }

@@ -18,7 +18,8 @@ namespace FishingWithGit
         push,
         commitmsg,
         clone,
-        add
+        add,
+        cherry
     }
 
     public static class CommandTypeExt
@@ -32,6 +33,11 @@ namespace FishingWithGit
             else if (str.Equals("commit-msg"))
             {
                 command = CommandType.commitmsg;
+                return true;
+            }
+            else if (str.Equals("cherry-pick"))
+            {
+                command = CommandType.cherry;
                 return true;
             }
             return false;
