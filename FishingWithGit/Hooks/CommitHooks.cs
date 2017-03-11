@@ -9,11 +9,13 @@ namespace FishingWithGit
     public class CommitHooks : HookSet
     {
         bool amend;
+        string[] args;
 
         private CommitHooks(BaseWrapper wrapper, List<string> args)
             : base(wrapper)
         {
             this.amend = args.Contains("--amend");
+            this.args = amend ? new string[] { "--amend" } : new string[0];
         }
 
         public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
@@ -23,7 +25,6 @@ namespace FishingWithGit
 
         public override Task<int> PreCommand()
         {
-            string[] args = amend ? new string[] { "--amend" } : new string[0];
             return CommonFunctions.RunCommands(
                 () => this.Wrapper.FireAllHooks(HookType.Pre_Commit, HookLocation.InRepo, args),
                 () => this.Wrapper.FireUnnaturalHooks(HookType.Pre_Commit, HookLocation.Normal, args));
@@ -32,8 +33,8 @@ namespace FishingWithGit
         public override Task<int> PostCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_Commit, HookLocation.InRepo),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Post_Commit, HookLocation.Normal));
+                () => this.Wrapper.FireAllHooks(HookType.Post_Commit, HookLocation.InRepo, args),
+                () => this.Wrapper.FireUnnaturalHooks(HookType.Post_Commit, HookLocation.Normal, args));
         }
     }
 }
