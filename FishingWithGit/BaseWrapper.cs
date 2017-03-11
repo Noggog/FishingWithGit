@@ -296,6 +296,8 @@ namespace FishingWithGit
                     return StatusHooks.Factory(this, args, commandIndex);
                 case CommandType.cherry:
                     return CherryPickHook.Factory(this, args, commandIndex);
+                case CommandType.merge:
+                    return MergeHooks.Factory(this, args, commandIndex);
                 default:
                     return null;
             }

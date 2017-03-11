@@ -62,6 +62,7 @@
     <Compile Include="Hooks\CherryPickHook.cs" />
     <Compile Include="Hooks\CommitHooks.cs" />
     <Compile Include="Hooks\CommitMsgHooks.cs" />
+    <Compile Include="Hooks\MergeHooks.cs" />
     <Compile Include="Hooks\RebaseHooks.cs" />
     <Compile Include="Hooks\ResetHooks.cs" />
     <Compile Include="Hooks\StatusHooks.cs" />
