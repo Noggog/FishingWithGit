@@ -67,6 +67,10 @@ namespace FishingWithGit
                 {
                     exitCode = await RunProcess(startInfo);
                 }
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
                 if (Properties.Settings.Default.FireHookLogic
                     && hook != null)
                 {
