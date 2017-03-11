@@ -9,11 +9,13 @@ namespace FishingWithGit
     public class RebaseHooks : HookSet
     {
         string[] args;
+        bool abort;
 
         private RebaseHooks(BaseWrapper wrapper, string[] args) 
             : base(wrapper)
         {
             this.args = args;
+            this.abort = this.args[0].Equals("--abort");
         }
 
         public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
@@ -39,16 +41,34 @@ namespace FishingWithGit
 
         public override Task<int> PreCommand()
         {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase, HookLocation.InRepo, args),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Pre_Rebase, HookLocation.Normal, args));
+            if (this.abort)
+            {
+                return CommonFunctions.RunCommands(
+                    () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase_Abort, HookLocation.InRepo),
+                    () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase_Abort, HookLocation.Normal));
+            }
+            else
+            {
+                return CommonFunctions.RunCommands(
+                    () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase, HookLocation.InRepo, args),
+                    () => this.Wrapper.FireUnnaturalHooks(HookType.Pre_Rebase, HookLocation.Normal, args));
+            }
         }
 
         public override Task<int> PostCommand()
         {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_Rebase, HookLocation.InRepo, args),
-                () => this.Wrapper.FireAllHooks(HookType.Post_Rebase, HookLocation.Normal, args));
+            if (this.abort)
+            {
+                return CommonFunctions.RunCommands(
+                    () => this.Wrapper.FireAllHooks(HookType.Post_Rebase_Abort, HookLocation.InRepo),
+                    () => this.Wrapper.FireAllHooks(HookType.Post_Rebase_Abort, HookLocation.Normal));
+            }
+            else
+            {
+                return CommonFunctions.RunCommands(
+                    () => this.Wrapper.FireAllHooks(HookType.Post_Rebase, HookLocation.InRepo, args),
+                    () => this.Wrapper.FireAllHooks(HookType.Post_Rebase, HookLocation.Normal, args));
+            }
         }
     }
 }
