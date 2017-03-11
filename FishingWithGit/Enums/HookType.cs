@@ -22,6 +22,8 @@ namespace FishingWithGit
         Post_Rebase,
         Pre_Rebase_Abort,
         Post_Rebase_Abort,
+        Pre_Rebase_Continue,
+        Post_Rebase_Continue,
         Pre_Merge,
         Post_Merge,
         Pre_Push,
@@ -119,6 +121,8 @@ namespace FishingWithGit
                 case HookType.Post_Rebase:
                 case HookType.Pre_Rebase_Abort:
                 case HookType.Post_Rebase_Abort:
+                case HookType.Pre_Rebase_Continue:
+                case HookType.Post_Rebase_Continue:
                     return "rebase";
                 case HookType.Pre_Merge:
                 case HookType.Post_Merge:
@@ -177,6 +181,10 @@ namespace FishingWithGit
                     return "pre-rebase-abort";
                 case HookType.Post_Rebase_Abort:
                     return "post-rebase-abort";
+                case HookType.Pre_Rebase_Continue:
+                    return "pre-rebase-continue";
+                case HookType.Post_Rebase_Continue:
+                    return "post-rebase-continue";
                 case HookType.Pre_Merge:
                     return "pre-merge";
                 case HookType.Post_Merge:
@@ -229,6 +237,8 @@ namespace FishingWithGit
                 case HookType.Post_Rebase:
                 case HookType.Pre_Rebase_Abort:
                 case HookType.Post_Rebase_Abort:
+                case HookType.Pre_Rebase_Continue:
+                case HookType.Post_Rebase_Continue:
                     return CommandType.rebase;
                 case HookType.Pre_Merge:
                 case HookType.Post_Merge:
