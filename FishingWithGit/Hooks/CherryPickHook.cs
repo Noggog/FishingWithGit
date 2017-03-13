@@ -8,12 +8,12 @@ namespace FishingWithGit
 {
     class CherryPickHook : HookSet
     {
-        string sha;
+        CherryPickArgs args;
 
-        private CherryPickHook(BaseWrapper wrapper, string sha)
+        private CherryPickHook(BaseWrapper wrapper, CherryPickArgs args)
             : base(wrapper)
         {
-            this.sha = sha;
+            this.args = args;
         }
 
         public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
@@ -23,21 +23,27 @@ namespace FishingWithGit
             {
                 throw new ArgumentException("Cherry pick did not have a target sha.");
             }
-            return new CherryPickHook(wrapper, args[commandIndex + 1]);
+            return new CherryPickHook(
+                wrapper,
+                new CherryPickArgs(
+                    new string[]
+                    {
+                        args[commandIndex + 1]
+                    }));
         }
 
         public override Task<int> PreCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_CherryPick, HookLocation.InRepo, sha),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Pre_CherryPick, HookLocation.Normal, sha));
+                () => this.Wrapper.FireAllHooks(HookType.Pre_CherryPick, HookLocation.InRepo, args.ToArray()),
+                () => this.Wrapper.FireUnnaturalHooks(HookType.Pre_CherryPick, HookLocation.Normal, args.ToArray()));
         }
 
         public override Task<int> PostCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_CherryPick, HookLocation.InRepo, sha),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Post_CherryPick, HookLocation.Normal, sha));
+                () => this.Wrapper.FireAllHooks(HookType.Post_CherryPick, HookLocation.InRepo, args.ToArray()),
+                () => this.Wrapper.FireUnnaturalHooks(HookType.Post_CherryPick, HookLocation.Normal, args.ToArray()));
         }
     }
 }
