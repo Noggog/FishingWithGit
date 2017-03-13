@@ -51,30 +51,38 @@ namespace FishingWithGit
                 {
                     throw new ArgumentException($"Target branch did not exist {args[commandIndex + 1]}");
                 }
-                return new RebaseHooks(
-                    wrapper,
-                    Type.Normal,
-                    new string[] { args[commandIndex + 1] },
+                var rebaseArgs = new RebaseArgs(
+                    args.ToArray(),
+                    commandIndex + 1);
+                var rebasePostArgs = new RebaseInProgressArgs(
                     new string[]
                     {
                         repo.Head.Tip.Sha,
                         targetBranch.Tip.Sha
-                    });
+                    },
+                    commandIndex + 1);
+                return new RebaseHooks(
+                    wrapper,
+                    Type.Normal,
+                    rebaseArgs.ToArray(),
+                    rebasePostArgs.ToArray());
             }
         }
 
         private static HookSet FactoryInProgress(BaseWrapper wrapper, List<string> args, int commandIndex, Type type)
         {
-            string[] commitArgs = new string[]
-            {
-                GetShaFromFile("orig-head"),
-                GetShaFromFile("abort-safety")
-            };
+            var rebaseArgs = new RebaseInProgressArgs(
+                new string[]
+                {
+                    GetShaFromFile("orig-head"),
+                    GetShaFromFile("abort-safety")
+                },
+                commandIndex + 1);
             return new RebaseHooks(
                 wrapper,
                 type,
-                commitArgs,
-                commitArgs);
+                rebaseArgs.ToArray(),
+                rebaseArgs.ToArray());
         }
 
         private static string GetShaFromFile(string fileName)
