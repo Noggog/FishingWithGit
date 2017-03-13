@@ -10,7 +10,7 @@ namespace FishingWithGit
 {
     public class CheckoutHooks : HookSet
     {
-        string[] newArgs;
+        CheckoutArgs newArgs;
 
         private CheckoutHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
             : base(wrapper)
@@ -32,7 +32,7 @@ namespace FishingWithGit
             }
         }
 
-        private string[] RetrieveNewArgs(List<string> args, int commandIndex)
+        private CheckoutArgs RetrieveNewArgs(List<string> args, int commandIndex)
         {
             string curSha, targetSha;
             var argsList = args.ToList();
@@ -55,16 +55,17 @@ namespace FishingWithGit
                     {
                         throw new ArgumentException($"Could not locate target remote branch name.");
                     }
-                    
+
                     targetSha = GetTargetSha(repo, args[trackIndex + 1]);
                 }
             }
 
-            return new string[]
-            {
-                curSha,
-                targetSha
-            };
+            return new CheckoutArgs(
+                new string[]
+                {
+                    curSha,
+                    targetSha
+                });
         }
 
         private string GetTargetSha(Repository repo, string targetBranchName)
@@ -79,20 +80,20 @@ namespace FishingWithGit
                 throw new ArgumentException($"Branch named {targetBranchName} did not point to a commit in repo {repo.Info.Path}.");
             }
             return targetBranch.Tip.Sha;
-        } 
+        }
 
         public override Task<int> PreCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Checkout, HookLocation.InRepo, newArgs),
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Checkout, HookLocation.Normal, newArgs));
+                () => this.Wrapper.FireAllHooks(HookType.Pre_Checkout, HookLocation.InRepo, newArgs.ToArray()),
+                () => this.Wrapper.FireAllHooks(HookType.Pre_Checkout, HookLocation.Normal, newArgs.ToArray()));
         }
 
         public override Task<int> PostCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_Checkout, HookLocation.InRepo, newArgs),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Post_Checkout, HookLocation.Normal, newArgs));
+                () => this.Wrapper.FireAllHooks(HookType.Post_Checkout, HookLocation.InRepo, newArgs.ToArray()),
+                () => this.Wrapper.FireUnnaturalHooks(HookType.Post_Checkout, HookLocation.Normal, newArgs.ToArray()));
         }
     }
 }
