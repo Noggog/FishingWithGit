@@ -86,7 +86,12 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\FishingWithGit.Common\FishingWithGit.Common.csproj">
+      <Project>{a99553e3-d288-482a-9bc8-ae0bf4f32acf}</Project>
+      <Name>FishingWithGit.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
