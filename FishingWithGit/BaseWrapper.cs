@@ -203,7 +203,7 @@ namespace FishingWithGit
                             }
                         }
                     }));
-                if (task != Task.WhenAny(task, Task.Delay(Properties.Settings.Default.ProcessTimeoutWarning)))
+                if (task != await Task.WhenAny(task, Task.Delay(Properties.Settings.Default.ProcessTimeoutWarning)))
                 {
                     this.WriteLine("Process taking a long time: " + startInfo.FileName + " " + startInfo.Arguments);
                 }
