@@ -44,6 +44,7 @@
     <Compile Include="Arguments\CherryPickArgs.cs" />
     <Compile Include="Arguments\CommitArgs.cs" />
     <Compile Include="Arguments\CommitMsgArgs.cs" />
+    <Compile Include="Arguments\MergeArgs.cs" />
     <Compile Include="HookType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
