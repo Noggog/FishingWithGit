@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Arguments\CheckoutArgs.cs" />
     <Compile Include="Arguments\CherryPickArgs.cs" />
+    <Compile Include="Arguments\CommitArgs.cs" />
     <Compile Include="HookType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
