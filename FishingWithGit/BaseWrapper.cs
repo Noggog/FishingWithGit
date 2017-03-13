@@ -369,7 +369,7 @@ namespace FishingWithGit
             FileInfo file = new FileInfo($"{path}/{type.HookName()}");
             if (!file.Exists) return 0;
 
-            WriteLine($"Firing Named Bash Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
+            WriteLine($"Firing Named Bash Hook {location} {type.HookName()} with args: {string.Join(" ", args)}", writeToConsole: !type.AssociatedCommand().Silent());
 
             var exitCode = await RunProcess(
                 SetArgumentsOnStartInfo(
@@ -391,13 +391,13 @@ namespace FishingWithGit
                 var rawName = Path.GetFileNameWithoutExtension(file.Name);
                 if (HookTypeExt.IsHookName(rawName)) continue;
 
-                WriteLine($"Firing Untied Bash Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
+                WriteLine($"Firing Untied Bash Hook {location} {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: !type.AssociatedCommand().Silent());
 
                 var exitCode = await this.RunProcess(
                     SetArgumentsOnStartInfo(
                         new ProcessStartInfo(file.FullName, string.Join(" ", args))));
 
-                WriteLine($"Fired Untied Bash Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
+                WriteLine($"Fired Untied Bash Hook {location} {type.HookName()} {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
                 if (exitCode != 0)
                 {
                     return exitCode;
@@ -420,7 +420,7 @@ namespace FishingWithGit
             FileInfo file = new FileInfo($"{path}/{type.HookName()}.exe");
             if (!file.Exists) return 0;
 
-            WriteLine($"Firing Named Exe Hook {location} {type.HookName()}", writeToConsole: !type.AssociatedCommand().Silent());
+            WriteLine($"Firing Named Exe Hook {location} {type.HookName()} with args: {string.Join(" ", args)}", writeToConsole: !type.AssociatedCommand().Silent());
 
             await this.RunProcess(
                 SetArgumentsOnStartInfo(
@@ -442,7 +442,7 @@ namespace FishingWithGit
                 var rawName = Path.GetFileNameWithoutExtension(file.Name);
                 if (HookTypeExt.IsHookName(rawName)) continue;
 
-                WriteLine($"Firing Untied Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
+                WriteLine($"Firing Untied Exe Hook {location} {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: !type.AssociatedCommand().Silent());
 
                 var newArgs = new string[args.Length + 2];
                 newArgs[0] = type.HookName();
@@ -453,7 +453,7 @@ namespace FishingWithGit
                     SetArgumentsOnStartInfo(
                         new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))));
 
-                WriteLine($"Fired Untied Exe Hook {location} {type.HookName()}: {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
+                WriteLine($"Fired Untied Exe Hook {location} {type.HookName()} {file.Name}", writeToConsole: !type.AssociatedCommand().Silent());
                 if (exitCode != 0)
                 {
                     return exitCode;
