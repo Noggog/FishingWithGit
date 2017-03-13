@@ -8,7 +8,7 @@ namespace FishingWithGit
 {
     public class TakeHooks : HookSet
     {
-        string[] newArgs;
+        TakeArgs args;
 
         private TakeHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
             : base(wrapper)
@@ -19,8 +19,9 @@ namespace FishingWithGit
             {
                 throw new ArgumentException("Could not run take hooks.  Args invalid and missing '--'.");
             }
-            newArgs = new string[args.Count - commandIndex];
+            var newArgs = new string[args.Count - commandIndex];
             Array.Copy(args.ToArray(), commandIndex, newArgs, 0, newArgs.Length);
+            this.args = new TakeArgs(newArgs);
         }
 
         public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
@@ -31,15 +32,15 @@ namespace FishingWithGit
         public override Task<int> PreCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Take, HookLocation.InRepo, newArgs),
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Take, HookLocation.Normal, newArgs));
+                () => this.Wrapper.FireAllHooks(HookType.Pre_Take, HookLocation.InRepo, args.ToArray()),
+                () => this.Wrapper.FireAllHooks(HookType.Pre_Take, HookLocation.Normal, args.ToArray()));
         }
 
         public override Task<int> PostCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_Take, HookLocation.InRepo, newArgs),
-                () => this.Wrapper.FireAllHooks(HookType.Post_Take, HookLocation.Normal, newArgs));
+                () => this.Wrapper.FireAllHooks(HookType.Post_Take, HookLocation.InRepo, args.ToArray()),
+                () => this.Wrapper.FireAllHooks(HookType.Post_Take, HookLocation.Normal, args.ToArray()));
         }
     }
 }
