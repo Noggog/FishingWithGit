@@ -10,7 +10,7 @@ namespace FishingWithGit
 {
     public class ResetHooks : HookSet
     {
-        string[] newArgs;
+        ResetArgs args;
 
         private ResetHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
             : base(wrapper)
@@ -56,12 +56,13 @@ namespace FishingWithGit
                 curBranch = repo.Head.FriendlyName;
             }
 
-            newArgs = new string[]
-            {
-                curBranch,
-                sha,
-                type
-            };
+            this.args = new ResetArgs(
+                new string[]
+                {
+                    curBranch,
+                    sha,
+                    type
+                });
         }
 
         public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
@@ -87,15 +88,15 @@ namespace FishingWithGit
         public override Task<int> PreCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Reset, HookLocation.InRepo, newArgs),
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Reset, HookLocation.Normal, newArgs));
+                () => this.Wrapper.FireAllHooks(HookType.Pre_Reset, HookLocation.InRepo, args.ToArray()),
+                () => this.Wrapper.FireAllHooks(HookType.Pre_Reset, HookLocation.Normal, args.ToArray()));
         }
 
         public override Task<int> PostCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_Reset, HookLocation.InRepo, newArgs),
-                () => this.Wrapper.FireAllHooks(HookType.Post_Reset, HookLocation.Normal, newArgs));
+                () => this.Wrapper.FireAllHooks(HookType.Post_Reset, HookLocation.InRepo, args.ToArray()),
+                () => this.Wrapper.FireAllHooks(HookType.Post_Reset, HookLocation.Normal, args.ToArray()));
         }
     }
 }
