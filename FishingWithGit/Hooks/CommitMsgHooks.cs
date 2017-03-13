@@ -8,7 +8,7 @@ namespace FishingWithGit
 {
     public class CommitMsgHooks : HookSet
     {
-        string[] newArgs;
+        CommitMsgArgs args;
 
         private CommitMsgHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
             : base(wrapper)
@@ -18,10 +18,11 @@ namespace FishingWithGit
                 throw new ArgumentException("Cannot run checkout hooks, as args are invald.  No content was found after checkout command.");
             }
 
-            newArgs = new string[]
-            {
-                args[commandIndex + 1]
-            };
+            this.args = new CommitMsgArgs(
+                new string[]
+                {
+                    args[commandIndex + 1]
+                });
         }
 
         public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
@@ -32,8 +33,8 @@ namespace FishingWithGit
         public override Task<int> PreCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Commit_Msg, HookLocation.InRepo, newArgs),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Commit_Msg, HookLocation.Normal, newArgs));
+                () => this.Wrapper.FireAllHooks(HookType.Commit_Msg, HookLocation.InRepo, args.ToArray()),
+                () => this.Wrapper.FireUnnaturalHooks(HookType.Commit_Msg, HookLocation.Normal, args.ToArray()));
         }
 
         public override async Task<int> PostCommand()
