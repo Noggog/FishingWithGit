@@ -13,7 +13,7 @@ namespace FishingWithGit
             if (args.Contains("--mixed")
                 || args.Contains("--hard")
                 || args.Contains("--soft")) return;
-            ProcessAfterSplitterFileList(args);
+            ProcessAfterSplitterFileList(args, throwEx: true);
         }
     }
 }

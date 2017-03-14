@@ -55,6 +55,7 @@
     <Compile Include="Arg Processors\AddProcessor.cs" />
     <Compile Include="Arg Processors\ArgProcessor.cs" />
     <Compile Include="Arg Processors\CloneProcessor.cs" />
+    <Compile Include="Arg Processors\CheckoutProcessor.cs" />
     <Compile Include="Arg Processors\ResetProcessor.cs" />
     <Compile Include="BaseWrapper.cs" />
     <Compile Include="Enums\CommandType.cs" />

@@ -10,10 +10,30 @@ namespace FishingWithGit
     {
         public abstract void Process(List<string> args);
 
-        public static void GenericProcessing(List<string> args)
+        public static void Process(CommandType commandType, List<string> args)
         {
             StripCArguments(args);
             EnsureFormatIsQuoted(args);
+            ArgProcessor commandProcessor;
+
+            switch (commandType)
+            {
+                case CommandType.clone:
+                    commandProcessor = new CloneProcessor();
+                    break;
+                case CommandType.add:
+                    commandProcessor = new AddProcessor();
+                    break;
+                case CommandType.reset:
+                    commandProcessor = new ResetProcessor();
+                    break;
+                case CommandType.checkout:
+                    commandProcessor = new CheckoutProcessor();
+                    break;
+                default:
+                    return;
+            }
+            commandProcessor.Process(args);
         }
 
         public static void StripCArguments(List<string> args)
@@ -26,7 +46,7 @@ namespace FishingWithGit
                 args.RemoveAt(index);
             }
         }
-        
+
         public static void EnsureFormatIsQuoted(List<string> args)
         {
             var formatStr = "--format=";
@@ -57,12 +77,16 @@ namespace FishingWithGit
             return str;
         }
 
-        public static void ProcessAfterSplitterFileList(List<string> args)
+        public static void ProcessAfterSplitterFileList(List<string> args, bool throwEx = false)
         {
             var splitterIndex = args.IndexOf("--");
             if (splitterIndex == -1)
             {
-                throw new ArgumentException("Add command had no target files.");
+                if (throwEx)
+                {
+                    throw new ArgumentException("Add command had no target files.");
+                }
+                return;
             }
             for (int i = splitterIndex + 1; i < args.Count; i++)
             {

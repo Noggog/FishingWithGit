@@ -10,6 +10,7 @@ namespace FishingWithGit
     public class CommitArgs : IEnumerable<string>
     {
         public bool Amending;
+        public string CommitMessageFile;
 
         public CommitArgs(string[] args)
         {

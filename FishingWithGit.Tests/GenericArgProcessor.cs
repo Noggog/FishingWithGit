@@ -82,7 +82,7 @@ namespace FishingWithGit.Tests
                 "HEAD",
                 "--"
             };
-            Assert.True(newArgs.SequenceEqual(args));
+            Assert.Equal(newArgs, args);
         }
 
         [Fact]
@@ -115,7 +115,7 @@ namespace FishingWithGit.Tests
                 "HEAD",
                 "--"
             };
-            Assert.True(newArgs.SequenceEqual(args));
+            Assert.Equal(newArgs, args);
         }
 
         [Fact]
@@ -158,7 +158,7 @@ namespace FishingWithGit.Tests
                 "\"TestFile.txt\"",
                 "\"test.txt\""
             };
-            Assert.True(newArgs.SequenceEqual(args));
+            Assert.Equal(newArgs, args);
         }
     }
 }

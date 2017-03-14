@@ -9,7 +9,7 @@ namespace FishingWithGit
 {
     public class TakeArgs : IEnumerable<string>
     {
-        List<string> Items;
+        public List<string> Items;
 
         public TakeArgs(string[] args)
         {

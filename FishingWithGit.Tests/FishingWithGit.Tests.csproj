@@ -52,6 +52,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TakeTests.cs" />
+    <Compile Include="ResetTests.cs" />
+    <Compile Include="RebaseTests.cs" />
+    <Compile Include="MergeTests.cs" />
+    <Compile Include="CommitMsgTests.cs" />
+    <Compile Include="CommitTests.cs" />
+    <Compile Include="CherryPickTests.cs" />
     <Compile Include="CheckoutTests.cs" />
     <Compile Include="FishingWithGitTests.cs" />
     <Compile Include="GenericArgProcessor.cs" />

@@ -7,16 +7,14 @@ using Xunit;
 
 namespace FishingWithGit.Tests.Arguments
 {
-    public class CheckoutTests
+    public class CherryPickTests
     {
-        public const string CURRENT_SHA = "92d1ea36962347d2f072d3d67a5b4842a0d9cf74";
         public const string TARGET_SHA = "c5ce43478954719c5577bbeec6f8dcfa575f732e";
 
         public static string[] GetBasicOutgoingArgs()
         {
             return new string[]
             {
-                CURRENT_SHA,
                 TARGET_SHA
             };
         }
@@ -24,9 +22,8 @@ namespace FishingWithGit.Tests.Arguments
         [Fact]
         public static void BasicArgs()
         {
-            var args = new CheckoutArgs(GetBasicOutgoingArgs());
-            Assert.Equal(CURRENT_SHA, args.CurrentSha);
-            Assert.Equal(TARGET_SHA, args.TargetSha);
+            var args = new CherryPickArgs(GetBasicOutgoingArgs());
+            Assert.Equal(TARGET_SHA, args.PickedSha);
         }
 
         public static string[] GetSourceTreeInboundArgs()
@@ -44,8 +41,8 @@ namespace FishingWithGit.Tests.Arguments
                 "diff.mnemonicprefix=false",
                 "-c",
                 "core.quotepath=false",
-                "checkout",
-                "TestBranch"
+                "cherry-pick",
+                "4787142663ff5e5af0a24dc82b73398470f040a3"
             };
         }
 
@@ -54,26 +51,25 @@ namespace FishingWithGit.Tests.Arguments
             return new string[]
             {
                 "--no-pager",
-                "checkout",
-                "TestBranch"
+                "cherry-pick",
+                "4787142663ff5e5af0a24dc82b73398470f040a3"
             };
         }
 
         [Fact]
         public static void BasicArgs_Enumeration()
         {
-            var args = new CheckoutArgs(GetBasicOutgoingArgs());
+            var args = new CherryPickArgs(GetBasicOutgoingArgs());
             var list = args.ToList();
-            Assert.Equal(2, list.Count);
-            Assert.Equal(CURRENT_SHA, list[0]);
-            Assert.Equal(TARGET_SHA, list[1]);
+            Assert.Equal(1, list.Count);
+            Assert.Equal(TARGET_SHA, list[0]);
         }
 
         [Fact]
         public static void Sourcetree()
         {
             var args = GetSourceTreeInboundArgs().ToList();
-            ArgProcessor.Process(CommandType.checkout, args);
+            ArgProcessor.Process(CommandType.cherry, args);
             Assert.Equal(GetProcessedArgs(), args);
         }
     }

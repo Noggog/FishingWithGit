@@ -225,28 +225,9 @@ namespace FishingWithGit
 
         private void ProcessArgs()
         {
-            this.WriteLine("Processing generic arguments.");
-            ArgProcessor.GenericProcessing(args);
-            ArgProcessor commandProcessor;
-
             try
             {
-                switch (commandType)
-                {
-                    case CommandType.clone:
-                        commandProcessor = new CloneProcessor();
-                        break;
-                    case CommandType.add:
-                        commandProcessor = new AddProcessor();
-                        break;
-                    case CommandType.reset:
-                        commandProcessor = new ResetProcessor();
-                        break;
-                    default:
-                        return;
-                }
-                this.WriteLine("Processing specialized arguments.");
-                commandProcessor.Process(args);
+                ArgProcessor.Process(this.commandType, args);
             }
             finally
             {
