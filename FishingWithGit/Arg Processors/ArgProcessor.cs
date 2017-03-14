@@ -16,7 +16,7 @@ namespace FishingWithGit
             EnsureFormatIsQuoted(args);
         }
 
-        protected static void StripCArguments(List<string> args)
+        public static void StripCArguments(List<string> args)
         {
             if (!Properties.Settings.Default.CleanCArguments) return;
             int index;
@@ -27,7 +27,7 @@ namespace FishingWithGit
             }
         }
         
-        protected static void EnsureFormatIsQuoted(List<string> args)
+        public static void EnsureFormatIsQuoted(List<string> args)
         {
             var formatStr = "--format=";
             for (int i = 0; i < args.Count; i++)
@@ -38,12 +38,12 @@ namespace FishingWithGit
                     if (arg.Length <= formatStr.Length) continue;
                     if (arg[formatStr.Length + 1] == '\"') continue;
                     if (arg[arg.Length - 1] == '\"') continue;
-                    args[i] = $"\"{arg}\"";
+                    args[i] = $"{formatStr}\"{arg.Substring(formatStr.Length)}\"";
                 }
             }
         }
 
-        protected static string AddQuotesIfNecessary(string str)
+        public static string AddQuotesIfNecessary(string str)
         {
             if (str.Length == 0) return str;
             if (str[0] != '\"')
@@ -57,7 +57,7 @@ namespace FishingWithGit
             return str;
         }
 
-        protected static void ProcessAfterSplitterFileList(List<string> args)
+        public static void ProcessAfterSplitterFileList(List<string> args)
         {
             var splitterIndex = args.IndexOf("--");
             if (splitterIndex == -1)

@@ -27,7 +27,17 @@ namespace FishingWithGit
             {
                 WriteLine(DateTime.Now.ToString());
                 WriteLine("Arguments:");
-                WriteLine($"  {string.Join(" ", args)}");
+                if (Properties.Settings.Default.PrintSeparateArgs)
+                {
+                    foreach (var arg in args)
+                    {
+                        WriteLine(arg);
+                    }
+                }
+                else
+                {
+                    WriteLine($"  {string.Join(" ", args)}");
+                }
                 WriteLine("");
                 GetCommandInfo();
                 WriteLine($"Command: {commandType.ToString()}", writeToConsole: !commandType.Silent());
