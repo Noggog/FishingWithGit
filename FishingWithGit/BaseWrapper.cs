@@ -209,7 +209,7 @@ namespace FishingWithGit
                                     first = false;
                                 }
                                 Console.Error.Write(result);
-                                WriteLine(result, writeToConsole: true);
+                                WriteLine(result);
                             }
                         }
                     }));
