@@ -59,8 +59,7 @@ namespace FishingWithGit
                     {
                         repo.Head.Tip.Sha,
                         targetBranch.Tip.Sha
-                    },
-                    commandIndex + 1);
+                    });
                 return new RebaseHooks(
                     wrapper,
                     Type.Normal,
