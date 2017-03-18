@@ -14,21 +14,13 @@ namespace FishingWithGit
         {
             StripCArguments(args);
             EnsureFormatIsQuoted(args);
+            ProcessAfterSplitterFileList(args);
             ArgProcessor commandProcessor;
 
             switch (commandType)
             {
                 case CommandType.clone:
                     commandProcessor = new CloneProcessor();
-                    break;
-                case CommandType.add:
-                    commandProcessor = new AddProcessor();
-                    break;
-                case CommandType.reset:
-                    commandProcessor = new ResetProcessor();
-                    break;
-                case CommandType.checkout:
-                    commandProcessor = new CheckoutProcessor();
                     break;
                 default:
                     return;
