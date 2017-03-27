@@ -10,6 +10,7 @@ namespace FishingWithGit.Tests.Arguments
     public class ResetTests
     {
         public const string TARGET_BRANCH = "master";
+        public const string STARTING_SHA = "55e8c38ef98d046d499f22e80ada6689295ad7f4";
         public const string TARGET_SHA = "c5ce43478954719c5577bbeec6f8dcfa575f732e";
         public const ResetType TYPE = ResetType.hard;
 
@@ -18,6 +19,7 @@ namespace FishingWithGit.Tests.Arguments
             return new string[]
             {
                 TARGET_BRANCH,
+                STARTING_SHA,
                 TARGET_SHA,
                 TYPE.ToString()
             };
@@ -28,6 +30,7 @@ namespace FishingWithGit.Tests.Arguments
         {
             var args = new ResetArgs(GetBasicOutgoingArgs());
             Assert.Equal(TARGET_BRANCH, args.Branch);
+            Assert.Equal(STARTING_SHA, args.StartingSha);
             Assert.Equal(TARGET_SHA, args.TargetSha);
             Assert.Equal(TYPE, args.Type);
         }
@@ -71,10 +74,11 @@ namespace FishingWithGit.Tests.Arguments
         {
             var args = new ResetArgs(GetBasicOutgoingArgs());
             var list = args.ToList();
-            Assert.Equal(3, list.Count);
+            Assert.Equal(4, list.Count);
             Assert.Equal(TARGET_BRANCH, list[0]);
-            Assert.Equal(TARGET_SHA, list[1]);
-            Assert.Equal(TYPE.ToString(), list[2]);
+            Assert.Equal(STARTING_SHA, list[1]);
+            Assert.Equal(TARGET_SHA, list[2]);
+            Assert.Equal(TYPE.ToString(), list[3]);
         }
 
         [Fact]

@@ -15,14 +15,14 @@ namespace FishingWithGit
         private ResetHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
             : base(wrapper)
         {
-            string sha = null;
+            string targetSha = null;
             string type = null;
             for (int i = commandIndex + 1; i < args.Count; i++)
             {
                 if (!args[i].StartsWith("-")
                     && args[i].Length == 40)
                 {
-                    sha = args[i];
+                    targetSha = args[i];
                 }
                 if (args[i].StartsWith("--"))
                 {
@@ -30,7 +30,7 @@ namespace FishingWithGit
                 }
             }
 
-            if (sha == null)
+            if (targetSha == null)
             {
                 throw new ArgumentException("Cannot run reset hooks, as args are invald.  No sha could be found.");
             }
@@ -50,17 +50,19 @@ namespace FishingWithGit
                     throw new ArgumentException($"Cannot run reset hooks, as args are invalid.  Type was invalid: {type}");
             }
 
-            string curBranch;
+            string curBranch, curSha;
             using (var repo = new Repository(Directory.GetCurrentDirectory()))
             {
                 curBranch = repo.Head.FriendlyName;
+                curSha = repo.Head.Tip.Sha;
             }
 
             this.args = new ResetArgs(
                 new string[]
                 {
                     curBranch,
-                    sha,
+                    curSha,
+                    targetSha,
                     type
                 });
         }
