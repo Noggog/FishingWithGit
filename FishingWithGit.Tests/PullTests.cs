@@ -25,7 +25,7 @@ namespace FishingWithGit.Tests.Arguments
         public static void BasicArgs()
         {
             var args = new PullArgs(GetBasicOutgoingArgs());
-            Assert.Equal(CURRENT_SHA, args.CurrentSha);
+            Assert.Equal(CURRENT_SHA, args.AncestorSha);
             Assert.Equal(TARGET_SHA, args.TargetSha);
         }
 
