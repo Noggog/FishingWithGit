@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PullTests.cs" />
     <Compile Include="TakeTests.cs" />
     <Compile Include="ResetTests.cs" />
     <Compile Include="RebaseTests.cs" />

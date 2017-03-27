@@ -59,6 +59,7 @@
     <Compile Include="CommonFunctions.cs" />
     <Compile Include="Hooks\CheckoutHooks.cs" />
     <Compile Include="Hooks\CherryPickHook.cs" />
+    <Compile Include="Hooks\PullHook.cs" />
     <Compile Include="Hooks\CommitHooks.cs" />
     <Compile Include="Hooks\CommitMsgHooks.cs" />
     <Compile Include="Hooks\MergeHooks.cs" />

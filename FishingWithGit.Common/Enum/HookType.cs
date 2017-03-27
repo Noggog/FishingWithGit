@@ -34,6 +34,8 @@ namespace FishingWithGit
         Post_Status,
         Pre_Take,
         Post_Take,
+        Pre_Pull,
+        Post_Pull,
     }
 
     public static class HookTypeExt
@@ -130,6 +132,9 @@ namespace FishingWithGit
                 case HookType.Pre_CherryPick:
                 case HookType.Post_CherryPick:
                     return "cherry-pick";
+                case HookType.Pre_Pull:
+                case HookType.Post_Pull:
+                    return "pull";
                 case HookType.Prepare_Commit_Msg:
                 default:
                     throw new NotImplementedException();
@@ -192,6 +197,10 @@ namespace FishingWithGit
                     return "pre-cherry-pick";
                 case HookType.Post_CherryPick:
                     return "post-cherry-pick";
+                case HookType.Pre_Pull:
+                    return "pre-pull";
+                case HookType.Post_Pull:
+                    return "post-pull";
                 default:
                     throw new NotImplementedException();
             }
