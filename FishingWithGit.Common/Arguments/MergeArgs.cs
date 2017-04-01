@@ -11,6 +11,10 @@ namespace FishingWithGit
     {
         public string TargetBranch;
 
+        public MergeArgs()
+        {
+        }
+
         public MergeArgs(string[] args, int startIndex = 0)
         {
             if (args.Length < 1 + startIndex)

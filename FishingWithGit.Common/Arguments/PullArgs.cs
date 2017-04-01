@@ -12,6 +12,10 @@ namespace FishingWithGit
         public string AncestorSha;
         public string TargetSha;
 
+        public PullArgs()
+        {
+        }
+
         public PullArgs(string[] args, int startingIndex = 0)
         {
             if (args.Length < 2 + startingIndex)

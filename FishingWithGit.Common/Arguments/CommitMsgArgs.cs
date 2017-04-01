@@ -11,6 +11,10 @@ namespace FishingWithGit
     {
         public string CommitMessageFilePath;
 
+        public CommitMsgArgs()
+        {
+        }
+
         public CommitMsgArgs(string[] args)
         {
             if (args.Length < 1)

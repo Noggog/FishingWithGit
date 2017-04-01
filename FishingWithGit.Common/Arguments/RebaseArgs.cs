@@ -11,6 +11,10 @@ namespace FishingWithGit
     {
         public string TargetBranch;
 
+        public RebaseArgs()
+        {
+        }
+
         public RebaseArgs(string[] args, int startingIndex = 0)
         {
             if (args.Length < 1 + startingIndex)

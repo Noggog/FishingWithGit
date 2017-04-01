@@ -11,6 +11,10 @@ namespace FishingWithGit
     {
         public string PickedSha;
 
+        public CherryPickArgs()
+        {
+        }
+
         public CherryPickArgs(string[] args)
         {
             if (args.Length < 1)

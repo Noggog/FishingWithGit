@@ -12,6 +12,10 @@ namespace FishingWithGit
         public string OriginalSha;
         public string TargetSha;
 
+        public RebaseInProgressArgs()
+        {
+        }
+
         public RebaseInProgressArgs(string[] args, int startingIndex = 0)
         {
             if (args.Length < 2 + startingIndex)

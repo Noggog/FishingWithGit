@@ -12,6 +12,10 @@ namespace FishingWithGit
         public string CurrentSha;
         public string TargetSha;
 
+        public CheckoutArgs()
+        {
+        }
+
         public CheckoutArgs(string[] args)
         {
             if (args.Length < 2)

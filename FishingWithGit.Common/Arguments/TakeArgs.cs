@@ -11,6 +11,10 @@ namespace FishingWithGit
     {
         public List<string> Items;
 
+        public TakeArgs()
+        {
+        }
+
         public TakeArgs(string[] args)
         {
             this.Items = args.ToList();

@@ -12,6 +12,10 @@ namespace FishingWithGit
         public bool Amending;
         public string CommitMessageFile;
 
+        public CommitArgs()
+        {
+        }
+
         public CommitArgs(string[] args)
         {
             this.Amending = args.Contains("--amend");

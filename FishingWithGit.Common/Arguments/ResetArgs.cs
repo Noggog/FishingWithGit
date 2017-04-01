@@ -14,6 +14,10 @@ namespace FishingWithGit
         public string TargetSha;
         public ResetType Type;
 
+        public ResetArgs()
+        {
+        }
+
         public ResetArgs(string[] args)
         {
             if (args.Length < 4)
