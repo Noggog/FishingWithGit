@@ -9,8 +9,8 @@ namespace FishingWithGit
 {
     public class RebaseInProgressArgs : IEnumerable<string>
     {
-        public string OriginalSha;
-        public string TargetSha;
+        public string OriginalTipSha;
+        public string LandingSha;
 
         public RebaseInProgressArgs()
         {
@@ -23,14 +23,14 @@ namespace FishingWithGit
                 throw new ArgumentException("An argument was expected but did not exist");
             }
 
-            this.OriginalSha = args[startingIndex];
-            this.TargetSha = args[startingIndex + 1];
+            this.OriginalTipSha = args[startingIndex];
+            this.LandingSha = args[startingIndex + 1];
         }
 
         public IEnumerator<string> GetEnumerator()
         {
-            yield return OriginalSha;
-            yield return TargetSha;
+            yield return OriginalTipSha;
+            yield return LandingSha;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
