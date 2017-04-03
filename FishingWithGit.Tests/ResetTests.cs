@@ -29,7 +29,7 @@ namespace FishingWithGit.Tests.Arguments
         public static void BasicArgs()
         {
             var args = new ResetArgs(GetBasicOutgoingArgs());
-            Assert.Equal(TARGET_BRANCH, args.Branch);
+            Assert.Equal(TARGET_BRANCH, args.StartingBranch);
             Assert.Equal(STARTING_SHA, args.StartingSha);
             Assert.Equal(TARGET_SHA, args.TargetSha);
             Assert.Equal(TYPE, args.Type);

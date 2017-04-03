@@ -9,7 +9,7 @@ namespace FishingWithGit
 {
     public class ResetArgs : IEnumerable<string>
     {
-        public string Branch;
+        public string StartingBranch;
         public string StartingSha;
         public string TargetSha;
         public ResetType Type;
@@ -25,7 +25,7 @@ namespace FishingWithGit
                 throw new ArgumentException("Unexpected amount of args.");
             }
 
-            this.Branch = args[0];
+            this.StartingBranch = args[0];
             this.StartingSha = args[1];
             this.TargetSha = args[2];
 
@@ -37,7 +37,7 @@ namespace FishingWithGit
 
         public IEnumerator<string> GetEnumerator()
         {
-            yield return Branch;
+            yield return StartingBranch;
             yield return StartingSha;
             yield return TargetSha;
             yield return Type.ToString();

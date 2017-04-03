@@ -89,8 +89,8 @@ namespace FishingWithGit.Tests.Arguments
         public static void InProgressArgs()
         {
             var args = new RebaseInProgressArgs(GetInProgressOutgoingArgs());
-            Assert.Equal(CURRENT_SHA, args.OriginalSha);
-            Assert.Equal(TARGET_SHA, args.TargetSha);
+            Assert.Equal(CURRENT_SHA, args.OriginalTipSha);
+            Assert.Equal(TARGET_SHA, args.LandingSha);
         }
 
         [Fact]
