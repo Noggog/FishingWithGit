@@ -22,7 +22,11 @@ namespace FishingWithGit
 
         public IEnumerator<string> GetEnumerator()
         {
-            return Items.GetEnumerator();
+            if (Items == null) yield break;
+            foreach (var item in this.Items)
+            {
+                yield return item;
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
