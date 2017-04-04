@@ -74,6 +74,9 @@ namespace FishingWithGit
                 case HookType.Pre_Pull:
                 case HookType.Post_Pull:
                     return CommandType.pull;
+                case HookType.Pre_Branch:
+                case HookType.Post_Branch:
+                    return CommandType.branch;
                 default:
                     throw new NotImplementedException();
             }

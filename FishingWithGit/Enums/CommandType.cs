@@ -20,7 +20,8 @@ namespace FishingWithGit
         clone,
         add,
         cherry,
-        pull
+        pull,
+        branch
     }
 
     public static class CommandTypeExt

@@ -36,6 +36,8 @@ namespace FishingWithGit
         Post_Take,
         Pre_Pull,
         Post_Pull,
+        Pre_Branch,
+        Post_Branch,
     }
 
     public static class HookTypeExt
@@ -135,6 +137,9 @@ namespace FishingWithGit
                 case HookType.Pre_Pull:
                 case HookType.Post_Pull:
                     return "pull";
+                case HookType.Pre_Branch:
+                case HookType.Post_Branch:
+                    return "branch";
                 case HookType.Prepare_Commit_Msg:
                 default:
                     throw new NotImplementedException();
@@ -201,6 +206,10 @@ namespace FishingWithGit
                     return "pre-pull";
                 case HookType.Post_Pull:
                     return "post-pull";
+                case HookType.Pre_Branch:
+                    return "pre-branch";
+                case HookType.Post_Branch:
+                    return "post-branch";
                 default:
                     throw new NotImplementedException();
             }
