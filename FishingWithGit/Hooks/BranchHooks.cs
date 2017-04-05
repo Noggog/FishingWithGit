@@ -34,15 +34,15 @@ namespace FishingWithGit
         public override Task<int> PreCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Pull, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Pull, HookLocation.Normal, args.ToArray()));
+                () => this.Wrapper.FireAllHooks(HookType.Pre_Branch, HookLocation.InRepo, args.ToArray()),
+                () => this.Wrapper.FireAllHooks(HookType.Pre_Branch, HookLocation.Normal, args.ToArray()));
         }
 
         public override Task<int> PostCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_Pull, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireAllHooks(HookType.Post_Pull, HookLocation.Normal, args.ToArray()));
+                () => this.Wrapper.FireAllHooks(HookType.Post_Branch, HookLocation.InRepo, args.ToArray()),
+                () => this.Wrapper.FireAllHooks(HookType.Post_Branch, HookLocation.Normal, args.ToArray()));
         }
     }
 }
