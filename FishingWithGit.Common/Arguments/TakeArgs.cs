@@ -9,6 +9,7 @@ namespace FishingWithGit
 {
     public class TakeArgs : IEnumerable<string>
     {
+        public string TargetSha;
         public List<string> Items;
 
         public TakeArgs()
@@ -17,11 +18,22 @@ namespace FishingWithGit
 
         public TakeArgs(string[] args)
         {
-            this.Items = args.ToList();
+            if (args.Length < 1
+                || args[0].Length != 40)
+            {
+                throw new ArgumentException("No target sha specified.");
+            }
+            this.TargetSha = args[0];
+            this.Items = new List<string>();
+            for (int i = 1; i < args.Length; i++)
+            {
+                this.Items.Add(args[i]);
+            }
         }
 
         public IEnumerator<string> GetEnumerator()
         {
+            yield return TargetSha;
             if (Items == null) yield break;
             foreach (var item in this.Items)
             {

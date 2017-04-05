@@ -18,13 +18,22 @@ namespace FishingWithGit
             this.newArgs = RetrieveNewArgs(args, commandIndex);
         }
 
-        public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
+        public static HookSet Factory(BaseWrapper wrapper, DirectoryInfo repoDir, List<string> args, int commandIndex)
         {
             if (args.Contains("--")
                 || args.Contains("--theirs")
                 || args.Contains("--ours"))
             {
-                return TakeHooks.Factory(wrapper, args, commandIndex);
+                string currentSha;
+                using (var repo = new Repository(repoDir.FullName))
+                {
+                    currentSha = repo.Head.Tip.Sha;
+                }
+                return TakeHooks.Factory(
+                    wrapper,
+                    currentSha,
+                    args,
+                    commandIndex);
             }
             else
             {

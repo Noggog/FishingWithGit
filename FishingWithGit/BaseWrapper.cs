@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibGit2Sharp;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -271,18 +272,26 @@ namespace FishingWithGit
             }
         }
         #endregion
-
+        
         #region Getting Hooks
         public HookSet GetHook()
         {
             switch (commandType)
             {
                 case CommandType.checkout:
-                    return CheckoutHooks.Factory(this, args, commandIndex);
+                    return CheckoutHooks.Factory(
+                        this, 
+                        new DirectoryInfo(Directory.GetCurrentDirectory()), 
+                        args,
+                        commandIndex);
                 case CommandType.rebase:
                     return RebaseHooks.Factory(this, args, commandIndex);
                 case CommandType.reset:
-                    return ResetHooks.Factory(this, args, commandIndex);
+                    return ResetHooks.Factory(
+                        this,
+                        new DirectoryInfo(Directory.GetCurrentDirectory()), 
+                        args,
+                        commandIndex);
                 case CommandType.commitmsg:
                     return CommitMsgHooks.Factory(this, args, commandIndex);
                 case CommandType.commit:

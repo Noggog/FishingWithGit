@@ -12,7 +12,7 @@ namespace FishingWithGit
     {
         ResetArgs args;
 
-        private ResetHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
+        private ResetHooks(BaseWrapper wrapper, DirectoryInfo repoDir, List<string> args, int commandIndex)
             : base(wrapper)
         {
             string targetSha = null;
@@ -51,7 +51,7 @@ namespace FishingWithGit
             }
 
             string curBranch, curSha;
-            using (var repo = new Repository(Directory.GetCurrentDirectory()))
+            using (var repo = new Repository(repoDir.FullName))
             {
                 curBranch = repo.Head.FriendlyName;
                 curSha = repo.Head.Tip.Sha;
@@ -67,7 +67,7 @@ namespace FishingWithGit
                 });
         }
 
-        public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
+        public static HookSet Factory(BaseWrapper wrapper, DirectoryInfo repoDir, List<string> args, int commandIndex)
         {
             if (args.Count <= commandIndex + 1)
             {
@@ -79,11 +79,16 @@ namespace FishingWithGit
                 || args.Contains("--mixed")
                 || args.Contains("--hard"))
             {
-                return new ResetHooks(wrapper, args, commandIndex);
+                return new ResetHooks(wrapper, repoDir, args, commandIndex);
             }
             else
             {
-                return TakeHooks.Factory(wrapper, args, commandIndex);
+                var splitIndex = args.IndexOf("--");
+                if (splitIndex == -1)
+                {
+                    throw new ArgumentException("Item split was not found: --");
+                }
+                return TakeHooks.Factory(wrapper, args[splitIndex - 1], args, commandIndex);
             }
         }
 

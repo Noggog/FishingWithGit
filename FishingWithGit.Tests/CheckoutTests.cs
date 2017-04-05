@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,6 +85,7 @@ namespace FishingWithGit.Tests.Arguments
         {
             var hook = CheckoutHooks.Factory(
                 null,
+                new DirectoryInfo(Directory.GetCurrentDirectory()),
                 GetSourceTreeInboundArgs().ToList(),
                 COMMAND_INDEX);
         }

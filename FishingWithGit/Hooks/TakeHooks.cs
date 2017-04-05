@@ -10,7 +10,7 @@ namespace FishingWithGit
     {
         TakeArgs args;
 
-        private TakeHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
+        private TakeHooks(BaseWrapper wrapper, string targetSha, List<string> args, int commandIndex)
             : base(wrapper)
         {
             var argsList = args.ToList();
@@ -21,12 +21,16 @@ namespace FishingWithGit
             }
             var newArgs = new string[args.Count - commandIndex];
             Array.Copy(args.ToArray(), commandIndex, newArgs, 0, newArgs.Length);
-            this.args = new TakeArgs(newArgs);
+            this.args = new TakeArgs()
+            {
+                TargetSha = targetSha,
+                Items = new List<string>(newArgs)
+            };
         }
 
-        public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
+        public static HookSet Factory(BaseWrapper wrapper, string targetSha, List<string> args, int commandIndex)
         {
-            return new TakeHooks(wrapper, args, commandIndex);
+            return new TakeHooks(wrapper, targetSha, args, commandIndex);
         }
 
         public override Task<int> PreCommand()
