@@ -26,7 +26,7 @@ namespace FishingWithGit
                 wrapper,
                 new BranchArgs()
                 {
-                    TargetBranch = args[commandIndex + 1],
+                    TargetBranch = (args.Count > commandIndex + 1) ? args[commandIndex + 1] : default(string),
                     Deleting = args.Contains("-D")
                 });
         }

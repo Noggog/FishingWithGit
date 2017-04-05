@@ -20,7 +20,7 @@ namespace FishingWithGit
         {
             if (args.Length < 1 + startingIndex)
             {
-                throw new ArgumentException("An argument was expected but did not exist");
+                return;
             }
 
             this.TargetBranch = args[startingIndex];
@@ -29,7 +29,10 @@ namespace FishingWithGit
 
         public IEnumerator<string> GetEnumerator()
         {
-            yield return TargetBranch;
+            if (!string.IsNullOrWhiteSpace(this.TargetBranch))
+            {
+                yield return TargetBranch;
+            }
             if (this.Deleting)
             {
                 yield return "-D";
