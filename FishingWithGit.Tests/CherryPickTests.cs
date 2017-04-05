@@ -46,6 +46,8 @@ namespace FishingWithGit.Tests.Arguments
             };
         }
 
+        public const int COMMAND_INDEX = 11;
+
         public static string[] GetProcessedArgs()
         {
             return new string[]
@@ -71,6 +73,15 @@ namespace FishingWithGit.Tests.Arguments
             var args = GetSourceTreeInboundArgs().ToList();
             ArgProcessor.Process(CommandType.cherry, args);
             Assert.Equal(GetProcessedArgs(), args);
+        }
+
+        [Fact]
+        public static void HookSetCtor()
+        {
+            var hook = BranchHooks.Factory(
+                null,
+                GetSourceTreeInboundArgs().ToList(),
+                COMMAND_INDEX);
         }
     }
 }

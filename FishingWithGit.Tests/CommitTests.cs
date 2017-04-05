@@ -57,6 +57,8 @@ namespace FishingWithGit.Tests.Arguments
             };
         }
 
+        public const int COMMAND_INDEX = 1;
+
         [Fact]
         public static void BasicArgs_Enumeration()
         {
@@ -71,6 +73,15 @@ namespace FishingWithGit.Tests.Arguments
             var args = GetSourceTreeInboundArgs().ToList();
             ArgProcessor.Process(CommandType.commit, args);
             Assert.Equal(GetProcessedArgs(), args);
+        }
+
+        [Fact]
+        public static void HookSetCtor()
+        {
+            var hook = CommitHooks.Factory(
+                null,
+                GetProcessedArgs().ToList(),
+                COMMAND_INDEX);
         }
 
         public static string[] GetAmendOutgoingArgs()
@@ -108,6 +119,15 @@ namespace FishingWithGit.Tests.Arguments
             var list = args.ToList();
             Assert.Equal(1, list.Count);
             Assert.Equal("--amend", list[0]);
+        }
+
+        [Fact]
+        public static void HookSetCtor_Amending()
+        {
+            var hook = CommitHooks.Factory(
+                null,
+                GetSourceTreeAmendArgs().ToList(),
+                COMMAND_INDEX);
         }
     }
 }

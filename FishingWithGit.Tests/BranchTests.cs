@@ -83,6 +83,8 @@ namespace FishingWithGit.Tests
             };
         }
 
+        public const int COMMAND_INDEX = 11;
+
         public static string[] GetProcessedArgs()
         {
             return new string[]
@@ -99,6 +101,73 @@ namespace FishingWithGit.Tests
             var args = GetSourceTreeInboundArgs().ToList();
             ArgProcessor.Process(CommandType.branch, args);
             Assert.Equal(GetProcessedArgs(), args);
+        }
+
+        [Fact]
+        public static void HookSetCtor()
+        {
+            var hook = BranchHooks.Factory(
+                null,
+                GetSourceTreeInboundArgs().ToList(),
+                COMMAND_INDEX);
+        }
+
+        public static string[] GetBranchListInboundArgs()
+        {
+            return new string[]
+            {
+                "--no-pager",
+                "-c",
+                "color.branch=false",
+                "-c",
+                "color.diff=false",
+                "-c",
+                "color.status=false",
+                "-c",
+                "diff.mnemonicprefix=false",
+                "-c",
+                "core.quotepath=false",
+                "branch"
+            };
+        }
+
+        [Fact]
+        public static void HookSetCtor_BranchListArgs()
+        {
+            var hook = BranchHooks.Factory(
+                null,
+                GetBranchListInboundArgs().ToList(),
+                COMMAND_INDEX);
+        }
+
+        public static string[] GetDeleteInboundArgs()
+        {
+            return new string[]
+            {
+                "--no-pager",
+                "-c",
+                "color.branch=false",
+                "-c",
+                "color.diff=false",
+                "-c",
+                "color.status=false",
+                "-c",
+                "diff.mnemonicprefix=false",
+                "-c",
+                "core.quotepath=false",
+                "branch",
+                "ssss",
+                "-D"
+            };
+        }
+
+        [Fact]
+        public static void HookSetCtor_Delete()
+        {
+            var hook = BranchHooks.Factory(
+                null,
+                GetDeleteInboundArgs().ToList(),
+                COMMAND_INDEX);
         }
     }
 }

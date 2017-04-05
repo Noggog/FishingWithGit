@@ -55,6 +55,8 @@ namespace FishingWithGit.Tests.Arguments
             };
         }
 
+        public const int COMMAND_INDEX = 11;
+
         public static string[] GetProcessedResetArgs()
         {
             return new string[]
@@ -84,6 +86,15 @@ namespace FishingWithGit.Tests.Arguments
             var args = GetSourceTreeInboundResetArgs().ToList();
             ArgProcessor.Process(CommandType.reset, args);
             Assert.Equal(GetProcessedResetArgs(), args);
+        }
+
+        [Fact]
+        public static void HookSetCtor_Reset()
+        {
+            var hook = TakeHooks.Factory(
+                null,
+                GetSourceTreeInboundResetArgs().ToList(),
+                COMMAND_INDEX);
         }
 
         public static string[] GetSourceTreeInboundCheckoutArgs()
@@ -128,6 +139,15 @@ namespace FishingWithGit.Tests.Arguments
             var args = GetSourceTreeInboundCheckoutArgs().ToList();
             ArgProcessor.Process(CommandType.checkout, args);
             Assert.Equal(GetProcessedCheckoutArgs(), args);
+        }
+
+        [Fact]
+        public static void HookSetCtor_Checkout()
+        {
+            var hook = TakeHooks.Factory(
+                null,
+                GetSourceTreeInboundCheckoutArgs().ToList(),
+                COMMAND_INDEX);
         }
     }
 }

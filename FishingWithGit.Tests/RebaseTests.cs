@@ -46,6 +46,8 @@ namespace FishingWithGit.Tests.Arguments
             };
         }
 
+        public const int COMMAND_INDEX = 11;
+
         public static string[] GetProcessedArgs()
         {
             return new string[]
@@ -71,6 +73,15 @@ namespace FishingWithGit.Tests.Arguments
             var args = GetSourceTreeInboundArgs().ToList();
             ArgProcessor.Process(CommandType.rebase, args);
             Assert.Equal(GetProcessedArgs(), args);
+        }
+
+        [Fact]
+        public static void HookSetCtor()
+        {
+            var hook = RebaseHooks.Factory(
+                null,
+                GetSourceTreeInboundArgs().ToList(),
+                COMMAND_INDEX);
         }
 
         public const string CURRENT_SHA = "92d1ea36962347d2f072d3d67a5b4842a0d9cf74";
