@@ -75,8 +75,7 @@ namespace FishingWithGit
                 {
                     GetShaFromFile("orig-head"),
                     GetShaFromFile("abort-safety")
-                },
-                commandIndex + 1);
+                });
             return new RebaseHooks(
                 wrapper,
                 type,
