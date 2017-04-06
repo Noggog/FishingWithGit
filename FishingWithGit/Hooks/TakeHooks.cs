@@ -9,6 +9,7 @@ namespace FishingWithGit
     public class TakeHooks : HookSet
     {
         TakeArgs args;
+        public override IGitHookArgs Args => args;
 
         private TakeHooks(BaseWrapper wrapper, string targetSha, List<string> args, int commandIndex)
             : base(wrapper)

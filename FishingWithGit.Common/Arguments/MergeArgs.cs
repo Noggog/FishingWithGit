@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace FishingWithGit
 {
-    public class MergeArgs : IEnumerable<string>
+    public class MergeArgs : IGitHookArgs
     {
         public string TargetBranch;
+        public bool Silent => false;
 
         public MergeArgs()
         {

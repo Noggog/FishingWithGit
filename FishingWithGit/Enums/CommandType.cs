@@ -44,17 +44,5 @@ namespace FishingWithGit
             }
             return false;
         }
-
-        public static bool Silent(this CommandType command)
-        {
-            switch (command)
-            {
-                case CommandType.status:
-                case CommandType.unknown:
-                    return true;
-                default:
-                    return false;
-            }
-        }
     }
 }

@@ -9,6 +9,7 @@ namespace FishingWithGit
     class CherryPickHook : HookSet
     {
         CherryPickArgs args;
+        public override IGitHookArgs Args => args;
 
         private CherryPickHook(BaseWrapper wrapper, CherryPickArgs args)
             : base(wrapper)

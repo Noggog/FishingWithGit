@@ -9,6 +9,7 @@ namespace FishingWithGit
     public class MergeHooks : HookSet
     {
         MergeArgs args;
+        public override IGitHookArgs Args => args;
 
         public MergeHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
             : base(wrapper)

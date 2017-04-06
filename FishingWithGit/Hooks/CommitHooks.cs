@@ -9,6 +9,7 @@ namespace FishingWithGit
     public class CommitHooks : HookSet
     {
         CommitArgs args;
+        public override IGitHookArgs Args => args;
 
         private CommitHooks(BaseWrapper wrapper, List<string> args)
             : base(wrapper)

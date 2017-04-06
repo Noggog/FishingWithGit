@@ -7,27 +7,21 @@ using System.Threading.Tasks;
 
 namespace FishingWithGit
 {
-    public class CommitArgs : IGitHookArgs
+    public class StatusArgs : IGitHookArgs
     {
-        public bool Amending;
-        public string CommitMessageFile;
-        public bool Silent => false;
+        public bool Silent => true;
 
-        public CommitArgs()
+        public StatusArgs()
         {
         }
 
-        public CommitArgs(string[] args)
+        public StatusArgs(string[] args)
         {
-            this.Amending = args.Contains("--amend");
         }
 
         public IEnumerator<string> GetEnumerator()
         {
-            if (Amending)
-            {
-                yield return "--amend";
-            }
+            yield break;
         }
 
         IEnumerator IEnumerable.GetEnumerator()

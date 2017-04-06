@@ -11,6 +11,7 @@ namespace FishingWithGit
         public BaseWrapper Wrapper { get; private set; }
         public abstract Task<int> PreCommand();
         public abstract Task<int> PostCommand();
+        public abstract IGitHookArgs Args { get; }
 
         public HookSet(BaseWrapper wrapper)
         {

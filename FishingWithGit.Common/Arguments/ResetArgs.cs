@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace FishingWithGit
 {
-    public class ResetArgs : IEnumerable<string>
+    public class ResetArgs : IGitHookArgs
     {
         public string StartingBranch;
         public string StartingSha;
         public string TargetSha;
         public ResetType Type;
+        public bool Silent => false;
 
         public ResetArgs()
         {

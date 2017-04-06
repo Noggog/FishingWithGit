@@ -9,6 +9,7 @@ namespace FishingWithGit
     public class BranchHooks : HookSet
     {
         BranchArgs args;
+        public override IGitHookArgs Args => args;
 
         private BranchHooks(BaseWrapper wrapper, BranchArgs args)
             : base(wrapper)

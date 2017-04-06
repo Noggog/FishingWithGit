@@ -12,11 +12,12 @@ namespace FishingWithGit
     {
         enum Type { Normal, Abort, Continue }
 
-        string[] preArgs;
-        string[] postArgs;
+        IGitHookArgs preArgs;
+        IGitHookArgs postArgs;
         Type type;
+        public override IGitHookArgs Args => preArgs;
 
-        private RebaseHooks(BaseWrapper wrapper, Type type, string[] preArgs, string[] postArgs)
+        private RebaseHooks(BaseWrapper wrapper, Type type, IGitHookArgs preArgs, IGitHookArgs postArgs)
             : base(wrapper)
         {
             this.preArgs = preArgs;
@@ -52,8 +53,10 @@ namespace FishingWithGit
                     throw new ArgumentException($"Target branch did not exist {args[commandIndex + 1]}");
                 }
                 var rebaseArgs = new RebaseArgs(
-                    args.ToArray(),
-                    commandIndex + 1);
+                    new string[]
+                    {
+                        args[commandIndex + 1]
+                    });
                 var rebasePostArgs = new RebaseInProgressArgs(
                     new string[]
                     {
@@ -63,8 +66,8 @@ namespace FishingWithGit
                 return new RebaseHooks(
                     wrapper,
                     Type.Normal,
-                    rebaseArgs.ToArray(),
-                    rebasePostArgs.ToArray());
+                    rebaseArgs,
+                    rebasePostArgs);
             }
         }
 
@@ -79,8 +82,8 @@ namespace FishingWithGit
             return new RebaseHooks(
                 wrapper,
                 type,
-                rebaseArgs.ToArray(),
-                rebaseArgs.ToArray());
+                rebaseArgs,
+                rebaseArgs);
         }
 
         private static string GetShaFromFile(string fileName)
@@ -112,16 +115,16 @@ namespace FishingWithGit
             {
                 case Type.Abort:
                     return CommonFunctions.RunCommands(
-                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase_Abort, HookLocation.InRepo, preArgs),
-                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase_Abort, HookLocation.Normal, preArgs));
+                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase_Abort, HookLocation.InRepo, preArgs.ToArray()),
+                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase_Abort, HookLocation.Normal, preArgs.ToArray()));
                 case Type.Continue:
                     return CommonFunctions.RunCommands(
-                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase_Continue, HookLocation.InRepo, preArgs),
-                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase_Continue, HookLocation.Normal, preArgs));
+                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase_Continue, HookLocation.InRepo, preArgs.ToArray()),
+                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase_Continue, HookLocation.Normal, preArgs.ToArray()));
                 case Type.Normal:
                     return CommonFunctions.RunCommands(
-                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase, HookLocation.InRepo, preArgs),
-                        () => this.Wrapper.FireUnnaturalHooks(HookType.Pre_Rebase, HookLocation.Normal, preArgs));
+                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase, HookLocation.InRepo, preArgs.ToArray()),
+                        () => this.Wrapper.FireUnnaturalHooks(HookType.Pre_Rebase, HookLocation.Normal, preArgs.ToArray()));
                 default:
                     throw new NotImplementedException();
             }
@@ -133,16 +136,16 @@ namespace FishingWithGit
             {
                 case Type.Abort:
                     return CommonFunctions.RunCommands(
-                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase_Abort, HookLocation.InRepo, postArgs),
-                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase_Abort, HookLocation.Normal, postArgs));
+                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase_Abort, HookLocation.InRepo, postArgs.ToArray()),
+                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase_Abort, HookLocation.Normal, postArgs.ToArray()));
                 case Type.Continue:
                     return CommonFunctions.RunCommands(
-                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase_Continue, HookLocation.InRepo, postArgs),
-                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase_Continue, HookLocation.Normal, postArgs));
+                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase_Continue, HookLocation.InRepo, postArgs.ToArray()),
+                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase_Continue, HookLocation.Normal, postArgs.ToArray()));
                 case Type.Normal:
                     return CommonFunctions.RunCommands(
-                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase, HookLocation.InRepo, postArgs),
-                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase, HookLocation.Normal, postArgs));
+                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase, HookLocation.InRepo, postArgs.ToArray()),
+                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase, HookLocation.Normal, postArgs.ToArray()));
                 default:
                     throw new NotImplementedException();
             }

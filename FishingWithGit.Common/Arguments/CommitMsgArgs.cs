@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace FishingWithGit
 {
-    public class CommitMsgArgs : IEnumerable<string>
+    public class CommitMsgArgs : IGitHookArgs
     {
         public string CommitMessageFilePath;
+        public bool Silent => false;
 
         public CommitMsgArgs()
         {

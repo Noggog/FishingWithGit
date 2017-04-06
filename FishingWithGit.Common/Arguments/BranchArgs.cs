@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace FishingWithGit
 {
-    public class BranchArgs : IEnumerable<string>
+    public class BranchArgs : IGitHookArgs
     {
         public string TargetBranch;
         public bool Deleting;
+        public bool Silent => false;
 
         public BranchArgs()
         {

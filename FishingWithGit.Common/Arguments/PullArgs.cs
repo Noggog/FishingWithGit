@@ -7,24 +7,25 @@ using System.Threading.Tasks;
 
 namespace FishingWithGit
 {
-    public class PullArgs : IEnumerable<string>
+    public class PullArgs : IGitHookArgs
     {
         public string AncestorSha;
         public string TargetSha;
+        public bool Silent => false;
 
         public PullArgs()
         {
         }
 
-        public PullArgs(string[] args, int startingIndex = 0)
+        public PullArgs(string[] args)
         {
-            if (args.Length < 2 + startingIndex)
+            if (args.Length < 2)
             {
                 throw new ArgumentException("An argument was expected but did not exist");
             }
 
-            this.AncestorSha = args[startingIndex];
-            this.TargetSha = args[startingIndex + 1];
+            this.AncestorSha = args[0];
+            this.TargetSha = args[1];
         }
 
         public IEnumerator<string> GetEnumerator()

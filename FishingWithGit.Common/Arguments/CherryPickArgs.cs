@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace FishingWithGit
 {
-    public class CherryPickArgs : IEnumerable<string>
+    public class CherryPickArgs : IGitHookArgs
     {
         public string PickedSha;
+        public bool Silent => false;
 
         public CherryPickArgs()
         {

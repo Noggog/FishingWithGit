@@ -10,12 +10,13 @@ namespace FishingWithGit
 {
     public class CheckoutHooks : HookSet
     {
-        CheckoutArgs newArgs;
+        CheckoutArgs args;
+        public override IGitHookArgs Args => args;
 
         private CheckoutHooks(BaseWrapper wrapper, CheckoutArgs newArgs)
             : base(wrapper)
         {
-            this.newArgs = newArgs;
+            this.args = newArgs;
         }
 
         public static HookSet Factory(BaseWrapper wrapper, DirectoryInfo repoDir, List<string> args, int commandIndex)
@@ -95,15 +96,15 @@ namespace FishingWithGit
         public override Task<int> PreCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Checkout, HookLocation.InRepo, newArgs.ToArray()),
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Checkout, HookLocation.Normal, newArgs.ToArray()));
+                () => this.Wrapper.FireAllHooks(HookType.Pre_Checkout, HookLocation.InRepo, args.ToArray()),
+                () => this.Wrapper.FireAllHooks(HookType.Pre_Checkout, HookLocation.Normal, args.ToArray()));
         }
 
         public override Task<int> PostCommand()
         {
             return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_Checkout, HookLocation.InRepo, newArgs.ToArray()),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Post_Checkout, HookLocation.Normal, newArgs.ToArray()));
+                () => this.Wrapper.FireAllHooks(HookType.Post_Checkout, HookLocation.InRepo, args.ToArray()),
+                () => this.Wrapper.FireUnnaturalHooks(HookType.Post_Checkout, HookLocation.Normal, args.ToArray()));
         }
     }
 }

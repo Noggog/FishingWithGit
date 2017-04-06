@@ -11,6 +11,7 @@ namespace FishingWithGit
     public class ResetHooks : HookSet
     {
         ResetArgs args;
+        public override IGitHookArgs Args => args;
 
         private ResetHooks(BaseWrapper wrapper, DirectoryInfo repoDir, List<string> args, int commandIndex)
             : base(wrapper)

@@ -11,6 +11,7 @@ namespace FishingWithGit
     public class PullHooks : HookSet
     {
         PullArgs args;
+        public override IGitHookArgs Args => args;
 
         private PullHooks(BaseWrapper wrapper, string currentSha, string targetSha)
             : base(wrapper)

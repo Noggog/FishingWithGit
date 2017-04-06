@@ -9,6 +9,7 @@ namespace FishingWithGit
     public class CommitMsgHooks : HookSet
     {
         CommitMsgArgs args;
+        public override IGitHookArgs Args => args;
 
         private CommitMsgHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
             : base(wrapper)

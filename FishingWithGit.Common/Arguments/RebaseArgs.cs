@@ -7,22 +7,23 @@ using System.Threading.Tasks;
 
 namespace FishingWithGit
 {
-    public class RebaseArgs : IEnumerable<string>
+    public class RebaseArgs : IGitHookArgs
     {
         public string TargetBranch;
+        public bool Silent => false;
 
         public RebaseArgs()
         {
         }
 
-        public RebaseArgs(string[] args, int startingIndex = 0)
+        public RebaseArgs(string[] args)
         {
-            if (args.Length < 1 + startingIndex)
+            if (args.Length < 1)
             {
                 throw new ArgumentException("An argument was expected but did not exist");
             }
 
-            this.TargetBranch = args[startingIndex];
+            this.TargetBranch = args[0];
         }
 
         public IEnumerator<string> GetEnumerator()

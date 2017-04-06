@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace FishingWithGit
 {
-    public class RebaseInProgressArgs : IEnumerable<string>
+    public class RebaseInProgressArgs : IGitHookArgs
     {
         public string OriginalTipSha;
         public string LandingSha;
+        public bool Silent => false;
 
         public RebaseInProgressArgs()
         {
