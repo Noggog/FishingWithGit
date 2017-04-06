@@ -11,20 +11,26 @@ namespace FishingWithGit
     {
         public string TargetBranch;
         public bool Deleting;
-        public bool Silent => false;
+        public bool Silent
+        {
+            get
+            {
+                return !Deleting && string.IsNullOrWhiteSpace(TargetBranch);
+            }
+        }
 
         public BranchArgs()
         {
         }
 
-        public BranchArgs(string[] args, int startingIndex = 0)
+        public BranchArgs(string[] args)
         {
-            if (args.Length < 1 + startingIndex)
+            if (args.Length < 1)
             {
                 return;
             }
 
-            this.TargetBranch = args[startingIndex];
+            this.TargetBranch = args[0];
             this.Deleting = args.Contains("-D");
         }
 

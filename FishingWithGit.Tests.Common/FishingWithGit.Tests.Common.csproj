@@ -5,7 +5,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{49385417-D1F6-4C8D-827C-8CE6D79203F9}</ProjectGuid>
+    <ProjectGuid>{9DDB652B-DE28-4E8E-B65B-AC2BFC0DDB43}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FishingWithGit.Tests.Common</RootNamespace>

@@ -50,6 +50,7 @@ namespace FishingWithGit
                 var startInfo = GetStartInfo();
                 HookSet hook = GetHook();
                 silentCommand = hook?.Args.Silent ?? true;
+                WriteLine($"Silent?: {silentCommand}");
                 ActivateAndFlushLogging();
                 if (Properties.Settings.Default.FireHookLogic)
                 {
