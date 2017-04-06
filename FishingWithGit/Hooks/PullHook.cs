@@ -1,6 +1,7 @@
 ﻿using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace FishingWithGit
                 });
         }
 
-        public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
+        public static HookSet Factory(BaseWrapper wrapper, DirectoryInfo repoDir, List<string> args, int commandIndex)
         {
             if (args.Count < commandIndex + 2)
             {
@@ -31,7 +32,7 @@ namespace FishingWithGit
             var originStr = args[commandIndex + 1];
             var branchStr = args[commandIndex + 2];
             string currentSha, targetSha;
-            using (var repo = new Repository("."))
+            using (var repo = new Repository(repoDir.FullName))
             {
                 currentSha = repo.Head.Tip.Sha;
                 var targetBranchStr = $"{originStr}/{branchStr}";

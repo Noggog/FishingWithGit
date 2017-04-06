@@ -24,7 +24,7 @@ namespace FishingWithGit
             this.type = type;
         }
 
-        public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
+        public static HookSet Factory(BaseWrapper wrapper, DirectoryInfo repoDir, List<string> args, int commandIndex)
         {
             if (args.Count <= commandIndex + 1)
             {
@@ -38,13 +38,13 @@ namespace FishingWithGit
                 case "--continue":
                     return FactoryInProgress(wrapper, args, commandIndex, Type.Continue);
                 default:
-                    return FactoryNormal(wrapper, args, commandIndex);
+                    return FactoryNormal(wrapper, repoDir, args, commandIndex);
             }
         }
 
-        private static HookSet FactoryNormal(BaseWrapper wrapper, List<string> args, int commandIndex)
+        private static HookSet FactoryNormal(BaseWrapper wrapper, DirectoryInfo repoDir, List<string> args, int commandIndex)
         {
-            using (var repo = new Repository(Directory.GetCurrentDirectory()))
+            using (var repo = new Repository(repoDir.FullName))
             {
                 var targetBranch = repo.Branches[args[commandIndex + 1]];
                 if (targetBranch == null)

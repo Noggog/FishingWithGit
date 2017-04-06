@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FishingWithGit.Tests.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,7 +47,7 @@ namespace FishingWithGit.Tests.Arguments
                 "core.quotepath=false",
                 "pull",
                 "origin",
-                "master"
+                Repository_Tools.JUMPBACK_BRANCH
             };
         }
 
@@ -59,7 +60,7 @@ namespace FishingWithGit.Tests.Arguments
                 "--no-pager",
                 "pull",
                 "origin",
-                "master"
+                Repository_Tools.JUMPBACK_BRANCH
             };
         }
 
@@ -84,10 +85,17 @@ namespace FishingWithGit.Tests.Arguments
         [Fact]
         public static void HookSetCtor()
         {
-            var hook = PullHooks.Factory(
-                null,
-                GetSourceTreeInboundArgs().ToList(),
-                COMMAND_INDEX);
+            using (var checkout = Repository_Tools.GetTypicalRepo())
+            {
+                using (var clone = Repository_Tools.GetClone(checkout.Repo))
+                {
+                    var hook = PullHooks.Factory(
+                        null,
+                        clone.Dir,
+                        GetSourceTreeInboundArgs().ToList(),
+                        COMMAND_INDEX);
+                }
+            }
         }
     }
 }

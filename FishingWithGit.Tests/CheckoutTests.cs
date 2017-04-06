@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FishingWithGit.Tests.Common;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -46,7 +47,7 @@ namespace FishingWithGit.Tests.Arguments
                 "-c",
                 "core.quotepath=false",
                 "checkout",
-                "TestBranch"
+                Repository_Tools.JUMPBACK_BRANCH
             };
         }
 
@@ -58,7 +59,7 @@ namespace FishingWithGit.Tests.Arguments
             {
                 "--no-pager",
                 "checkout",
-                "TestBranch"
+                Repository_Tools.JUMPBACK_BRANCH
             };
         }
 
@@ -83,11 +84,14 @@ namespace FishingWithGit.Tests.Arguments
         [Fact]
         public static void HookSetCtor()
         {
-            var hook = CheckoutHooks.Factory(
-                null,
-                new DirectoryInfo(Directory.GetCurrentDirectory()),
-                GetSourceTreeInboundArgs().ToList(),
-                COMMAND_INDEX);
+            using (var repo = Repository_Tools.GetTypicalRepo())
+            {
+                var hook = CheckoutHooks.Factory(
+                    null,
+                    repo.Dir,
+                    GetSourceTreeInboundArgs().ToList(),
+                    COMMAND_INDEX);
+            }
         }
     }
 }

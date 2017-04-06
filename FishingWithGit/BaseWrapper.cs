@@ -285,7 +285,11 @@ namespace FishingWithGit
                         args,
                         commandIndex);
                 case CommandType.rebase:
-                    return RebaseHooks.Factory(this, args, commandIndex);
+                    return RebaseHooks.Factory(
+                        this,
+                        new DirectoryInfo(Directory.GetCurrentDirectory()), 
+                        args, 
+                        commandIndex);
                 case CommandType.reset:
                     return ResetHooks.Factory(
                         this,
@@ -303,7 +307,11 @@ namespace FishingWithGit
                 case CommandType.merge:
                     return MergeHooks.Factory(this, args, commandIndex);
                 case CommandType.pull:
-                    return PullHooks.Factory(this, args, commandIndex);
+                    return PullHooks.Factory(
+                        this,
+                        new DirectoryInfo(Directory.GetCurrentDirectory()), 
+                        args, 
+                        commandIndex);
                 case CommandType.branch:
                     return BranchHooks.Factory(this, args, commandIndex);
                 default:

@@ -95,11 +95,14 @@ namespace FishingWithGit.Tests.Arguments
         [Fact]
         public static void HookSetCtor()
         {
-            var hook = ResetHooks.Factory(
-                null,
-                new DirectoryInfo(Directory.GetCurrentDirectory()),
-                GetSourceTreeInboundArgs().ToList(),
-                COMMAND_INDEX);
+            using (var checkout = Repository_Tools.GetTypicalRepo())
+            {
+                var hook = ResetHooks.Factory(
+                    null,
+                    checkout.Dir,
+                    GetSourceTreeInboundArgs().ToList(),
+                    COMMAND_INDEX);
+            }
         }
     }
 }

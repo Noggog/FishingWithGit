@@ -17,7 +17,7 @@ namespace FishingWithGit.Tests.Arguments
         {
             return new string[]
             {
-                Utility.TYPICAL_SHA,
+                Repository_Tools.TYPICAL_SHA,
                 ITEM_1,
                 ITEM_2,
                 ITEM_3
@@ -51,7 +51,7 @@ namespace FishingWithGit.Tests.Arguments
                 "core.quotepath=false",
                 "reset",
                 "-q",
-                Utility.TYPICAL_SHA,
+                Repository_Tools.TYPICAL_SHA,
                 "--",
                 ITEM_1,
                 ITEM_2,
@@ -68,11 +68,11 @@ namespace FishingWithGit.Tests.Arguments
                 "--no-pager",
                 "reset",
                 "-q",
-                Utility.TYPICAL_SHA,
+                Repository_Tools.TYPICAL_SHA,
                 "--",
-                ITEM_1,
-                ITEM_2,
-                ITEM_3
+                $"\"{ITEM_1}\"",
+                $"\"{ITEM_2}\"",
+                $"\"{ITEM_3}\"",
             };
         }
 
@@ -82,7 +82,7 @@ namespace FishingWithGit.Tests.Arguments
             var args = new TakeArgs(GetBasicOutgoingArgs());
             var list = args.ToList();
             Assert.Equal(4, list.Count);
-            Assert.Equal(Utility.TYPICAL_SHA, list[0]);
+            Assert.Equal(Repository_Tools.TYPICAL_SHA, list[0]);
             Assert.Equal(ITEM_1, list[1]);
             Assert.Equal(ITEM_2, list[2]);
             Assert.Equal(ITEM_3.ToString(), list[3]);
@@ -101,7 +101,7 @@ namespace FishingWithGit.Tests.Arguments
         {
             var hook = TakeHooks.Factory(
                 null,
-                Utility.TYPICAL_SHA,
+                Repository_Tools.TYPICAL_SHA,
                 GetSourceTreeInboundResetArgs().ToList(),
                 COMMAND_INDEX);
         }
@@ -155,7 +155,7 @@ namespace FishingWithGit.Tests.Arguments
         {
             var hook = TakeHooks.Factory(
                 null,
-                Utility.TYPICAL_SHA,
+                Repository_Tools.TYPICAL_SHA,
                 GetSourceTreeInboundCheckoutArgs().ToList(),
                 COMMAND_INDEX);
         }

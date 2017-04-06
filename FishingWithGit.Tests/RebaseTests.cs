@@ -78,10 +78,14 @@ namespace FishingWithGit.Tests.Arguments
         [Fact]
         public static void HookSetCtor()
         {
-            var hook = RebaseHooks.Factory(
-                null,
-                GetSourceTreeInboundArgs().ToList(),
-                COMMAND_INDEX);
+            using (var checkout = Repository_Tools.GetTypicalRepo())
+            {
+                var hook = RebaseHooks.Factory(
+                    null,
+                    checkout.Dir,
+                    GetSourceTreeInboundArgs().ToList(),
+                    COMMAND_INDEX);
+            }
         }
 
         public const string CURRENT_SHA = "92d1ea36962347d2f072d3d67a5b4842a0d9cf74";

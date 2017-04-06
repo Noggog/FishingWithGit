@@ -12,10 +12,10 @@ namespace FishingWithGit
     {
         CheckoutArgs newArgs;
 
-        private CheckoutHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
+        private CheckoutHooks(BaseWrapper wrapper, CheckoutArgs newArgs)
             : base(wrapper)
         {
-            this.newArgs = RetrieveNewArgs(args, commandIndex);
+            this.newArgs = newArgs;
         }
 
         public static HookSet Factory(BaseWrapper wrapper, DirectoryInfo repoDir, List<string> args, int commandIndex)
@@ -37,16 +37,17 @@ namespace FishingWithGit
             }
             else
             {
-                return new CheckoutHooks(wrapper, args, commandIndex);
+                CheckoutArgs newArgs = RetrieveNewArgs(args, repoDir, commandIndex);
+                return new CheckoutHooks(wrapper, newArgs);
             }
         }
 
-        private CheckoutArgs RetrieveNewArgs(List<string> args, int commandIndex)
+        private static CheckoutArgs RetrieveNewArgs(List<string> args, DirectoryInfo repoDir, int commandIndex)
         {
             string curSha, targetSha;
             var argsList = args.ToList();
             var trackIndex = argsList.IndexOf("--track");
-            using (var repo = new Repository(Directory.GetCurrentDirectory()))
+            using (var repo = new Repository(repoDir.FullName))
             {
                 curSha = repo.Head.Tip.Sha;
                 if (trackIndex == -1)
@@ -77,7 +78,7 @@ namespace FishingWithGit
                 });
         }
 
-        private string GetTargetSha(Repository repo, string targetBranchName)
+        private static string GetTargetSha(Repository repo, string targetBranchName)
         {
             var targetBranch = repo.Branches[targetBranchName];
             if (targetBranch == null)
