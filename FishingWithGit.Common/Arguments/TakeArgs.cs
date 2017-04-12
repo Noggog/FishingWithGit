@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FishingWithGit.Common;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace FishingWithGit
         public TakeArgs(string[] args)
         {
             if (args.Length < 1
-                || args[0].Length != 40)
+                || args[0].Length != Constants.SHA_LENGTH)
             {
                 throw new ArgumentException("No target sha specified.");
             }

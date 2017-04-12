@@ -1,4 +1,5 @@
-﻿using LibGit2Sharp;
+﻿using FishingWithGit.Common;
+using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +22,7 @@ namespace FishingWithGit
             for (int i = commandIndex + 1; i < args.Count; i++)
             {
                 if (!args[i].StartsWith("-")
-                    && args[i].Length == 40)
+                    && args[i].Length == Constants.SHA_LENGTH)
                 {
                     targetSha = args[i];
                 }
@@ -89,7 +90,12 @@ namespace FishingWithGit
                 {
                     throw new ArgumentException("Item split was not found: --");
                 }
-                return TakeHooks.Factory(wrapper, args[splitIndex - 1], args, commandIndex);
+                var sha = args[splitIndex - 1];
+                if (sha.Length != Constants.SHA_LENGTH)
+                {
+                    return TakeHooks.Factory(wrapper, repoDir, args, commandIndex);
+                }
+                return TakeHooks.Factory(wrapper, sha, args, commandIndex);
             }
         }
 

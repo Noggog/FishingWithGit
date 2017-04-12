@@ -53,6 +53,7 @@
     <Compile Include="Arguments\ResetArgs.cs" />
     <Compile Include="Arguments\StatusArgs.cs" />
     <Compile Include="Arguments\TakeArgs.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Enum\HookType.cs" />
     <Compile Include="Enum\ResetType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

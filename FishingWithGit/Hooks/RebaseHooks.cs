@@ -1,4 +1,5 @@
-﻿using LibGit2Sharp;
+﻿using FishingWithGit.Common;
+using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -101,9 +102,9 @@ namespace FishingWithGit
             }
 
             var line = lines[0];
-            if (line.Length != 40)
+            if (line.Length != Constants.SHA_LENGTH)
             {
-                throw new ArgumentException($"Unexpected length of line in {file.FullName}: {line.Length}, expected 40 for a Sha.");
+                throw new ArgumentException($"Unexpected length of line in {file.FullName}: {line.Length}, expected {Constants.SHA_LENGTH} for a Sha.");
             }
 
             return line;

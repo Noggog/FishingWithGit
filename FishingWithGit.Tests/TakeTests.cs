@@ -34,6 +34,18 @@ namespace FishingWithGit.Tests.Arguments
             Assert.Equal(ITEM_3.ToString(), args.Items[2]);
         }
 
+        [Fact]
+        public static void BasicArgs_Enumeration()
+        {
+            var args = new TakeArgs(GetBasicOutgoingArgs());
+            var list = args.ToList();
+            Assert.Equal(4, list.Count);
+            Assert.Equal(Repository_Tools.TYPICAL_SHA, list[0]);
+            Assert.Equal(ITEM_1, list[1]);
+            Assert.Equal(ITEM_2, list[2]);
+            Assert.Equal(ITEM_3.ToString(), list[3]);
+        }
+
         public static string[] GetSourceTreeInboundResetArgs()
         {
             return new string[]
@@ -77,18 +89,6 @@ namespace FishingWithGit.Tests.Arguments
         }
 
         [Fact]
-        public static void BasicArgs_Enumeration()
-        {
-            var args = new TakeArgs(GetBasicOutgoingArgs());
-            var list = args.ToList();
-            Assert.Equal(4, list.Count);
-            Assert.Equal(Repository_Tools.TYPICAL_SHA, list[0]);
-            Assert.Equal(ITEM_1, list[1]);
-            Assert.Equal(ITEM_2, list[2]);
-            Assert.Equal(ITEM_3.ToString(), list[3]);
-        }
-
-        [Fact]
         public static void Sourcetree_Reset()
         {
             var args = GetSourceTreeInboundResetArgs().ToList();
@@ -104,6 +104,90 @@ namespace FishingWithGit.Tests.Arguments
                 Repository_Tools.TYPICAL_SHA,
                 GetSourceTreeInboundResetArgs().ToList(),
                 COMMAND_INDEX);
+        }
+
+        [Fact]
+        public static void HookSetCtor_Reset_To_Take()
+        {
+            using (var checkout = Repository_Tools.GetTypicalRepo())
+            {
+                var hook = ResetHooks.Factory(
+                    null,
+                    checkout.Dir,
+                    GetSourceTreeInboundResetArgs().ToList(),
+                    COMMAND_INDEX);
+                Assert.True(hook is TakeHooks);
+            }
+        }
+
+        public static string[] GetSourceTreeInboundResetShalessArgs()
+        {
+            return new string[]
+            {
+                "--no-pager",
+                "-c",
+                "color.branch=false",
+                "-c",
+                "color.diff=false",
+                "-c",
+                "color.status=false",
+                "-c",
+                "diff.mnemonicprefix=false",
+                "-c",
+                "core.quotepath=false",
+                "reset",
+                "-q",
+                "--",
+                ITEM_1,
+                ITEM_2,
+                ITEM_3
+            };
+        }
+
+        public static string[] GetProcessedResetShalessArgs()
+        {
+            return new string[]
+            {
+                "--no-pager",
+                "reset",
+                "-q",
+                "--",
+                $"\"{ITEM_1}\"",
+                $"\"{ITEM_2}\"",
+                $"\"{ITEM_3}\"",
+            };
+        }
+
+        [Fact]
+        public static void Sourcetree_ResetShaless()
+        {
+            var args = GetSourceTreeInboundResetShalessArgs().ToList();
+            ArgProcessor.Process(CommandType.reset, args);
+            Assert.Equal(GetProcessedResetShalessArgs(), args);
+        }
+
+        [Fact]
+        public static void HookSetCtor_ResetShaless()
+        {
+            var hook = TakeHooks.Factory(
+                null,
+                Repository_Tools.TYPICAL_SHA,
+                GetSourceTreeInboundResetShalessArgs().ToList(),
+                COMMAND_INDEX);
+        }
+
+        [Fact]
+        public static void HookSetCtor_ResetShaless_To_Take()
+        {
+            using (var checkout = Repository_Tools.GetTypicalRepo())
+            {
+                var hook = ResetHooks.Factory(
+                    null,
+                    checkout.Dir,
+                    GetSourceTreeInboundResetShalessArgs().ToList(),
+                    COMMAND_INDEX);
+                Assert.True(hook is TakeHooks);
+            }
         }
 
         public static string[] GetSourceTreeInboundCheckoutArgs()
@@ -159,5 +243,19 @@ namespace FishingWithGit.Tests.Arguments
                 GetSourceTreeInboundCheckoutArgs().ToList(),
                 COMMAND_INDEX);
         }
+        [Fact]
+        public static void HookSetCtor_Checkout_To_Take()
+        {
+            using (var checkout = Repository_Tools.GetTypicalRepo())
+            {
+                var hook = CheckoutHooks.Factory(
+                    null,
+                    checkout.Dir,
+                    GetSourceTreeInboundCheckoutArgs().ToList(),
+                    COMMAND_INDEX);
+                Assert.True(hook is TakeHooks);
+            }
+        }
+
     }
 }

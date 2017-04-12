@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FishingWithGit.Common;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace FishingWithGit
 
             this.PickedSha = args[0];
 
-            if (PickedSha.Length != 40)
+            if (PickedSha.Length != Constants.SHA_LENGTH)
             {
                 throw new ArgumentException($"Checkout args for picked sha was shorter than expected: {this.PickedSha.Length} {this.PickedSha}");
             }

@@ -1,5 +1,8 @@
-﻿using System;
+﻿using FishingWithGit.Common;
+using LibGit2Sharp;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +17,10 @@ namespace FishingWithGit
         private TakeHooks(BaseWrapper wrapper, string targetSha, List<string> args, int commandIndex)
             : base(wrapper)
         {
+            if (targetSha.Length != Constants.SHA_LENGTH)
+            {
+                throw new ArgumentException($"Sha was not correct length: {targetSha.Length}");
+            }
             var argsList = args.ToList();
             commandIndex = argsList.IndexOf("--", commandIndex);
             if (commandIndex == -1)
@@ -32,6 +39,15 @@ namespace FishingWithGit
         public static HookSet Factory(BaseWrapper wrapper, string targetSha, List<string> args, int commandIndex)
         {
             return new TakeHooks(wrapper, targetSha, args, commandIndex);
+        }
+
+        public static HookSet Factory(BaseWrapper wrapper, DirectoryInfo repoDir, List<string> args, int commandIndex)
+        {
+            using (var repo = new Repository(repoDir.FullName))
+            {
+                return new TakeHooks(wrapper, repo.Head.Tip.Sha, args, commandIndex);
+            }
+
         }
 
         public override Task<int> PreCommand()

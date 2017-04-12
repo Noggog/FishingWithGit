@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FishingWithGit.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace FishingWithGit
         public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
         {
             if (args.Count <= commandIndex
-                || args[commandIndex + 1].Length != 40)
+                || args[commandIndex + 1].Length != Constants.SHA_LENGTH)
             {
                 throw new ArgumentException("Cherry pick did not have a target sha.");
             }
