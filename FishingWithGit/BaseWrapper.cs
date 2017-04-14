@@ -470,6 +470,8 @@ namespace FishingWithGit
             DirectoryInfo dir = new DirectoryInfo(path);
             if (!dir.Exists) return 0;
 
+            HashSet<string> firedHooks = new HashSet<string>();
+
             foreach (var file in dir.EnumerateFiles())
             {
                 if (!file.Extension.ToUpper().Equals(".EXE")) continue;
@@ -488,6 +490,36 @@ namespace FishingWithGit
                         new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))));
 
                 WriteLine($"Fired Untied Exe Hook {location} {type.HookName()} {file.Name}", writeToConsole: null);
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
+
+                firedHooks.Add(file.Name);
+            }
+
+            if (!Properties.Settings.Default.RunMassHooks) return 0;
+            DirectoryInfo massHookDir = new DirectoryInfo(Properties.Settings.Default.MassHookFolder);
+            if (!massHookDir.Exists) return 0;
+            foreach (var file in massHookDir.EnumerateFiles())
+            {
+                if (firedHooks.Contains(file.Name)) continue;
+                if (!file.Extension.ToUpper().Equals(".EXE")) continue;
+                var rawName = Path.GetFileNameWithoutExtension(file.Name);
+                if (HookTypeExt.IsHookName(rawName)) continue;
+
+                WriteLine($"Firing Mass Exe Hook {location} {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: null);
+
+                var newArgs = new string[args.Length + 2];
+                newArgs[0] = type.HookName();
+                newArgs[1] = type.CommandString();
+                Array.Copy(args, 0, newArgs, 2, args.Length);
+
+                var exitCode = await RunProcess(
+                    SetArgumentsOnStartInfo(
+                        new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))));
+
+                WriteLine($"Fired Mass Exe Hook {location} {type.HookName()} {file.Name}", writeToConsole: null);
                 if (exitCode != 0)
                 {
                     return exitCode;

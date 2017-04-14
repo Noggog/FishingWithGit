@@ -29,5 +29,11 @@
     <Setting Name="PrintSeparateArgs" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="RunMassHooks" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="MassHookFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\Program Files\FishingWithGit\Mass Hooks\</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
