@@ -19,6 +19,7 @@ namespace FishingWithGit
         bool logFlushed;
         Queue<(string log, bool? toConsole)> logBuffer = new Queue<(string log, bool? toConsole)>();
         bool silentCommand = true;
+        Stopwatch sw;
 
         public BaseWrapper(string[] args)
         {
@@ -29,6 +30,8 @@ namespace FishingWithGit
         {
             try
             {
+                sw = new Stopwatch();
+                sw.Start();
                 WriteLine(DateTime.Now.ToString());
                 WriteLine("Arguments:");
                 if (Properties.Settings.Default.PrintSeparateArgs)
@@ -111,6 +114,8 @@ namespace FishingWithGit
             }
             finally
             {
+                sw.Stop();
+                WriteLine($"Command took {sw.Elapsed.TotalMilliseconds}ms");
                 WriteLine("--------------------------------------------------------------------------------------------------------- Fishing With Git call done.");
                 if (this.shouldLogToFile)
                 {
@@ -284,9 +289,9 @@ namespace FishingWithGit
                     file.Delete();
                 }
 
-                using (StreamWriter sw = File.AppendText(filePath))
+                using (StreamWriter writer = File.AppendText(filePath))
                 {
-                    sw.WriteLine(sb.ToString());
+                    writer.WriteLine(sb.ToString());
                 }
             }
             catch (Exception)
