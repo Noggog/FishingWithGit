@@ -280,7 +280,13 @@ namespace FishingWithGit
             try
             {
                 DirectoryInfo curDir = new DirectoryInfo(Directory.GetCurrentDirectory());
-                var filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + $"/Temp/FishingWithGit-{curDir.Name}.log";
+
+                var logDir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + $"/Temp/FishingWithGit/");
+                if (!logDir.Exists)
+                {
+                    logDir.Create();
+                }
+                var filePath = Path.Combine(logDir.FullName, $"{curDir.Name}.log");
 
                 FileInfo file = new FileInfo(filePath);
                 if (file.Exists
