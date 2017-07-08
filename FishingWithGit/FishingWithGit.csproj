@@ -54,6 +54,7 @@
     <Compile Include="Hooks\CheckoutHooks.cs" />
     <Compile Include="Hooks\CherryPickHook.cs" />
     <Compile Include="Hooks\BranchHooks.cs" />
+    <Compile Include="Hooks\PushHooks.cs" />
     <Compile Include="Hooks\TagHooks.cs" />
     <Compile Include="Hooks\PullHook.cs" />
     <Compile Include="Hooks\CommitHooks.cs" />

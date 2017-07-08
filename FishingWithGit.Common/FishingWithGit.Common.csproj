@@ -48,6 +48,7 @@
     <Compile Include="Arguments\IGitHookArgs.cs" />
     <Compile Include="Arguments\MergeArgs.cs" />
     <Compile Include="Arguments\PullArgs.cs" />
+    <Compile Include="Arguments\PushArgs.cs" />
     <Compile Include="Arguments\RebaseArgs.cs" />
     <Compile Include="Arguments\RebaseInProgressArgs.cs" />
     <Compile Include="Arguments\ResetArgs.cs" />

@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BranchTests.cs" />
+    <Compile Include="PushTests.cs" />
     <Compile Include="PullTests.cs" />
     <Compile Include="Repository_Tools.cs" />
     <Compile Include="TakeTests.cs" />

@@ -352,6 +352,8 @@ namespace FishingWithGit
                     return BranchHooks.Factory(this, args, commandIndex);
                 case CommandType.tag:
                     return TagHooks.Factory(this, args, commandIndex);
+                case CommandType.push:
+                    return PushHooks.Factory(this, args, commandIndex);
                 default:
                     return null;
             }
