@@ -164,7 +164,7 @@ namespace FishingWithGit
             var sourcePath = GetSourcePath();
             var trimIndex = exePath.IndexOf(sourcePath);
             var trim = exePath.Substring(trimIndex + sourcePath.Length);
-            trim = Properties.Settings.Default.RealGitProgramFolder + trim;
+            trim = Path.Combine(Properties.Settings.Default.RealGitProgramFolder, trim);
             WriteLine("Target exe " + trim);
             startInfo.FileName = trim;
             startInfo.RedirectStandardError = true;
