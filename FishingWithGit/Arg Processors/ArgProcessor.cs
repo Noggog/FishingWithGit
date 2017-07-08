@@ -15,6 +15,7 @@ namespace FishingWithGit
             StripCArguments(args);
             EnsureFormatIsQuoted(args);
             ProcessAfterSplitterFileList(args);
+            AddQuotesToWhitespace(args);
             ArgProcessor commandProcessor;
 
             switch (commandType)
@@ -51,6 +52,18 @@ namespace FishingWithGit
                     if (arg[formatStr.Length + 1] == '\"') continue;
                     if (arg[arg.Length - 1] == '\"') continue;
                     args[i] = $"{formatStr}\"{arg.Substring(formatStr.Length)}\"";
+                }
+            }
+        }
+
+        public static void AddQuotesToWhitespace(List<string> args)
+        {
+            for (int i = 0; i < args.Count; i++)
+            {
+                var arg = args[i];
+                if (string.IsNullOrWhiteSpace(arg))
+                {
+                    args[i] = $"\"{arg}\"";
                 }
             }
         }
