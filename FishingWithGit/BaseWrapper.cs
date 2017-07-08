@@ -21,6 +21,7 @@ namespace FishingWithGit
         bool silentCommand = true;
         Stopwatch overallSw = new Stopwatch();
         Stopwatch actualProcessSw = new Stopwatch();
+        public bool AlwaysLog;
 
         public BaseWrapper(string[] args)
         {
@@ -255,7 +256,7 @@ namespace FishingWithGit
         {
             if (logFlushed)
             {
-                if (writeToConsole ?? !silentCommand)
+                if (AlwaysLog || (writeToConsole ?? !silentCommand))
                 {
                     System.Console.WriteLine(line);
                 }
