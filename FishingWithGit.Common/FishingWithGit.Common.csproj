@@ -52,6 +52,7 @@
     <Compile Include="Arguments\RebaseInProgressArgs.cs" />
     <Compile Include="Arguments\ResetArgs.cs" />
     <Compile Include="Arguments\StatusArgs.cs" />
+    <Compile Include="Arguments\TagArgs.cs" />
     <Compile Include="Arguments\TakeArgs.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Enum\HookType.cs" />
