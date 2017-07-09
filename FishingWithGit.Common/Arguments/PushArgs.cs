@@ -15,6 +15,11 @@ namespace FishingWithGit
         public string Remote;
         public List<Tuple<string, string>> RefSpecs;
 
+        public PushArgs()
+        {
+            this.RefSpecs = new List<Tuple<string, string>>();
+        }
+
         public PushArgs(string[] args)
         {
             this.args = args;
