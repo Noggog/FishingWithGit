@@ -86,7 +86,7 @@ namespace FishingWithGit
                 else
                 {
                     actualProcessSw.Start();
-                    exitCode = await RunProcess(startInfo);
+                    exitCode = await RunProcess(startInfo, hookIO: true);
                     actualProcessSw.Stop();
                 }
                 if (exitCode != 0)
@@ -180,7 +180,7 @@ namespace FishingWithGit
             return Properties.Settings.Default.BackupSourcePath;
         }
 
-        public async Task<int> RunProcess(ProcessStartInfo startInfo)
+        public async Task<int> RunProcess(ProcessStartInfo startInfo, bool hookIO)
         {
             FileInfo file = new FileInfo(startInfo.FileName);
             if (!file.Exists)
@@ -189,9 +189,11 @@ namespace FishingWithGit
             }
             using (var process = Process.Start(startInfo))
             {
-                var task = Task.WhenAll(
-                    Task.Run(() => process.WaitForExit()),
-                    Task.Run(() =>
+                List<Task> tasks = new List<Task>(3);
+                tasks.Add(Task.Run(() => process.WaitForExit()));
+                if (hookIO)
+                {
+                    tasks.Add(Task.Run(() =>
                     {
                         bool first = true;
                         using (StreamReader reader = process.StandardOutput)
@@ -208,8 +210,8 @@ namespace FishingWithGit
                                 WriteLine(result);
                             }
                         }
-                    }),
-                    Task.Run(() =>
+                    }));
+                    tasks.Add(Task.Run(() =>
                     {
                         var first = true;
                         using (StreamReader reader = process.StandardError)
@@ -227,6 +229,8 @@ namespace FishingWithGit
                             }
                         }
                     }));
+                }
+                var task = Task.WhenAll(tasks);
                 if (task != await Task.WhenAny(task, Task.Delay(Properties.Settings.Default.ProcessTimeoutWarning)))
                 {
                     this.WriteLine("Process taking a long time: " + startInfo.FileName + " " + startInfo.Arguments);
@@ -427,7 +431,8 @@ namespace FishingWithGit
 
             var exitCode = await RunProcess(
                 SetArgumentsOnStartInfo(
-                    new ProcessStartInfo(file.FullName, string.Join(" ", args))));
+                    new ProcessStartInfo(file.FullName, string.Join(" ", args))),
+                hookIO: !this.silentCommand);
 
             sw.Stop();
             WriteLine($"Fired Named Bash Hook {location} {type.HookName()}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
@@ -452,7 +457,8 @@ namespace FishingWithGit
 
                 var exitCode = await this.RunProcess(
                     SetArgumentsOnStartInfo(
-                        new ProcessStartInfo(file.FullName, string.Join(" ", args))));
+                        new ProcessStartInfo(file.FullName, string.Join(" ", args))),
+                    hookIO: !this.silentCommand);
 
                 sw.Stop();
                 WriteLine($"Fired Untied Bash Hook {location} {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
@@ -484,7 +490,8 @@ namespace FishingWithGit
 
             await this.RunProcess(
                 SetArgumentsOnStartInfo(
-                    new ProcessStartInfo(file.FullName, string.Join(" ", args))));
+                    new ProcessStartInfo(file.FullName, string.Join(" ", args))),
+                hookIO: !this.silentCommand);
 
             sw.Stop();
             WriteLine($"Fired Named Exe Hook {location} {type.HookName()}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
@@ -516,7 +523,8 @@ namespace FishingWithGit
 
                 var exitCode = await RunProcess(
                     SetArgumentsOnStartInfo(
-                        new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))));
+                        new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))),
+                    hookIO: !this.silentCommand);
 
                 sw.Stop();
                 WriteLine($"Fired Untied Exe Hook {location} {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
@@ -549,7 +557,8 @@ namespace FishingWithGit
 
                 var exitCode = await RunProcess(
                     SetArgumentsOnStartInfo(
-                        new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))));
+                        new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))),
+                    hookIO: !this.silentCommand);
 
                 sw.Stop();
                 WriteLine($"Fired Mass Exe Hook {location} {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
