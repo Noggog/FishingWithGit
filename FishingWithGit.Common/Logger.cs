@@ -14,7 +14,7 @@ namespace FishingWithGit.Common
         Queue<LogItem> logBuffer = new Queue<LogItem>();
         public bool ConsoleSilent;
         public bool AlwaysLog;
-        public double WipeLogsOlderThanDays;
+        public double WipeLogsOlderThanDays = -1;
         public readonly string AppName;
         public bool ShouldLogToFile;
 
@@ -81,6 +81,7 @@ namespace FishingWithGit.Common
 
                 FileInfo file = new FileInfo(filePath);
                 if (file.Exists
+                    && this.WipeLogsOlderThanDays >= 0
                     && (DateTime.Now - file.LastWriteTime).TotalDays > this.WipeLogsOlderThanDays)
                 {
                     file.Delete();
