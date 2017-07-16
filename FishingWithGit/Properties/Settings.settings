@@ -5,9 +5,6 @@
     <Setting Name="RealGitProgramFolder" Type="System.String" Scope="Application">
       <Value Profile="(Default)">C:\Program Files\Git\Git\</Value>
     </Setting>
-    <Setting Name="BackupSourcePath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Program Files\Git\</Value>
-    </Setting>
     <Setting Name="ShouldLog" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
     </Setting>

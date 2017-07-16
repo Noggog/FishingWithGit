@@ -18,7 +18,7 @@ namespace FishingWithGit.Tester
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
                     BaseWrapper wrapper = new BaseWrapper(args);
-                    wrapper.AlwaysLog = true;
+                    wrapper.Logger.AlwaysLog = true;
                     var result = await wrapper.Wrap();
                     sw.Stop();
                     System.Console.WriteLine($"DONE OVERALL   Took {sw.ElapsedMilliseconds}ms");

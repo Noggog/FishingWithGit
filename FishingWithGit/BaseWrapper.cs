@@ -1,4 +1,5 @@
-﻿using LibGit2Sharp;
+﻿using FishingWithGit.Common;
+using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,20 +13,18 @@ namespace FishingWithGit
     public class BaseWrapper
     {
         StringBuilder sb = new StringBuilder();
-        bool shouldLogToFile = Properties.Settings.Default.ShouldLog;
         CommandType commandType;
         int commandIndex;
         List<string> args;
-        bool logFlushed;
-        Queue<(string log, bool? toConsole)> logBuffer = new Queue<(string log, bool? toConsole)>();
-        bool silentCommand = true;
         Stopwatch overallSw = new Stopwatch();
         Stopwatch actualProcessSw = new Stopwatch();
-        public bool AlwaysLog;
+        public Logger Logger = new Logger("FishingWithGit");
 
         public BaseWrapper(string[] args)
         {
             this.args = args.ToList();
+            this.Logger.ShouldLogToFile = Properties.Settings.Default.ShouldLog;
+            this.Logger.WipeLogsOlderThanDays = Properties.Settings.Default.WipeLogsOlderThanDays;
         }
 
         public async Task<int> Wrap()
@@ -33,50 +32,50 @@ namespace FishingWithGit
             try
             {
                 overallSw.Start();
-                WriteLine(DateTime.Now.ToString());
-                WriteLine("Arguments:");
+                this.Logger.WriteLine(DateTime.Now.ToString());
+                this.Logger.WriteLine("Arguments:");
                 if (Properties.Settings.Default.PrintSeparateArgs)
                 {
                     foreach (var arg in args)
                     {
-                        WriteLine(arg);
+                        this.Logger.WriteLine(arg);
                     }
                 }
                 else
                 {
-                    WriteLine($"  {string.Join(" ", args)}");
+                    this.Logger.WriteLine($"  {string.Join(" ", args)}");
                 }
-                WriteLine("");
+                this.Logger.WriteLine("");
                 GetCommandInfo();
-                WriteLine($"Command: {commandType.ToString()}", writeToConsole: null);
+                this.Logger.WriteLine($"Command: {commandType.ToString()}", writeToConsole: null);
                 ProcessArgs();
                 GetMainCommand(out commandIndex);
                 var startInfo = GetStartInfo();
                 HookSet hook = GetHook();
-                silentCommand = hook?.Args.Silent ?? true;
-                WriteLine($"Silent?: {silentCommand}");
-                ActivateAndFlushLogging();
+                this.Logger.ConsoleSilent = hook?.Args.Silent ?? true;
+                this.Logger.WriteLine($"Silent?: {this.Logger.ConsoleSilent}");
+                this.Logger.ActivateAndFlushLogging();
                 if (Properties.Settings.Default.FireHookLogic)
                 {
                     if (hook == null)
                     {
-                        this.WriteLine("No hooks for this command.");
+                        this.Logger.WriteLine("No hooks for this command.");
                     }
                     else
                     {
-                        WriteLine("Firing prehooks.");
+                        this.Logger.WriteLine("Firing prehooks.");
                         int? hookExitCode = await hook.PreCommand();
-                        WriteLine("Fired prehooks.");
+                        this.Logger.WriteLine("Fired prehooks.");
                         if (0 != (hookExitCode ?? 0))
                         {
-                            WriteLine($"Exiting early because of hook failure ({hookExitCode})", writeToConsole: true);
+                            this.Logger.WriteLine($"Exiting early because of hook failure ({hookExitCode})", writeToConsole: true);
                             return hookExitCode.Value;
                         }
                     }
                 }
                 else
                 {
-                    WriteLine("Fire hook logic is off.");
+                    this.Logger.WriteLine("Fire hook logic is off.");
                 }
                 int exitCode;
                 if (args.Contains("-NO_PASSING_FISH"))
@@ -96,12 +95,12 @@ namespace FishingWithGit
                 if (Properties.Settings.Default.FireHookLogic
                     && hook != null)
                 {
-                    WriteLine("Firing posthooks.");
+                    this.Logger.WriteLine("Firing posthooks.");
                     int? hookExitCode = await hook.PostCommand();
-                    WriteLine("Fired posthooks.");
+                    this.Logger.WriteLine("Fired posthooks.");
                     if (0 != (hookExitCode ?? 0))
                     {
-                        WriteLine($"Exiting early because of hook failure ({hookExitCode})", writeToConsole: true);
+                        this.Logger.WriteLine($"Exiting early because of hook failure ({hookExitCode})", writeToConsole: true);
                         return hookExitCode.Value;
                     }
                 }
@@ -109,20 +108,20 @@ namespace FishingWithGit
             }
             catch (Exception ex)
             {
-                shouldLogToFile = true;
-                ActivateAndFlushLogging();
-                WriteLine("An error occurred!!!: " + ex.Message, writeToConsole: true);
-                WriteLine(ex.ToString(), writeToConsole: true);
+                this.Logger.ShouldLogToFile = true;
+                this.Logger.ActivateAndFlushLogging();
+                this.Logger.WriteLine("An error occurred!!!: " + ex.Message, writeToConsole: true);
+                this.Logger.WriteLine(ex.ToString(), writeToConsole: true);
                 throw;
             }
             finally
             {
                 overallSw.Stop();
-                WriteLine($"Command overall took {overallSw.ElapsedMilliseconds}ms.  Actual git command took {actualProcessSw.ElapsedMilliseconds}ms.  Fishing With Git and Hooks took {overallSw.ElapsedMilliseconds - actualProcessSw.ElapsedMilliseconds}ms");
-                WriteLine("--------------------------------------------------------------------------------------------------------- Fishing With Git call done.");
-                if (this.shouldLogToFile)
+                this.Logger.WriteLine($"Command overall took {overallSw.ElapsedMilliseconds}ms.  Actual git command took {actualProcessSw.ElapsedMilliseconds}ms.  Fishing With Git and Hooks took {overallSw.ElapsedMilliseconds - actualProcessSw.ElapsedMilliseconds}ms");
+                this.Logger.WriteLine("--------------------------------------------------------------------------------------------------------- Fishing With Git call done.");
+                if (this.Logger.ShouldLogToFile)
                 {
-                    LogResults();
+                    this.Logger.LogResults();
                 }
             }
         }
@@ -135,7 +134,7 @@ namespace FishingWithGit
                 commandType = CommandType.unknown;
                 if (yell)
                 {
-                    WriteLine("No command found.");
+                    this.Logger.WriteLine("No command found.");
                     throw new ArgumentException("No command found.");
                 }
                 else
@@ -146,7 +145,7 @@ namespace FishingWithGit
             if (!CommandTypeExt.TryParse(cmdStr, out commandType))
             {
                 commandType = CommandType.unknown;
-                WriteLine("Unknown command: " + cmdStr);
+                this.Logger.WriteLine("Unknown command: " + cmdStr);
             }
         }
 
@@ -154,30 +153,16 @@ namespace FishingWithGit
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.Arguments = string.Join(" ", args);
-            WriteLine("Working directory " + Directory.GetCurrentDirectory());
-            var exePath = System.Reflection.Assembly.GetEntryAssembly().Location;
-            if (exePath.EndsWith("FishingWithGit.exe"))
-            {
-                exePath = exePath.Replace("FishingWithGit.exe", "git.exe");
-            }
-            WriteLine("Running exe from " + exePath);
-            var sourcePath = GetSourcePath();
-            var trimIndex = exePath.IndexOf(sourcePath);
-            var trim = exePath.Substring(trimIndex + sourcePath.Length);
-            trim = Path.Combine(Properties.Settings.Default.RealGitProgramFolder, trim);
-            WriteLine("Target exe " + trim);
-            startInfo.FileName = trim;
+            this.Logger.WriteLine("Working directory " + Directory.GetCurrentDirectory());
+            var exePath = Path.Combine(Properties.Settings.Default.RealGitProgramFolder, "cmd/git.exe");
+            this.Logger.WriteLine("Target exe " + exePath);
+            startInfo.FileName = exePath;
             startInfo.RedirectStandardError = true;
             startInfo.RedirectStandardInput = true;
             startInfo.WorkingDirectory = Directory.GetCurrentDirectory();
             startInfo.RedirectStandardOutput = true;
             startInfo.UseShellExecute = false;
             return startInfo;
-        }
-
-        string GetSourcePath()
-        {
-            return Properties.Settings.Default.BackupSourcePath;
         }
 
         public async Task<int> RunProcess(ProcessStartInfo startInfo, bool hookIO)
@@ -203,11 +188,11 @@ namespace FishingWithGit
                             {
                                 if (first)
                                 {
-                                    WriteLine("--------- Standard Output :");
+                                    this.Logger.WriteLine("--------- Standard Output :");
                                     first = false;
                                 }
                                 Console.Write(result);
-                                WriteLine(result);
+                                this.Logger.WriteLine(result);
                             }
                         }
                     }));
@@ -221,11 +206,11 @@ namespace FishingWithGit
                             {
                                 if (first)
                                 {
-                                    WriteLine("--------- Standard Error :");
+                                    this.Logger.WriteLine("--------- Standard Error :", error: true);
                                     first = false;
                                 }
                                 Console.Error.Write(result);
-                                WriteLine(result);
+                                this.Logger.WriteLine(result, error: true);
                             }
                         }
                     }));
@@ -233,7 +218,7 @@ namespace FishingWithGit
                 var task = Task.WhenAll(tasks);
                 if (task != await Task.WhenAny(task, Task.Delay(Properties.Settings.Default.ProcessTimeoutWarning)))
                 {
-                    this.WriteLine("Process taking a long time: " + startInfo.FileName + " " + startInfo.Arguments);
+                    this.Logger.WriteLine("Process taking a long time: " + startInfo.FileName + " " + startInfo.Arguments, error: true);
                 }
                 await task;
 
@@ -249,70 +234,12 @@ namespace FishingWithGit
             }
             finally
             {
-                WriteLine("Arguments going in:");
-                WriteLine($"  {string.Join(" ", args)}");
-                WriteLine("");
+                this.Logger.WriteLine("Arguments going in:");
+                this.Logger.WriteLine($"  {string.Join(" ", args)}");
+                this.Logger.WriteLine("");
             }
         }
 
-        #region Logging
-        public void WriteLine(string line, bool? writeToConsole = false)
-        {
-            if (logFlushed)
-            {
-                if (AlwaysLog || (writeToConsole ?? !silentCommand))
-                {
-                    System.Console.WriteLine(line);
-                }
-                sb.AppendLine(line);
-            }
-            else
-            {
-                logBuffer.Enqueue((line, writeToConsole));
-            }
-        }
-
-        void ActivateAndFlushLogging()
-        {
-            logFlushed = true;
-            foreach (var item in logBuffer)
-            {
-                WriteLine(item.log, item.toConsole);
-            }
-            logBuffer.Clear();
-        }
-
-        void LogResults()
-        {
-            try
-            {
-                DirectoryInfo curDir = new DirectoryInfo(Directory.GetCurrentDirectory());
-
-                var logDir = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + $"/Temp/FishingWithGit/");
-                if (!logDir.Exists)
-                {
-                    logDir.Create();
-                }
-                var filePath = Path.Combine(logDir.FullName, $"{curDir.Name}.log");
-
-                FileInfo file = new FileInfo(filePath);
-                if (file.Exists
-                    && (DateTime.Now - file.LastWriteTime).TotalDays > Properties.Settings.Default.WipeLogsOlderThanDays)
-                {
-                    file.Delete();
-                }
-
-                using (StreamWriter writer = File.AppendText(filePath))
-                {
-                    writer.WriteLine(sb.ToString());
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-        #endregion
-        
         #region Getting Hooks
         public HookSet GetHook()
         {
@@ -320,20 +247,20 @@ namespace FishingWithGit
             {
                 case CommandType.checkout:
                     return CheckoutHooks.Factory(
-                        this, 
-                        new DirectoryInfo(Directory.GetCurrentDirectory()), 
+                        this,
+                        new DirectoryInfo(Directory.GetCurrentDirectory()),
                         args,
                         commandIndex);
                 case CommandType.rebase:
                     return RebaseHooks.Factory(
                         this,
-                        new DirectoryInfo(Directory.GetCurrentDirectory()), 
-                        args, 
+                        new DirectoryInfo(Directory.GetCurrentDirectory()),
+                        args,
                         commandIndex);
                 case CommandType.reset:
                     return ResetHooks.Factory(
                         this,
-                        new DirectoryInfo(Directory.GetCurrentDirectory()), 
+                        new DirectoryInfo(Directory.GetCurrentDirectory()),
                         args,
                         commandIndex);
                 case CommandType.commitmsg:
@@ -342,15 +269,15 @@ namespace FishingWithGit
                     return CommitHooks.Factory(this, args, commandIndex);
                 case CommandType.status:
                     return StatusHooks.Factory(this, args, commandIndex);
-                case CommandType. cherry:
+                case CommandType.cherry:
                     return CherryPickHook.Factory(this, args, commandIndex);
                 case CommandType.merge:
                     return MergeHooks.Factory(this, args, commandIndex);
                 case CommandType.pull:
                     return PullHooks.Factory(
                         this,
-                        new DirectoryInfo(Directory.GetCurrentDirectory()), 
-                        args, 
+                        new DirectoryInfo(Directory.GetCurrentDirectory()),
+                        args,
                         commandIndex);
                 case CommandType.branch:
                     return BranchHooks.Factory(this, args, commandIndex);
@@ -425,17 +352,17 @@ namespace FishingWithGit
             FileInfo file = new FileInfo($"{path}/{type.HookName()}");
             if (!file.Exists) return 0;
 
-            WriteLine($"Firing Named Bash Hook {location} {type.HookName()} with args: {string.Join(" ", args)}", writeToConsole: null);
+            this.Logger.WriteLine($"Firing Named Bash Hook {location} {type.HookName()} with args: {string.Join(" ", args)}", writeToConsole: null);
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
             var exitCode = await RunProcess(
                 SetArgumentsOnStartInfo(
                     new ProcessStartInfo(file.FullName, string.Join(" ", args))),
-                hookIO: !this.silentCommand);
+                hookIO: !this.Logger.ConsoleSilent);
 
             sw.Stop();
-            WriteLine($"Fired Named Bash Hook {location} {type.HookName()}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
+            this.Logger.WriteLine($"Fired Named Bash Hook {location} {type.HookName()}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
             return exitCode;
         }
 
@@ -451,17 +378,17 @@ namespace FishingWithGit
                 var rawName = Path.GetFileNameWithoutExtension(file.Name);
                 if (HookTypeExt.IsHookName(rawName)) continue;
 
-                WriteLine($"Firing Untied Bash Hook {location} {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: null);
+                this.Logger.WriteLine($"Firing Untied Bash Hook {location} {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: null);
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
                 var exitCode = await this.RunProcess(
                     SetArgumentsOnStartInfo(
                         new ProcessStartInfo(file.FullName, string.Join(" ", args))),
-                    hookIO: !this.silentCommand);
+                    hookIO: !this.Logger.ConsoleSilent);
 
                 sw.Stop();
-                WriteLine($"Fired Untied Bash Hook {location} {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
+                this.Logger.WriteLine($"Fired Untied Bash Hook {location} {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
                 if (exitCode != 0)
                 {
                     return exitCode;
@@ -484,17 +411,17 @@ namespace FishingWithGit
             FileInfo file = new FileInfo($"{path}/{type.HookName()}.exe");
             if (!file.Exists) return 0;
 
-            WriteLine($"Firing Named Exe Hook {location} {type.HookName()} with args: {string.Join(" ", args)}", writeToConsole: null);
+            this.Logger.WriteLine($"Firing Named Exe Hook {location} {type.HookName()} with args: {string.Join(" ", args)}", writeToConsole: null);
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
             await this.RunProcess(
                 SetArgumentsOnStartInfo(
                     new ProcessStartInfo(file.FullName, string.Join(" ", args))),
-                hookIO: !this.silentCommand);
+                hookIO: !this.Logger.ConsoleSilent);
 
             sw.Stop();
-            WriteLine($"Fired Named Exe Hook {location} {type.HookName()}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
+            this.Logger.WriteLine($"Fired Named Exe Hook {location} {type.HookName()}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
             return 0;
         }
 
@@ -512,7 +439,7 @@ namespace FishingWithGit
                 var rawName = Path.GetFileNameWithoutExtension(file.Name);
                 if (HookTypeExt.IsHookName(rawName)) continue;
 
-                WriteLine($"Firing Untied Exe Hook {location} {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: null);
+                this.Logger.WriteLine($"Firing Untied Exe Hook {location} {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: null);
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
@@ -524,10 +451,10 @@ namespace FishingWithGit
                 var exitCode = await RunProcess(
                     SetArgumentsOnStartInfo(
                         new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))),
-                    hookIO: !this.silentCommand);
+                    hookIO: !this.Logger.ConsoleSilent);
 
                 sw.Stop();
-                WriteLine($"Fired Untied Exe Hook {location} {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
+                this.Logger.WriteLine($"Fired Untied Exe Hook {location} {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
                 if (exitCode != 0)
                 {
                     return exitCode;
@@ -546,7 +473,7 @@ namespace FishingWithGit
                 var rawName = Path.GetFileNameWithoutExtension(file.Name);
                 if (HookTypeExt.IsHookName(rawName)) continue;
 
-                WriteLine($"Firing Mass Exe Hook {location} {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: null);
+                this.Logger.WriteLine($"Firing Mass Exe Hook {location} {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: null);
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
@@ -558,10 +485,10 @@ namespace FishingWithGit
                 var exitCode = await RunProcess(
                     SetArgumentsOnStartInfo(
                         new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))),
-                    hookIO: !this.silentCommand);
+                    hookIO: !this.Logger.ConsoleSilent);
 
                 sw.Stop();
-                WriteLine($"Fired Mass Exe Hook {location} {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
+                this.Logger.WriteLine($"Fired Mass Exe Hook {location} {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
                 if (exitCode != 0)
                 {
                     return exitCode;
