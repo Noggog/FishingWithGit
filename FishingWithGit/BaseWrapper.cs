@@ -178,42 +178,7 @@ namespace FishingWithGit
                 tasks.Add(Task.Run(() => process.WaitForExit()));
                 if (hookIO)
                 {
-                    tasks.Add(Task.Run(() =>
-                    {
-                        bool first = true;
-                        using (StreamReader reader = process.StandardOutput)
-                        {
-                            string result = reader.ReadToEnd();
-                            if (!string.IsNullOrWhiteSpace(result))
-                            {
-                                if (first)
-                                {
-                                    this.Logger.WriteLine("--------- Standard Output :");
-                                    first = false;
-                                }
-                                Console.Write(result);
-                                this.Logger.WriteLine(result);
-                            }
-                        }
-                    }));
-                    tasks.Add(Task.Run(() =>
-                    {
-                        var first = true;
-                        using (StreamReader reader = process.StandardError)
-                        {
-                            string result = reader.ReadToEnd();
-                            if (!string.IsNullOrWhiteSpace(result))
-                            {
-                                if (first)
-                                {
-                                    this.Logger.WriteLine("--------- Standard Error :", error: true);
-                                    first = false;
-                                }
-                                Console.Error.Write(result);
-                                this.Logger.WriteLine(result, error: true);
-                            }
-                        }
-                    }));
+                    await HookIO(process);
                 }
                 var task = Task.WhenAll(tasks);
                 if (task != await Task.WhenAny(task, Task.Delay(Properties.Settings.Default.ProcessTimeoutWarning)))
@@ -222,8 +187,55 @@ namespace FishingWithGit
                 }
                 await task;
 
+                if (process.ExitCode != 0
+                    && !hookIO)
+                {
+                    await HookIO(process);
+                }
+
                 return process.ExitCode;
             }
+        }
+
+        private Task HookIO(Process process)
+        {
+            return Task.WhenAll(
+                Task.Run(() =>
+                {
+                    bool first = true;
+                    using (StreamReader reader = process.StandardOutput)
+                    {
+                        string result = reader.ReadToEnd();
+                        if (!string.IsNullOrWhiteSpace(result))
+                        {
+                            if (first)
+                            {
+                                this.Logger.WriteLine("--------- Standard Output :");
+                                first = false;
+                            }
+                            Console.Write(result);
+                            this.Logger.WriteLine(result);
+                        }
+                    }
+                }),
+                Task.Run(() =>
+                {
+                    var first = true;
+                    using (StreamReader reader = process.StandardError)
+                    {
+                        string result = reader.ReadToEnd();
+                        if (!string.IsNullOrWhiteSpace(result))
+                        {
+                            if (first)
+                            {
+                                this.Logger.WriteLine("--------- Standard Error :", error: true);
+                                first = false;
+                            }
+                            Console.Error.Write(result);
+                            this.Logger.WriteLine(result, error: true);
+                        }
+                    }
+                }));
         }
 
         private void ProcessArgs()
@@ -415,14 +427,14 @@ namespace FishingWithGit
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            await this.RunProcess(
+            var exitCode = await this.RunProcess(
                 SetArgumentsOnStartInfo(
                     new ProcessStartInfo(file.FullName, string.Join(" ", args))),
                 hookIO: !this.Logger.ConsoleSilent);
 
             sw.Stop();
             this.Logger.WriteLine($"Fired Named Exe Hook {location} {type.HookName()}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
-            return 0;
+            return exitCode;
         }
 
         private async Task<int> FireUntiedExeHooks(HookType type, HookLocation location, params string[] args)
