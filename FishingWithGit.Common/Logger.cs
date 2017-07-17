@@ -23,7 +23,7 @@ namespace FishingWithGit.Common
             this.AppName = appName;
         }
 
-        public void WriteLine(string line, bool error = false, bool? writeToConsole = false)
+        public void WriteLine(string line, bool error = false, bool? writeToConsole = null)
         {
             WriteLine(new LogItem
             {
