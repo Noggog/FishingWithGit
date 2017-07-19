@@ -447,45 +447,47 @@ namespace FishingWithGit
         private async Task<int> FireUntiedExeHooks(HookType type, HookLocation location, params string[] args)
         {
             var path = GetHookFolder(location);
-            DirectoryInfo dir = new DirectoryInfo(path);
-            if (!dir.Exists) return 0;
-
             HashSet<string> firedHooks = new HashSet<string>();
 
-            foreach (var file in dir.EnumerateFiles())
+            DirectoryInfo dir = new DirectoryInfo(path);
+            if (dir.Exists)
             {
-                if (!file.Extension.ToUpper().Equals(".EXE")) continue;
-                var rawName = Path.GetFileNameWithoutExtension(file.Name);
-                if (HookTypeExt.IsHookName(rawName)) continue;
-
-                this.Logger.WriteLine($"Firing Untied Exe Hook {location} {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: null);
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-
-                var newArgs = new string[args.Length + 2];
-                newArgs[0] = type.HookName();
-                newArgs[1] = type.CommandString();
-                Array.Copy(args, 0, newArgs, 2, args.Length);
-
-                var exitCode = await RunProcess(
-                    SetArgumentsOnStartInfo(
-                        new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))),
-                    hookIO: !this.Logger.ConsoleSilent);
-
-                sw.Stop();
-                this.Logger.WriteLine($"Fired Untied Exe Hook {location} {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
-                if (exitCode != 0)
+                foreach (var file in dir.EnumerateFiles())
                 {
-                    return exitCode;
-                }
+                    if (!file.Extension.ToUpper().Equals(".EXE")) continue;
+                    var rawName = Path.GetFileNameWithoutExtension(file.Name);
+                    if (HookTypeExt.IsHookName(rawName)) continue;
 
-                firedHooks.Add(file.Name);
+                    this.Logger.WriteLine($"Firing Untied Exe Hook {location} {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: null);
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+
+                    var newArgs = new string[args.Length + 2];
+                    newArgs[0] = type.HookName();
+                    newArgs[1] = type.CommandString();
+                    Array.Copy(args, 0, newArgs, 2, args.Length);
+
+                    var exitCode = await RunProcess(
+                        SetArgumentsOnStartInfo(
+                            new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))),
+                        hookIO: !this.Logger.ConsoleSilent);
+
+                    sw.Stop();
+                    this.Logger.WriteLine($"Fired Untied Exe Hook {location} {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
+                    if (exitCode != 0)
+                    {
+                        return exitCode;
+                    }
+
+                    firedHooks.Add(file.Name);
+                }
             }
 
             if (!Properties.Settings.Default.RunMassHooks) return 0;
             DirectoryInfo massHookDir = new DirectoryInfo(Properties.Settings.Default.MassHookFolder);
             if (!massHookDir.Exists) return 0;
-            foreach (var file in massHookDir.EnumerateFiles())
+            foreach (var file in massHookDir.EnumerateFiles()
+                .Union(massHookDir.EnumerateDirectories().SelectMany((d) => d.EnumerateFiles())))
             {
                 if (firedHooks.Contains(file.Name)) continue;
                 if (!file.Extension.ToUpper().Equals(".EXE")) continue;
