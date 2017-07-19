@@ -84,9 +84,7 @@ namespace FishingWithGit
                 }
                 else
                 {
-                    actualProcessSw.Start();
-                    exitCode = await RunProcess(startInfo, hookIO: true);
-                    actualProcessSw.Stop();
+                    exitCode = await RunActualGit(startInfo);
                 }
                 if (exitCode != 0)
                 {
@@ -147,6 +145,15 @@ namespace FishingWithGit
                 commandType = CommandType.unknown;
                 this.Logger.WriteLine("Unknown command: " + cmdStr);
             }
+        }
+
+        async Task<int> RunActualGit(ProcessStartInfo startInfo)
+        {
+            int exitCode;
+            actualProcessSw.Start();
+            exitCode = await RunProcess(startInfo, hookIO: true);
+            actualProcessSw.Stop();
+            return exitCode;
         }
 
         ProcessStartInfo GetStartInfo()
