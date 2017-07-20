@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FishingWithGit", "FishingWithGit\FishingWithGit.csproj", "{E886F1C5-99E4-48A0-B02A-77EFA17CF88F}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FishingWithGit.Tester", "FishingWithGit.Tester\FishingWithGit.Tester.csproj", "{8129D5C3-DB9D-4375-8513-9F6EEE8F7016}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{7C0AA498-6F1B-4BEF-B0F7-014C024C30EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FishingWithGit.CustomSetup", "FishingWithGit.CustomSetup\FishingWithGit.CustomSetup.csproj", "{6B92E34C-8D3C-43CB-9635-20C07B527C4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{8129D5C3-DB9D-4375-8513-9F6EEE8F7016}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7C0AA498-6F1B-4BEF-B0F7-014C024C30EE}.Debug|Any CPU.ActiveCfg = Debug
 		{7C0AA498-6F1B-4BEF-B0F7-014C024C30EE}.Release|Any CPU.ActiveCfg = Release
+		{6B92E34C-8D3C-43CB-9635-20C07B527C4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B92E34C-8D3C-43CB-9635-20C07B527C4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B92E34C-8D3C-43CB-9635-20C07B527C4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B92E34C-8D3C-43CB-9635-20C07B527C4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FishingWithGit.CustomSetup;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -17,6 +18,9 @@ namespace FishingWithGit.Tester
                 {
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
+                    var pth = Environment.GetEnvironmentVariable("path", EnvironmentVariableTarget.Machine);
+                    //var item = new FishingInstallerClass();
+                    //item.RemoveFromPath();
                     BaseWrapper wrapper = new BaseWrapper(args);
                     wrapper.Logger.AlwaysLog = true;
                     var result = await wrapper.Wrap();

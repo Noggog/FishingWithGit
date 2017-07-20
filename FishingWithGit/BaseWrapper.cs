@@ -208,7 +208,7 @@ namespace FishingWithGit
 
             // Query PATH for viable git installs
             this.Logger.WriteLine("Querying PATH", writeToConsole: false);
-            string pathStr = Environment.GetEnvironmentVariable("PATH");
+            string pathStr = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
             string[] paths = pathStr.Split(';');
             foreach (var path in paths)
             {
@@ -220,27 +220,7 @@ namespace FishingWithGit
                     foreach (var file in dir.EnumerateFiles())
                     {
                         if (!file.Name.Equals("git.exe")) continue;
-
-                        // Test if it's another FishingForGit
-                        using (var process = Process.Start(
-                            new ProcessStartInfo()
-                            {
-                                FileName = file.FullName,
-                                Arguments = Constants.IS_FISHING_CMD,
-                                RedirectStandardError = true,
-                                RedirectStandardOutput = true,
-                                RedirectStandardInput = true,
-                                WorkingDirectory = Directory.GetCurrentDirectory(),
-                                UseShellExecute = false
-                            }))
-                        {
-                            process.WaitForExit();
-                            using (StreamReader reader = process.StandardOutput)
-                            {
-                                var str = reader.ReadToEnd();
-                                if (str.Trim().Equals(Constants.IS_FISHING_RESP)) continue;
-                            }
-                        }
+                        if (Utility.TestIfFishingEXE(file.FullName)) continue;
 
                         // Probably a real git install
                         gitFile = file;

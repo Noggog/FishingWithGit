@@ -27,6 +27,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_09E23026732448E684DE70FBBDE74BBE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0C2D29F5226542D5AF2BB846AFA7FE6B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -39,18 +45,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_11CB8EDF3D1B9A71376BC2967751F562"
-        "OwnerKey" = "8:_0C2D29F5226542D5AF2BB846AFA7FE6B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_11CB8EDF3D1B9A71376BC2967751F562"
-        "OwnerKey" = "8:_67BE1C4141EE44EEA51F6B2DA40B6EB1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_184F447E803F45E2BA225832364B521C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -58,6 +52,66 @@
         "Entry"
         {
         "MsmKey" = "8:_3333F73171A84ECBA6BD724FF4040464"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3453E6D6629A2C84AF0642796CF8BF5A"
+        "OwnerKey" = "8:_09E23026732448E684DE70FBBDE74BBE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3453E6D6629A2C84AF0642796CF8BF5A"
+        "OwnerKey" = "8:_654D01F2FF014692816311C903EC60EC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3453E6D6629A2C84AF0642796CF8BF5A"
+        "OwnerKey" = "8:_101C517419DC48E3A679E55B25DDCA04"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3453E6D6629A2C84AF0642796CF8BF5A"
+        "OwnerKey" = "8:_A8B5B80188E248BC9E490BABFBEA9578"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3453E6D6629A2C84AF0642796CF8BF5A"
+        "OwnerKey" = "8:_67BE1C4141EE44EEA51F6B2DA40B6EB1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3453E6D6629A2C84AF0642796CF8BF5A"
+        "OwnerKey" = "8:_4D5D885EDF384A6DB2E735A1A9A599D7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3453E6D6629A2C84AF0642796CF8BF5A"
+        "OwnerKey" = "8:_49646B171F0B42DE9ED1D95DBAF10AB9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3453E6D6629A2C84AF0642796CF8BF5A"
+        "OwnerKey" = "8:_0C2D29F5226542D5AF2BB846AFA7FE6B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_49646B171F0B42DE9ED1D95DBAF10AB9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4D5D885EDF384A6DB2E735A1A9A599D7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -76,13 +130,13 @@
         "Entry"
         {
         "MsmKey" = "8:_5CFEBCC22432D24DD5B0F21567B7CA63"
-        "OwnerKey" = "8:_101C517419DC48E3A679E55B25DDCA04"
+        "OwnerKey" = "8:_654D01F2FF014692816311C903EC60EC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_5CFEBCC22432D24DD5B0F21567B7CA63"
-        "OwnerKey" = "8:_654D01F2FF014692816311C903EC60EC"
+        "OwnerKey" = "8:_101C517419DC48E3A679E55B25DDCA04"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -123,6 +177,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_A8B5B80188E248BC9E490BABFBEA9578"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_D4A9B00C8A5A49AE9633CA80BEDB3695"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -131,18 +191,6 @@
         {
         "MsmKey" = "8:_DFFCBEE014004FC2BB4C6AFC851FE28B"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E7664778BD53E67DB162BFE9B5276851"
-        "OwnerKey" = "8:_654D01F2FF014692816311C903EC60EC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E7664778BD53E67DB162BFE9B5276851"
-        "OwnerKey" = "8:_101C517419DC48E3A679E55B25DDCA04"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -159,50 +207,50 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_EE9C2FFE678706AB2E55C3A006186FA2"
+        "OwnerKey" = "8:_09E23026732448E684DE70FBBDE74BBE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EE9C2FFE678706AB2E55C3A006186FA2"
+        "OwnerKey" = "8:_A8B5B80188E248BC9E490BABFBEA9578"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EE9C2FFE678706AB2E55C3A006186FA2"
+        "OwnerKey" = "8:_67BE1C4141EE44EEA51F6B2DA40B6EB1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EE9C2FFE678706AB2E55C3A006186FA2"
+        "OwnerKey" = "8:_4D5D885EDF384A6DB2E735A1A9A599D7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EE9C2FFE678706AB2E55C3A006186FA2"
+        "OwnerKey" = "8:_49646B171F0B42DE9ED1D95DBAF10AB9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EE9C2FFE678706AB2E55C3A006186FA2"
+        "OwnerKey" = "8:_0C2D29F5226542D5AF2BB846AFA7FE6B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_F50F50DBD7554052AFF5849A09267D71"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_FA2678170B2BB799A08A000763A0E701"
-        "OwnerKey" = "8:_0C2D29F5226542D5AF2BB846AFA7FE6B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FA2678170B2BB799A08A000763A0E701"
-        "OwnerKey" = "8:_67BE1C4141EE44EEA51F6B2DA40B6EB1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_67BE1C4141EE44EEA51F6B2DA40B6EB1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_101C517419DC48E3A679E55B25DDCA04"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_654D01F2FF014692816311C903EC60EC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E7664778BD53E67DB162BFE9B5276851"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_01BAF175F4E64963B5C76910FF1B8003"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -214,7 +262,43 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_654D01F2FF014692816311C903EC60EC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_5F34D4FA96AD4519A14A6CBE70974A20"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_101C517419DC48E3A679E55B25DDCA04"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_01BAF175F4E64963B5C76910FF1B8003"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_A8B5B80188E248BC9E490BABFBEA9578"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_4D5D885EDF384A6DB2E735A1A9A599D7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_49646B171F0B42DE9ED1D95DBAF10AB9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -226,19 +310,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FA2678170B2BB799A08A000763A0E701"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_5CFEBCC22432D24DD5B0F21567B7CA63"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_11CB8EDF3D1B9A71376BC2967751F562"
+        "OwnerKey" = "8:_09E23026732448E684DE70FBBDE74BBE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_3453E6D6629A2C84AF0642796CF8BF5A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_EE9C2FFE678706AB2E55C3A006186FA2"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -281,7 +371,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\Setup.msi"
+        "OutputFilename" = "8:Release\\FishingWithGitSetup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -313,6 +403,62 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_1D37177F28704A1391BC2C6C64BD8CDB"
+            {
+            "Name" = "8:Primary output from FishingWithGit.CustomSetup (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_4D5D885EDF384A6DB2E735A1A9A599D7"
+            "FileType" = "3:2"
+            "InstallAction" = "3:4"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_BEEFF844_3A58_480C_A073_C9DD3F4E9096"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:/targetdir=\"[TARGETDIR]\\\""
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_389DCFF988C7486EA956766F65804901"
+            {
+            "Name" = "8:Primary output from FishingWithGit.CustomSetup (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_A8B5B80188E248BC9E490BABFBEA9578"
+            "FileType" = "3:2"
+            "InstallAction" = "3:3"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_AEB0775E_0682_47E1_A7F9_DAB49A2A65F1"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:/targetdir=\"[TARGETDIR]\\\""
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B23A2F90369C455F8D23CC83C059819B"
+            {
+            "Name" = "8:Primary output from FishingWithGit.CustomSetup (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_09E23026732448E684DE70FBBDE74BBE"
+            "FileType" = "3:2"
+            "InstallAction" = "3:2"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_35DFCB81_5EF9_40CE_88D0_D61197DE839B"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:/targetdir=\"[TARGETDIR]\\\""
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_BC0F9981346F401E98DB6EE1010346A2"
+            {
+            "Name" = "8:Primary output from FishingWithGit.CustomSetup (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_49646B171F0B42DE9ED1D95DBAF10AB9"
+            "FileType" = "3:2"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_D9136D0C_A7EB_44E1_A832_57B12B5C93A3"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:/targetdir=\"[TARGETDIR]\\\""
+            }
         }
         "DefaultFeature"
         {
@@ -418,37 +564,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_11CB8EDF3D1B9A71376BC2967751F562"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-                "ScatterAssemblies"
-                {
-                    "_11CB8EDF3D1B9A71376BC2967751F562"
-                    {
-                    "Name" = "8:System.Net.Http.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:System.Net.Http.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_1373B6A1BE8A41378C842356FA8B0E7E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_184F447E803F45E2BA225832364B521C"
             {
             "SourcePath" = "8:..\\FishingWithGit\\bin\\Release\\lib\\win32\\x86\\git2-15e1193.dll"
@@ -487,6 +602,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3453E6D6629A2C84AF0642796CF8BF5A"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:FishingWithGit.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_3453E6D6629A2C84AF0642796CF8BF5A"
+                    {
+                    "Name" = "8:FishingWithGit.Common.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:FishingWithGit.Common.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_A47850FEE2C24CDAA946E6022597BB77"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_55FAD7AA4E69466FBEF7BFEF7FD3EAA5"
@@ -682,37 +828,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E7664778BD53E67DB162BFE9B5276851"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:FishingWithGit.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_E7664778BD53E67DB162BFE9B5276851"
-                    {
-                    "Name" = "8:FishingWithGit.Common.DLL"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:FishingWithGit.Common.DLL"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_1373B6A1BE8A41378C842356FA8B0E7E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E8317DC66C45441B8DC333A9FF20C5F4"
             {
             "SourcePath" = "8:..\\FishingWithGit\\bin\\Release\\lib\\win32\\x64\\git2-15e1193.pdb"
@@ -753,6 +868,37 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EE9C2FFE678706AB2E55C3A006186FA2"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+                "ScatterAssemblies"
+                {
+                    "_EE9C2FFE678706AB2E55C3A006186FA2"
+                    {
+                    "Name" = "8:System.Net.Http.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:System.Net.Http.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_1373B6A1BE8A41378C842356FA8B0E7E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F50F50DBD7554052AFF5849A09267D71"
             {
             "AssemblyRegister" = "3:1"
@@ -782,37 +928,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FA2678170B2BB799A08A000763A0E701"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:FishingWithGit.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_FA2678170B2BB799A08A000763A0E701"
-                    {
-                    "Name" = "8:FishingWithGit.Common.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:FishingWithGit.Common.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_1373B6A1BE8A41378C842356FA8B0E7E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
         }
@@ -971,7 +1086,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:FishingWithGit"
         "ProductCode" = "8:{AD873791-3EF4-4F13-9F92-46E46312FFBD}"
-        "PackageCode" = "8:{CFCE85EE-8814-478E-871F-5CBD8E2F2C59}"
+        "PackageCode" = "8:{D821096D-F551-4EC0-84E8-7A3008D0456B}"
         "UpgradeCode" = "8:{DEC2B446-C97A-44CB-BF07-C8A347DA3645}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -987,7 +1102,7 @@
         "ARPCONTACT" = "8:Justin Swanson"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
-        "ARPURLINFOABOUT" = "8:"
+        "ARPURLINFOABOUT" = "8:https://github.com/Noggog/"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
@@ -1490,6 +1605,34 @@
         }
         "ProjectOutput"
         {
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_09E23026732448E684DE70FBBDE74BBE"
+            {
+            "SourcePath" = "8:..\\FishingWithGit.CustomSetup\\obj\\Release\\FishingWithGit.CustomSetup.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_A47850FEE2C24CDAA946E6022597BB77"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{6B92E34C-8D3C-43CB-9635-20C07B527C4F}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_0C2D29F5226542D5AF2BB846AFA7FE6B"
             {
             "SourcePath" = "8:..\\FishingWithGit\\obj\\Release\\FishingWithGit.exe"
@@ -1518,6 +1661,62 @@
                 {
                 }
             }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_49646B171F0B42DE9ED1D95DBAF10AB9"
+            {
+            "SourcePath" = "8:..\\FishingWithGit.CustomSetup\\obj\\Release\\FishingWithGit.CustomSetup.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_A47850FEE2C24CDAA946E6022597BB77"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{6B92E34C-8D3C-43CB-9635-20C07B527C4F}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4D5D885EDF384A6DB2E735A1A9A599D7"
+            {
+            "SourcePath" = "8:..\\FishingWithGit.CustomSetup\\obj\\Release\\FishingWithGit.CustomSetup.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_A47850FEE2C24CDAA946E6022597BB77"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{6B92E34C-8D3C-43CB-9635-20C07B527C4F}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_67BE1C4141EE44EEA51F6B2DA40B6EB1"
             {
             "SourcePath" = "8:..\\FishingWithGit\\obj\\Release\\FishingWithGit.exe"
@@ -1541,6 +1740,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{E886F1C5-99E4-48A0-B02A-77EFA17CF88F}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A8B5B80188E248BC9E490BABFBEA9578"
+            {
+            "SourcePath" = "8:..\\FishingWithGit.CustomSetup\\obj\\Release\\FishingWithGit.CustomSetup.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_A47850FEE2C24CDAA946E6022597BB77"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{6B92E34C-8D3C-43CB-9635-20C07B527C4F}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

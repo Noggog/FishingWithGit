@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8129D5C3-DB9D-4375-8513-9F6EEE8F7016}</ProjectGuid>
+    <ProjectGuid>{6B92E34C-8D3C-43CB-9635-20C07B527C4F}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>FishingWithGit.Tester</RootNamespace>
-    <AssemblyName>FishingWithGit.Tester</AssemblyName>
+    <RootNamespace>FishingWithGit.CustomSetup</RootNamespace>
+    <AssemblyName>FishingWithGit.CustomSetup</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -30,8 +30,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoWarn>CS1998</NoWarn>
-    <WarningsAsErrors>CS4014</WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -45,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FishingInstallerClass.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -55,14 +56,6 @@
     <ProjectReference Include="..\FishingWithGit.Common\FishingWithGit.Common.csproj">
       <Project>{a99553e3-d288-482a-9bc8-ae0bf4f32acf}</Project>
       <Name>FishingWithGit.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FishingWithGit.CustomSetup\FishingWithGit.CustomSetup.csproj">
-      <Project>{6b92e34c-8d3c-43cb-9635-20c07b527c4f}</Project>
-      <Name>FishingWithGit.CustomSetup</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FishingWithGit\FishingWithGit.csproj">
-      <Project>{e886f1c5-99e4-48a0-b02a-77efa17cf88f}</Project>
-      <Name>FishingWithGit</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
