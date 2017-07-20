@@ -15,9 +15,17 @@ namespace FishingWithGit.CustomSetup
     [RunInstaller(true)]
     public class FishingInstallerClass : Installer
     {
+        private string _targetDir;
+        public string TargetDir
+        {
+            get => _targetDir ?? this.Context.Parameters["targetdir"];
+            set => _targetDir = value;
+        }
+
         public override void Commit(IDictionary savedState)
         {
             base.Commit(savedState);
+            AddToPath();
         }
 
         public override void Install(IDictionary stateSaver)
@@ -29,6 +37,7 @@ namespace FishingWithGit.CustomSetup
         public override void Rollback(IDictionary savedState)
         {
             base.Rollback(savedState);
+            RemoveFromPath();
         }
 
         public override void Uninstall(IDictionary savedState)
@@ -40,7 +49,7 @@ namespace FishingWithGit.CustomSetup
         public bool Match(string str)
         {
             if (!str.EndsWith("cmd")) return false;
-            string targetDir = this.Context.Parameters["targetdir"];
+            string targetDir = this.TargetDir.TrimEnd('\\');
             if (!str.Contains(targetDir)) return false;
             return true;
         }
@@ -60,21 +69,29 @@ namespace FishingWithGit.CustomSetup
                     var dir = new DirectoryInfo(path);
                     if (!dir.Name.Equals("cmd")) continue;
                     if (!dir.Exists) continue;
-                    foreach (var file in dir.EnumerateFiles())
+                    if (IsGitDir(dir))
                     {
-                        if (file.Name.Equals("git.exe")) break;
+                        break;
                     }
                 }
                 catch (ArgumentException)
                 {
                 }
             }
-            var targetDir = this.Context.Parameters["targetdir"];
-            targetDir = Path.Combine(targetDir.TrimEnd('\\'), "cmd");
+            var targetDir = Path.Combine(this.TargetDir.TrimEnd('\\'), "cmd");
             paths.Insert(index, targetDir);
 
             var toSet = string.Join(";", paths);
             Environment.SetEnvironmentVariable("path", toSet, EnvironmentVariableTarget.Machine);
+        }
+
+        private bool IsGitDir(DirectoryInfo dir)
+        {
+            foreach (var file in dir.EnumerateFiles())
+            {
+                if (file.Name.Equals("git.exe")) return true;
+            }
+            return false;
         }
 
         public void RemoveFromPath()
@@ -84,10 +101,13 @@ namespace FishingWithGit.CustomSetup
             var matchingPaths = paths
                 .Where((p) => Match(p))
                 .ToList();
+            bool removed = false;
             foreach (var match in matchingPaths)
             {
+                removed = true;
                 paths.Remove(match);
             }
+            if (!removed) return;
             var toSet = string.Join(";", paths);
             Environment.SetEnvironmentVariable("path", toSet, EnvironmentVariableTarget.Machine);
         }
