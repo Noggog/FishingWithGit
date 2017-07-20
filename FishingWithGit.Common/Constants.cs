@@ -9,5 +9,7 @@ namespace FishingWithGit.Common
     public static class Constants
     {
         public const int SHA_LENGTH = 40;
+        public const string IS_FISHING_CMD = "-IsFishingWithGit";
+        public const string IS_FISHING_RESP = "IsFishing";
     }
 }

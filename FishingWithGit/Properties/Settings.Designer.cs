@@ -23,12 +23,15 @@ namespace FishingWithGit.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\Git\\")]
-        public string RealGitProgramFolder {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RealGitProgramPath {
             get {
-                return ((string)(this["RealGitProgramFolder"]));
+                return ((string)(this["RealGitProgramPath"]));
+            }
+            set {
+                this["RealGitProgramPath"] = value;
             }
         }
         
@@ -106,10 +109,19 @@ namespace FishingWithGit.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\FishingWithGit\\Mass Hooks\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("..\\Mass Hooks\\")]
         public string MassHookFolder {
             get {
                 return ((string)(this["MassHookFolder"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RealGitProgramPathOverride {
+            get {
+                return ((string)(this["RealGitProgramPathOverride"]));
             }
         }
     }

@@ -31,6 +31,7 @@ namespace FishingWithGit
         {
             try
             {
+                if (HandleIsFishing()) return 0;
                 overallSw.Start();
                 this.Logger.WriteLine(DateTime.Now.ToString());
                 this.Logger.WriteLine("Arguments:");
@@ -50,7 +51,7 @@ namespace FishingWithGit
                 this.Logger.WriteLine($"Command: {commandType.ToString()}", writeToConsole: null);
                 ProcessArgs();
                 GetMainCommand(out commandIndex);
-                var startInfo = GetStartInfo();
+                if (!GetStartInfo(out var startInfo)) return -1;
                 HookSet hook = GetHook();
                 this.Logger.ConsoleSilent = hook?.Args.Silent ?? true;
                 this.Logger.WriteLine($"Silent?: {this.Logger.ConsoleSilent}");
@@ -124,6 +125,18 @@ namespace FishingWithGit
             }
         }
 
+        bool HandleIsFishing()
+        {
+            if (args.Count != 1) return false;
+            if (string.Equals(args[0], Constants.IS_FISHING_CMD))
+            {
+                System.Console.WriteLine(Constants.IS_FISHING_RESP);
+                this.Logger.WriteLine("Responded to IsFishing check.", writeToConsole: false);
+                return true;
+            }
+            return false;
+        }
+
         void GetCommandInfo(bool yell = false)
         {
             string cmdStr = GetMainCommand(out commandIndex);
@@ -156,12 +169,17 @@ namespace FishingWithGit
             return exitCode;
         }
 
-        ProcessStartInfo GetStartInfo()
+        bool GetStartInfo(out ProcessStartInfo startInfo)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo = new ProcessStartInfo();
             startInfo.Arguments = string.Join(" ", args);
             this.Logger.WriteLine("Working directory " + Directory.GetCurrentDirectory());
-            var exePath = Path.Combine(Properties.Settings.Default.RealGitProgramFolder, "cmd/git.exe");
+            if (!GetGitPath(out var gitFile))
+            {
+                this.Logger.WriteLine("Could not find git install.");
+                return false;
+            }
+            var exePath = gitFile.FullName;
             this.Logger.WriteLine("Target exe " + exePath);
             startInfo.FileName = exePath;
             startInfo.RedirectStandardError = true;
@@ -169,7 +187,80 @@ namespace FishingWithGit
             startInfo.WorkingDirectory = Directory.GetCurrentDirectory();
             startInfo.RedirectStandardOutput = true;
             startInfo.UseShellExecute = false;
-            return startInfo;
+            return true;
+        }
+
+        public bool GetGitPath(out FileInfo gitFile)
+        {
+            // Return if overridden
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.RealGitProgramPathOverride))
+            {
+                gitFile = new FileInfo(Properties.Settings.Default.RealGitProgramPathOverride);
+                return true;
+            }
+
+            // Return if cached
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.RealGitProgramPath))
+            {
+                gitFile = new FileInfo(Properties.Settings.Default.RealGitProgramPath);
+                if (gitFile.Exists) return true;
+            }
+
+            // Query PATH for viable git installs
+            this.Logger.WriteLine("Querying PATH", writeToConsole: false);
+            string pathStr = Environment.GetEnvironmentVariable("PATH");
+            string[] paths = pathStr.Split(';');
+            foreach (var path in paths)
+            {
+                try
+                {
+                    var dir = new DirectoryInfo(path);
+                    if (!dir.Name.Equals("cmd")) continue;
+                    if (!dir.Exists) continue;
+                    foreach (var file in dir.EnumerateFiles())
+                    {
+                        if (!file.Name.Equals("git.exe")) continue;
+
+                        // Test if it's another FishingForGit
+                        using (var process = Process.Start(
+                            new ProcessStartInfo()
+                            {
+                                FileName = file.FullName,
+                                Arguments = Constants.IS_FISHING_CMD,
+                                RedirectStandardError = true,
+                                RedirectStandardOutput = true,
+                                RedirectStandardInput = true,
+                                WorkingDirectory = Directory.GetCurrentDirectory(),
+                                UseShellExecute = false
+                            }))
+                        {
+                            process.WaitForExit();
+                            using (StreamReader reader = process.StandardOutput)
+                            {
+                                var str = reader.ReadToEnd();
+                                if (str.Trim().Equals(Constants.IS_FISHING_RESP)) continue;
+                            }
+                        }
+
+                        // Probably a real git install
+                        gitFile = file;
+                        Properties.Settings.Default.RealGitProgramPath = file.FullName;
+                        Properties.Settings.Default.Upgrade();
+                        Properties.Settings.Default.Save();
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    this.Logger.WriteLine(
+                        $"Error loading PATH {path}. {ex}",
+                        error: true,
+                        writeToConsole: false);
+                }
+            }
+
+            gitFile = default(FileInfo);
+            return false;
         }
 
         public async Task<int> RunProcess(ProcessStartInfo startInfo, bool hookIO)
@@ -185,7 +276,7 @@ namespace FishingWithGit
                 tasks.Add(Task.Run(() => process.WaitForExit()));
                 if (hookIO)
                 {
-                    await HookIO(process);
+                    await TypicalHookIO(process);
                 }
                 var task = Task.WhenAll(tasks);
                 if (task != await Task.WhenAny(task, Task.Delay(Properties.Settings.Default.ProcessTimeoutWarning)))
@@ -197,50 +288,62 @@ namespace FishingWithGit
                 if (process.ExitCode != 0
                     && !hookIO)
                 {
-                    await HookIO(process);
+                    await TypicalHookIO(process);
                 }
 
                 return process.ExitCode;
             }
         }
 
-        private Task HookIO(Process process)
+        private Task TypicalHookIO(Process proccess)
+        {
+            bool firstStandard = true;
+            bool firstErr = true;
+            return HookIO(
+                proccess,
+                standard: (result) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(result))
+                    {
+                        if (firstStandard)
+                        {
+                            this.Logger.WriteLine("--------- Standard Output :");
+                            firstStandard = false;
+                        }
+                        Console.Write(result);
+                        this.Logger.WriteLine(result);
+                    }
+                },
+                err: (result) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(result))
+                    {
+                        if (firstErr)
+                        {
+                            this.Logger.WriteLine("--------- Standard Error :", error: true);
+                            firstErr = false;
+                        }
+                        Console.Error.Write(result);
+                        this.Logger.WriteLine(result, error: true);
+                    }
+                });
+        }
+
+        private Task HookIO(Process process, Action<string> standard, Action<string> err)
         {
             return Task.WhenAll(
                 Task.Run(() =>
                 {
-                    bool first = true;
                     using (StreamReader reader = process.StandardOutput)
                     {
-                        string result = reader.ReadToEnd();
-                        if (!string.IsNullOrWhiteSpace(result))
-                        {
-                            if (first)
-                            {
-                                this.Logger.WriteLine("--------- Standard Output :");
-                                first = false;
-                            }
-                            Console.Write(result);
-                            this.Logger.WriteLine(result);
-                        }
+                        standard?.Invoke(reader.ReadToEnd());
                     }
                 }),
                 Task.Run(() =>
                 {
-                    var first = true;
                     using (StreamReader reader = process.StandardError)
                     {
-                        string result = reader.ReadToEnd();
-                        if (!string.IsNullOrWhiteSpace(result))
-                        {
-                            if (first)
-                            {
-                                this.Logger.WriteLine("--------- Standard Error :", error: true);
-                                first = false;
-                            }
-                            Console.Error.Write(result);
-                            this.Logger.WriteLine(result, error: true);
-                        }
+                        err?.Invoke(reader.ReadToEnd());
                     }
                 }));
         }

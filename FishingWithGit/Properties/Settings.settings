@@ -2,8 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FishingWithGit.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="RealGitProgramFolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Program Files\Git\</Value>
+    <Setting Name="RealGitProgramPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="ShouldLog" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
@@ -30,7 +30,10 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="MassHookFolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Program Files\FishingWithGit\Mass Hooks\</Value>
+      <Value Profile="(Default)">..\Mass Hooks\</Value>
+    </Setting>
+    <Setting Name="RealGitProgramPathOverride" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>
