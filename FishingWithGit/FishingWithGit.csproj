@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>fishingwithgiticon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -93,6 +96,11 @@
       <Version>0.24.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="fishingwithgiticon.ico" />
+    <Content Include="Resources\FishingWithGitIcon.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
