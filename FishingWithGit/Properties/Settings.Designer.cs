@@ -127,7 +127,7 @@ namespace FishingWithGit.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool RunInRepoHooks {
             get {
                 return ((bool)(this["RunInRepoHooks"]));
@@ -136,7 +136,7 @@ namespace FishingWithGit.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool RunNormalFolderHooks {
             get {
                 return ((bool)(this["RunNormalFolderHooks"]));

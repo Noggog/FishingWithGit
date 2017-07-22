@@ -18,16 +18,16 @@ namespace FishingWithGit.Tester
                 {
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
-                    var pth = Environment.GetEnvironmentVariable("path", EnvironmentVariableTarget.Machine);
-                    var item = new FishingInstallerClass()
-                    {
-                        TargetDir = @"C:\Program Files (x86)\FishingWithGit\\"
-                    };
-                    item.AddToPath();
-                    item.RemoveFromPath();
-                    //BaseWrapper wrapper = new BaseWrapper(args);
-                    //wrapper.Logger.AlwaysLog = true;
-                    //var result = await wrapper.Wrap();
+                    //var pth = Environment.GetEnvironmentVariable("path", EnvironmentVariableTarget.Machine);
+                    //var item = new FishingInstallerClass()
+                    //{
+                    //    TargetDir = @"C:\Program Files (x86)\FishingWithGit\\"
+                    //};
+                    //item.AddToPath();
+                    //item.RemoveFromPath();
+                    BaseWrapper wrapper = new BaseWrapper(args);
+                    wrapper.Logger.AlwaysLog = true;
+                    var result = await wrapper.Wrap();
                     sw.Stop();
                     System.Console.WriteLine($"DONE OVERALL   Took {sw.ElapsedMilliseconds}ms");
                 }

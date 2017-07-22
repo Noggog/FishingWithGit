@@ -33,18 +33,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_0C2D29F5226542D5AF2BB846AFA7FE6B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_101C517419DC48E3A679E55B25DDCA04"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_184F447E803F45E2BA225832364B521C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -70,31 +58,13 @@
         "Entry"
         {
         "MsmKey" = "8:_53176FBEA16831F11C27331F9ACCFD8D"
-        "OwnerKey" = "8:_0C2D29F5226542D5AF2BB846AFA7FE6B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_53176FBEA16831F11C27331F9ACCFD8D"
         "OwnerKey" = "8:_654D01F2FF014692816311C903EC60EC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_53176FBEA16831F11C27331F9ACCFD8D"
-        "OwnerKey" = "8:_101C517419DC48E3A679E55B25DDCA04"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_53176FBEA16831F11C27331F9ACCFD8D"
         "OwnerKey" = "8:_67BE1C4141EE44EEA51F6B2DA40B6EB1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_55FAD7AA4E69466FBEF7BFEF7FD3EAA5"
-        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -142,12 +112,6 @@
         "Entry"
         {
         "MsmKey" = "8:_9F5E356490993F72E6C1BCCEC66542A7"
-        "OwnerKey" = "8:_101C517419DC48E3A679E55B25DDCA04"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9F5E356490993F72E6C1BCCEC66542A7"
         "OwnerKey" = "8:_A8B5B80188E248BC9E490BABFBEA9578"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -167,12 +131,6 @@
         {
         "MsmKey" = "8:_9F5E356490993F72E6C1BCCEC66542A7"
         "OwnerKey" = "8:_49646B171F0B42DE9ED1D95DBAF10AB9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9F5E356490993F72E6C1BCCEC66542A7"
-        "OwnerKey" = "8:_0C2D29F5226542D5AF2BB846AFA7FE6B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -237,12 +195,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_EE9C2FFE678706AB2E55C3A006186FA2"
-        "OwnerKey" = "8:_0C2D29F5226542D5AF2BB846AFA7FE6B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_F50F50DBD7554052AFF5849A09267D71"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -274,12 +226,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_101C517419DC48E3A679E55B25DDCA04"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_01BAF175F4E64963B5C76910FF1B8003"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -299,12 +245,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_49646B171F0B42DE9ED1D95DBAF10AB9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0C2D29F5226542D5AF2BB846AFA7FE6B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -533,37 +473,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_101C517419DC48E3A679E55B25DDCA04"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:FishingWithGit, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_101C517419DC48E3A679E55B25DDCA04"
-                    {
-                    "Name" = "8:git.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\FishingWithGit\\bin\\Release\\git.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_A47850FEE2C24CDAA946E6022597BB77"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_184F447E803F45E2BA225832364B521C"
             {
             "SourcePath" = "8:..\\FishingWithGit\\bin\\Release\\lib\\win32\\x86\\git2-15e1193.dll"
@@ -633,26 +542,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_55FAD7AA4E69466FBEF7BFEF7FD3EAA5"
-            {
-            "SourcePath" = "8:..\\FishingWithGit\\bin\\Release\\git.exe.config"
-            "TargetName" = "8:git.exe.config"
-            "Tag" = "8:"
-            "Folder" = "8:_A47850FEE2C24CDAA946E6022597BB77"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5D10864E0EDD488093C7A2AF0A086E23"
@@ -1628,34 +1517,6 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{6B92E34C-8D3C-43CB-9635-20C07B527C4F}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_0C2D29F5226542D5AF2BB846AFA7FE6B"
-            {
-            "SourcePath" = "8:..\\FishingWithGit\\obj\\Release\\FishingWithGit.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_1373B6A1BE8A41378C842356FA8B0E7E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{E886F1C5-99E4-48A0-B02A-77EFA17CF88F}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
