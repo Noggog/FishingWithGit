@@ -18,7 +18,7 @@ namespace FishingWithGit.CustomSetup
         private string _targetDir;
         public string TargetDir
         {
-            get => _targetDir ?? this.Context.Parameters["targetdir"];
+            get => _targetDir ?? this.Context.Parameters["targetdir"].TrimEnd('\\');
             set => _targetDir = value;
         }
 
@@ -49,7 +49,7 @@ namespace FishingWithGit.CustomSetup
         public bool Match(string str)
         {
             if (!str.EndsWith("cmd")) return false;
-            string targetDir = this.TargetDir.TrimEnd('\\');
+            string targetDir = this.TargetDir;
             if (!str.Contains(targetDir)) return false;
             return true;
         }
@@ -78,7 +78,7 @@ namespace FishingWithGit.CustomSetup
                 {
                 }
             }
-            var targetDir = Path.Combine(this.TargetDir.TrimEnd('\\'), "cmd");
+            var targetDir = Path.Combine(this.TargetDir, "cmd");
             paths.Insert(index, targetDir);
 
             var toSet = string.Join(";", paths);

@@ -11,5 +11,6 @@ namespace FishingWithGit.Common
         public const int SHA_LENGTH = 40;
         public const string IS_FISHING_CMD = "-IsFishingWithGit";
         public const string IS_FISHING_RESP = "IsFishing";
+        public const string MASS_HOOK_FOLDER_NAME = "Mass Hooks";
     }
 }
