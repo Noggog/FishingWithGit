@@ -11,6 +11,10 @@ namespace FishingWithGit
     {
         CherryPickArgs args;
         public override IGitHookArgs Args => args;
+        public override HookType PreType => HookType.Pre_CherryPick;
+        public override bool PreHookNatural => false;
+        public override HookType PostType => HookType.Post_CherryPick;
+        public override bool PostHookNatural => false;
 
         private CherryPickHook(BaseWrapper wrapper, CherryPickArgs args)
             : base(wrapper)
@@ -32,20 +36,6 @@ namespace FishingWithGit
                     {
                         args[commandIndex + 1]
                     }));
-        }
-
-        public override Task<int> PreCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_CherryPick, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Pre_CherryPick, HookLocation.Normal, args.ToArray()));
-        }
-
-        public override Task<int> PostCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_CherryPick, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Post_CherryPick, HookLocation.Normal, args.ToArray()));
         }
     }
 }

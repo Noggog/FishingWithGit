@@ -10,6 +10,10 @@ namespace FishingWithGit
     {
         TagArgs args;
         public override IGitHookArgs Args => args;
+        public override HookType PreType => HookType.Pre_Tag;
+        public override bool PreHookNatural => false;
+        public override HookType PostType => HookType.Post_Tag;
+        public override bool PostHookNatural => false;
 
         private TagHooks(BaseWrapper wrapper, List<string> args)
             : base(wrapper)
@@ -20,20 +24,6 @@ namespace FishingWithGit
         public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
         {
             return new TagHooks(wrapper, args);
-        }
-
-        public override Task<int> PreCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Tag, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Tag, HookLocation.Normal, args.ToArray()));
-        }
-
-        public override Task<int> PostCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_Tag, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireAllHooks(HookType.Post_Tag, HookLocation.Normal, args.ToArray()));
         }
     }
 }

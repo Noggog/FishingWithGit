@@ -10,6 +10,10 @@ namespace FishingWithGit
     {
         BranchArgs args;
         public override IGitHookArgs Args => args;
+        public override HookType PreType => HookType.Pre_Branch;
+        public override bool PreHookNatural => false;
+        public override HookType PostType => HookType.Post_Branch;
+        public override bool PostHookNatural => false;
 
         private BranchHooks(BaseWrapper wrapper, BranchArgs args)
             : base(wrapper)
@@ -30,20 +34,6 @@ namespace FishingWithGit
                     TargetBranch = (args.Count > commandIndex + 1) ? args[commandIndex + 1] : default(string),
                     Deleting = args.Contains("-D")
                 });
-        }
-
-        public override Task<int> PreCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Branch, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Branch, HookLocation.Normal, args.ToArray()));
-        }
-
-        public override Task<int> PostCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_Branch, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireAllHooks(HookType.Post_Branch, HookLocation.Normal, args.ToArray()));
         }
     }
 }

@@ -10,6 +10,10 @@ namespace FishingWithGit
     {
         CommitMsgArgs args;
         public override IGitHookArgs Args => args;
+        public override HookType PreType => HookType.Commit_Msg;
+        public override bool PreHookNatural => true;
+        public override HookType PostType => throw new NotImplementedException();
+        public override bool PostHookNatural => throw new NotImplementedException();
 
         private CommitMsgHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
             : base(wrapper)
@@ -29,13 +33,6 @@ namespace FishingWithGit
         public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
         {
             return new CommitMsgHooks(wrapper, args, commandIndex);
-        }
-
-        public override Task<int> PreCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Commit_Msg, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Commit_Msg, HookLocation.Normal, args.ToArray()));
         }
 
         public override async Task<int> PostCommand()

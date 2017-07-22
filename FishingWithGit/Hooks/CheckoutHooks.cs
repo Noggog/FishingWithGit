@@ -12,6 +12,10 @@ namespace FishingWithGit
     {
         CheckoutArgs args;
         public override IGitHookArgs Args => args;
+        public override HookType PreType => HookType.Pre_Checkout;
+        public override bool PreHookNatural => false;
+        public override HookType PostType => HookType.Post_Checkout;
+        public override bool PostHookNatural => true;
 
         private CheckoutHooks(BaseWrapper wrapper, CheckoutArgs newArgs)
             : base(wrapper)
@@ -91,20 +95,6 @@ namespace FishingWithGit
                 throw new ArgumentException($"Branch named {targetBranchName} did not point to a commit in repo {repo.Info.Path}.");
             }
             return targetBranch.Tip.Sha;
-        }
-
-        public override Task<int> PreCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Checkout, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Checkout, HookLocation.Normal, args.ToArray()));
-        }
-
-        public override Task<int> PostCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_Checkout, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Post_Checkout, HookLocation.Normal, args.ToArray()));
         }
     }
 }

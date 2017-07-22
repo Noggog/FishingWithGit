@@ -12,6 +12,10 @@ namespace FishingWithGit
     {
         PullArgs args;
         public override IGitHookArgs Args => args;
+        public override HookType PreType => HookType.Pre_Pull;
+        public override bool PreHookNatural => false;
+        public override HookType PostType => HookType.Post_Pull;
+        public override bool PostHookNatural => false;
 
         private PullHooks(BaseWrapper wrapper, string currentSha, string targetSha)
             : base(wrapper)
@@ -45,20 +49,6 @@ namespace FishingWithGit
                 targetSha = branch.Tip.Sha;
             }
             return new PullHooks(wrapper, currentSha, targetSha);
-        }
-
-        public override Task<int> PreCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Pull, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Pre_Pull, HookLocation.Normal, args.ToArray()));
-        }
-
-        public override Task<int> PostCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_Pull, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Post_Pull, HookLocation.Normal, args.ToArray()));
         }
     }
 }

@@ -9,6 +9,7 @@ namespace FishingWithGit
     public enum HookLocation
     {
         Normal,
-        InRepo
+        InRepo,
+        Mass
     }
 }

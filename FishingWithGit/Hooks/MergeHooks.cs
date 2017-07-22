@@ -10,6 +10,10 @@ namespace FishingWithGit
     {
         MergeArgs args;
         public override IGitHookArgs Args => args;
+        public override HookType PreType => HookType.Pre_Merge;
+        public override bool PreHookNatural => false;
+        public override HookType PostType => HookType.Post_Merge;
+        public override bool PostHookNatural => true;
 
         public MergeHooks(BaseWrapper wrapper, List<string> args, int commandIndex)
             : base(wrapper)
@@ -22,20 +26,6 @@ namespace FishingWithGit
         public static HookSet Factory(BaseWrapper wrapper, List<string> args, int commandIndex)
         {
             return new MergeHooks(wrapper, args, commandIndex);
-        }
-
-        public override Task<int> PreCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Merge, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Pre_Merge, HookLocation.Normal, args.ToArray()));
-        }
-
-        public override Task<int> PostCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_Merge, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireUnnaturalHooks(HookType.Post_Merge, HookLocation.Normal, args.ToArray()));
         }
     }
 }

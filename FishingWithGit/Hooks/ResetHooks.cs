@@ -13,6 +13,10 @@ namespace FishingWithGit
     {
         ResetArgs args;
         public override IGitHookArgs Args => args;
+        public override HookType PreType => HookType.Pre_Reset;
+        public override bool PreHookNatural => false;
+        public override HookType PostType => HookType.Post_Reset;
+        public override bool PostHookNatural => false;
 
         private ResetHooks(BaseWrapper wrapper, DirectoryInfo repoDir, List<string> args, int commandIndex)
             : base(wrapper)
@@ -97,20 +101,6 @@ namespace FishingWithGit
                 }
                 return TakeHooks.Factory(wrapper, sha, args, commandIndex);
             }
-        }
-
-        public override Task<int> PreCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Reset, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Reset, HookLocation.Normal, args.ToArray()));
-        }
-
-        public override Task<int> PostCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_Reset, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireAllHooks(HookType.Post_Reset, HookLocation.Normal, args.ToArray()));
         }
     }
 }

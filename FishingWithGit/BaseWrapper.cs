@@ -19,6 +19,11 @@ namespace FishingWithGit
         Stopwatch overallSw = new Stopwatch();
         Stopwatch actualProcessSw = new Stopwatch();
         public Logger Logger = new Logger("FishingWithGit");
+        public Lazy<DirectoryInfo> MassHookDir = new Lazy<DirectoryInfo>(() =>
+        {
+            var exe = new FileInfo(System.Reflection.Assembly.GetEntryAssembly().Location);
+            return new DirectoryInfo(Path.Combine(exe.Directory.FullName, Properties.Settings.Default.MassHookFolder));
+        });
 
         public BaseWrapper(string[] args)
         {
@@ -416,14 +421,30 @@ namespace FishingWithGit
         #endregion
 
         #region Firing Hooks
-        public Task<int> FireAllHooks(HookType type, HookLocation location, params string[] args)
+        public Task<int> FireHooks(HookType type, bool natural, params string[] args)
+        {
+            if (natural)
+            {
+                return CommonFunctions.RunCommands(
+                    () => this.FireAllHooks(type, HookLocation.InRepo, args),
+                    () => this.FireUnnaturalHooks(type, HookLocation.Normal, args));
+            }
+            else
+            {
+                return CommonFunctions.RunCommands(
+                    () => this.FireAllHooks(type, HookLocation.InRepo, args),
+                    () => this.FireAllHooks(type, HookLocation.Normal, args));
+            }
+        }
+
+        private Task<int> FireAllHooks(HookType type, HookLocation location, params string[] args)
         {
             return CommonFunctions.RunCommands(
                 () => FireBashHook(type, location, args),
                 () => FireExeHooks(type, location, args));
         }
 
-        public Task<int> FireUnnaturalHooks(HookType type, HookLocation location, params string[] args)
+        private Task<int> FireUnnaturalHooks(HookType type, HookLocation location, params string[] args)
         {
             return CommonFunctions.RunCommands(
                 () => FireUntiedBashHook(type, location, args),
@@ -534,8 +555,6 @@ namespace FishingWithGit
         {
             if (!CheckLocationFiringSwitch(location)) return 0;
             var path = GetHookFolder(location);
-            HashSet<string> firedHooks = new HashSet<string>();
-
             DirectoryInfo dir = new DirectoryInfo(path);
             if (dir.Exists)
             {
@@ -565,23 +584,28 @@ namespace FishingWithGit
                     {
                         return exitCode;
                     }
-
-                    firedHooks.Add(file.Name);
                 }
             }
 
-            if (!Properties.Settings.Default.RunMassHooks) return 0;
-            DirectoryInfo massHookDir = new DirectoryInfo(Properties.Settings.Default.MassHookFolder);
-            if (!massHookDir.Exists) return 0;
-            foreach (var file in massHookDir.EnumerateFiles()
-                .Union(massHookDir.EnumerateDirectories().SelectMany((d) => d.EnumerateFiles())))
+            return 0;
+        }
+
+        public async Task<int> FireMassHooks(HookType type, params string[] args)
+        {
+            if (!CheckLocationFiringSwitch(HookLocation.Mass)) return 0;
+            if (!MassHookDir.Value.Exists)
             {
-                if (firedHooks.Contains(file.Name)) continue;
+                this.Logger.WriteLine($"No mass hook folder at {MassHookDir.Value.FullName}.", writeToConsole: null);
+                return 0;
+            }
+            foreach (var file in MassHookDir.Value.EnumerateFiles()
+                .Union(MassHookDir.Value.EnumerateDirectories().SelectMany((d) => d.EnumerateFiles())))
+            {
                 if (!file.Extension.ToUpper().Equals(".EXE")) continue;
                 var rawName = Path.GetFileNameWithoutExtension(file.Name);
                 if (HookTypeExt.IsHookName(rawName)) continue;
 
-                this.Logger.WriteLine($"Firing Mass Exe Hook {location} {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: null);
+                this.Logger.WriteLine($"Firing Mass Exe Hook {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: null);
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
@@ -596,7 +620,7 @@ namespace FishingWithGit
                     hookIO: !this.Logger.ConsoleSilent);
 
                 sw.Stop();
-                this.Logger.WriteLine($"Fired Mass Exe Hook {location} {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
+                this.Logger.WriteLine($"Fired Mass Exe Hook {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
                 if (exitCode != 0)
                 {
                     return exitCode;
@@ -608,9 +632,17 @@ namespace FishingWithGit
 
         private bool CheckLocationFiringSwitch(HookLocation loc)
         {
-            if (loc == HookLocation.InRepo && !Properties.Settings.Default.RunInRepoHooks) return false;
-            if (loc == HookLocation.Normal && !Properties.Settings.Default.RunNormalFolderHooks) return false;
-            return true;
+            switch (loc)
+            {
+                case HookLocation.Normal:
+                    return Properties.Settings.Default.RunNormalFolderHooks;
+                case HookLocation.InRepo:
+                    return Properties.Settings.Default.RunInRepoHooks;
+                case HookLocation.Mass:
+                    return Properties.Settings.Default.RunMassHooks;
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         private ProcessStartInfo SetArgumentsOnStartInfo(ProcessStartInfo startInfo)

@@ -17,6 +17,10 @@ namespace FishingWithGit
         IGitHookArgs postArgs;
         Type type;
         public override IGitHookArgs Args => preArgs;
+        public override HookType PreType => HookType.Pre_Rebase;
+        public override bool PreHookNatural => true;
+        public override HookType PostType => HookType.Post_Rebase;
+        public override bool PostHookNatural => false;
 
         private RebaseHooks(BaseWrapper wrapper, Type type, IGitHookArgs preArgs, IGitHookArgs postArgs)
             : base(wrapper)
@@ -116,16 +120,16 @@ namespace FishingWithGit
             {
                 case Type.Abort:
                     return CommonFunctions.RunCommands(
-                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase_Abort, HookLocation.InRepo, preArgs.ToArray()),
-                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase_Abort, HookLocation.Normal, preArgs.ToArray()));
+                        () => this.Wrapper.FireHooks(HookType.Pre_Rebase_Abort, natural: false, args: preArgs.ToArray()),
+                        () => this.Wrapper.FireMassHooks(HookType.Pre_Rebase_Abort,  preArgs.ToArray()));
                 case Type.Continue:
                     return CommonFunctions.RunCommands(
-                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase_Continue, HookLocation.InRepo, preArgs.ToArray()),
-                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase_Continue, HookLocation.Normal, preArgs.ToArray()));
+                        () => this.Wrapper.FireHooks(HookType.Pre_Rebase_Continue, natural: false, args: preArgs.ToArray()),
+                        () => this.Wrapper.FireMassHooks(HookType.Pre_Rebase_Continue, preArgs.ToArray()));
                 case Type.Normal:
                     return CommonFunctions.RunCommands(
-                        () => this.Wrapper.FireAllHooks(HookType.Pre_Rebase, HookLocation.InRepo, preArgs.ToArray()),
-                        () => this.Wrapper.FireUnnaturalHooks(HookType.Pre_Rebase, HookLocation.Normal, preArgs.ToArray()));
+                        () => this.Wrapper.FireHooks(HookType.Pre_Rebase, natural: true, args: preArgs.ToArray()),
+                        () => this.Wrapper.FireMassHooks(HookType.Pre_Rebase, preArgs.ToArray()));
                 default:
                     throw new NotImplementedException();
             }
@@ -137,16 +141,16 @@ namespace FishingWithGit
             {
                 case Type.Abort:
                     return CommonFunctions.RunCommands(
-                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase_Abort, HookLocation.InRepo, postArgs.ToArray()),
-                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase_Abort, HookLocation.Normal, postArgs.ToArray()));
+                        () => this.Wrapper.FireHooks(HookType.Post_Rebase_Abort, natural: false, args: postArgs.ToArray()),
+                        () => this.Wrapper.FireMassHooks(HookType.Post_Rebase_Abort, postArgs.ToArray()));
                 case Type.Continue:
                     return CommonFunctions.RunCommands(
-                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase_Continue, HookLocation.InRepo, postArgs.ToArray()),
-                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase_Continue, HookLocation.Normal, postArgs.ToArray()));
+                        () => this.Wrapper.FireHooks(HookType.Post_Rebase_Continue, natural: false, args: postArgs.ToArray()),
+                        () => this.Wrapper.FireMassHooks(HookType.Post_Rebase_Continue, postArgs.ToArray()));
                 case Type.Normal:
                     return CommonFunctions.RunCommands(
-                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase, HookLocation.InRepo, postArgs.ToArray()),
-                        () => this.Wrapper.FireAllHooks(HookType.Post_Rebase, HookLocation.Normal, postArgs.ToArray()));
+                        () => this.Wrapper.FireHooks(HookType.Post_Rebase, natural: false, args: postArgs.ToArray()),
+                        () => this.Wrapper.FireMassHooks(HookType.Post_Rebase, postArgs.ToArray()));
                 default:
                     throw new NotImplementedException();
             }

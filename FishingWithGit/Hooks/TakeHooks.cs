@@ -13,6 +13,10 @@ namespace FishingWithGit
     {
         TakeArgs args;
         public override IGitHookArgs Args => args;
+        public override HookType PreType => HookType.Pre_Take;
+        public override bool PreHookNatural => false;
+        public override HookType PostType => HookType.Post_Take;
+        public override bool PostHookNatural => false;
 
         private TakeHooks(BaseWrapper wrapper, string targetSha, List<string> args, int commandIndex)
             : base(wrapper)
@@ -48,20 +52,6 @@ namespace FishingWithGit
                 return new TakeHooks(wrapper, repo.Head.Tip.Sha, args, commandIndex);
             }
 
-        }
-
-        public override Task<int> PreCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Take, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireAllHooks(HookType.Pre_Take, HookLocation.Normal, args.ToArray()));
-        }
-
-        public override Task<int> PostCommand()
-        {
-            return CommonFunctions.RunCommands(
-                () => this.Wrapper.FireAllHooks(HookType.Post_Take, HookLocation.InRepo, args.ToArray()),
-                () => this.Wrapper.FireAllHooks(HookType.Post_Take, HookLocation.Normal, args.ToArray()));
         }
     }
 }
