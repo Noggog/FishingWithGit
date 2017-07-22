@@ -124,5 +124,23 @@ namespace FishingWithGit.Properties {
                 return ((string)(this["RealGitProgramPathOverride"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool RunInRepoHooks {
+            get {
+                return ((bool)(this["RunInRepoHooks"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool RunNormalFolderHooks {
+            get {
+                return ((bool)(this["RunNormalFolderHooks"]));
+            }
+        }
     }
 }

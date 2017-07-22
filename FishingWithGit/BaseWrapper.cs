@@ -450,6 +450,7 @@ namespace FishingWithGit
 
         private async Task<int> FireNamedBashHook(HookType type, HookLocation location, params string[] args)
         {
+            if (!CheckLocationFiringSwitch(location)) return 0;
             var path = GetHookFolder(location);
             FileInfo file = new FileInfo($"{path}/{type.HookName()}");
             if (!file.Exists) return 0;
@@ -470,6 +471,7 @@ namespace FishingWithGit
 
         private async Task<int> FireUntiedBashHook(HookType type, HookLocation location, params string[] args)
         {
+            if (!CheckLocationFiringSwitch(location)) return 0;
             var path = GetHookFolder(location);
             DirectoryInfo dir = new DirectoryInfo(path);
             if (!dir.Exists) return 0;
@@ -509,6 +511,7 @@ namespace FishingWithGit
 
         private async Task<int> FireNamedExeHooks(HookType type, HookLocation location, params string[] args)
         {
+            if (!CheckLocationFiringSwitch(location)) return 0;
             var path = GetHookFolder(location);
             FileInfo file = new FileInfo($"{path}/{type.HookName()}.exe");
             if (!file.Exists) return 0;
@@ -529,6 +532,7 @@ namespace FishingWithGit
 
         private async Task<int> FireUntiedExeHooks(HookType type, HookLocation location, params string[] args)
         {
+            if (!CheckLocationFiringSwitch(location)) return 0;
             var path = GetHookFolder(location);
             HashSet<string> firedHooks = new HashSet<string>();
 
@@ -600,6 +604,13 @@ namespace FishingWithGit
             }
 
             return 0;
+        }
+
+        private bool CheckLocationFiringSwitch(HookLocation loc)
+        {
+            if (loc == HookLocation.InRepo && !Properties.Settings.Default.RunInRepoHooks) return false;
+            if (loc == HookLocation.Normal && !Properties.Settings.Default.RunNormalFolderHooks) return false;
+            return true;
         }
 
         private ProcessStartInfo SetArgumentsOnStartInfo(ProcessStartInfo startInfo)
