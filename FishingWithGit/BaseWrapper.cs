@@ -295,8 +295,7 @@ namespace FishingWithGit
                             this.Logger.WriteLine("--------- Standard Output :");
                             firstStandard = false;
                         }
-                        Console.Write(result);
-                        this.Logger.WriteLine(result);
+                        this.Logger.WriteLine(result, writeToConsole: true);
                     }
                 },
                 err: (result) =>
@@ -308,8 +307,7 @@ namespace FishingWithGit
                             this.Logger.WriteLine("--------- Standard Error :", error: true);
                             firstErr = false;
                         }
-                        Console.Error.Write(result);
-                        this.Logger.WriteLine(result, error: true);
+                        this.Logger.WriteLine(result, writeToConsole: true, error: true);
                     }
                 });
         }
