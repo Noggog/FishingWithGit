@@ -104,5 +104,62 @@ namespace FishingWithGit.Tests.Arguments
                     COMMAND_INDEX);
             }
         }
+        
+        public static string[] GetSourceTreeHEADInboundArgs()
+        {
+            return new string[]
+            {
+                "--no-pager",
+                "-c",
+                "color.branch=false",
+                "-c",
+                "color.diff=false",
+                "-c",
+                "color.status=false",
+                "-c",
+                "diff.mnemonicprefix=false",
+                "-c",
+                "core.quotepath=false",
+                "reset",
+                "-q",
+                "--hard",
+                "HEAD",
+                "--"
+            };
+        }
+
+        [Fact]
+        public static void SourcetreeHEAD()
+        {
+            var args = GetSourceTreeHEADInboundArgs().ToList();
+            ArgProcessor.Process(CommandType.reset, args);
+            Assert.Equal(GetHEADProcessedArgs(), args);
+        }
+
+        public static string[] GetHEADProcessedArgs()
+        {
+            return new string[]
+            {
+                "--no-pager",
+                "reset",
+                "-q",
+                "--hard",
+                "HEAD",
+                "--"
+            };
+        }
+
+        [Fact]
+        public static void HookSetCtorHEAD()
+        {
+            using (var checkout = Repository_Tools.GetTypicalRepo())
+            {
+                var hook = ResetHooks.Factory(
+                    null,
+                    checkout.Dir,
+                    GetSourceTreeHEADInboundArgs().ToList(),
+                    COMMAND_INDEX);
+            }
+        }
     }
 }

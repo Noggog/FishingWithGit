@@ -25,18 +25,20 @@ namespace FishingWithGit
             string type = null;
             for (int i = commandIndex + 1; i < args.Count; i++)
             {
-                if (!args[i].StartsWith("-")
-                    && args[i].Length == Constants.SHA_LENGTH)
+                var arg = args[i];
+                if (!arg.StartsWith("-")
+                    && arg.Length == Constants.SHA_LENGTH)
                 {
-                    targetSha = args[i];
+                    targetSha = arg;
                 }
-                if (args[i].StartsWith("--"))
+                if (arg.StartsWith("--") && arg.Length > 2)
                 {
-                    type = args[i].Substring(2);
+                    type = arg.Substring(2);
                 }
             }
 
-            if (targetSha == null)
+            if (targetSha == null
+                && !args.Contains("HEAD"))
             {
                 throw new ArgumentException("Cannot run reset hooks, as args are invald.  No sha could be found.");
             }
@@ -61,6 +63,10 @@ namespace FishingWithGit
             {
                 curBranch = repo.Head.FriendlyName;
                 curSha = repo.Head.Tip.Sha;
+                if (targetSha == null)
+                {
+                    targetSha = repo.Head.Tip.Sha;
+                }
             }
 
             this.args = new ResetArgs(
@@ -80,7 +86,6 @@ namespace FishingWithGit
                 throw new ArgumentException("Cannot run reset hooks, as args are invald.  No content was found after checkout command.");
             }
             var argsList = args.ToList();
-            var extraCommand = args[commandIndex + 1];
             if (args.Contains("--soft")
                 || args.Contains("--mixed")
                 || args.Contains("--hard"))
