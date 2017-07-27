@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace FishingWithGit.Common
 {
@@ -95,6 +96,26 @@ namespace FishingWithGit.Common
             catch (Exception)
             {
             }
+        }
+
+        public bool LogError(string err, string caption, bool showMessageBox)
+        {
+            this.WriteLine(err, error: true);
+            if (showMessageBox)
+            {
+                return DialogResult.OK == MessageBox.Show(err, caption, MessageBoxButtons.OKCancel);
+            }
+            return false;
+        }
+
+        public bool LogErrorYesNo(string err, string caption, bool showMessageBox)
+        {
+            this.WriteLine(err, error: true);
+            if (showMessageBox)
+            {
+                return DialogResult.Yes == MessageBox.Show(err, caption, MessageBoxButtons.YesNo);
+            }
+            return false;
         }
     }
 }
