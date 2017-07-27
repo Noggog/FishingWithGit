@@ -33,5 +33,16 @@ namespace FishingWithGit.Common
             }
             return false;
         }
+
+        public static string StandardizePath(string path)
+        {
+            if (path.StartsWith("../"))
+            {
+                var f = new FileInfo(path);
+                path = f.FullName;
+            }
+            path = path.TrimEnd('\\');
+            return path;
+        }
     }
 }
