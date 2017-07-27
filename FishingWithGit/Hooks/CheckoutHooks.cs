@@ -1,4 +1,5 @@
-﻿using LibGit2Sharp;
+﻿using FishingWithGit.Common;
+using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -83,16 +84,21 @@ namespace FishingWithGit
                 });
         }
 
-        private static string GetTargetSha(Repository repo, string targetBranchName)
+        private static string GetTargetSha(Repository repo, string val)
         {
-            var targetBranch = repo.Branches[targetBranchName];
+            if (val.Length == Constants.SHA_LENGTH)
+            {
+                return val;
+            }
+
+            var targetBranch = repo.Branches[val];
             if (targetBranch == null)
             {
-                throw new ArgumentException($"Could not locate local branch named {targetBranchName} in repo {repo.Info.Path}");
+                throw new ArgumentException($"Could not locate local branch named {val} in repo {repo.Info.Path}");
             }
             if (targetBranch.Tip == null)
             {
-                throw new ArgumentException($"Branch named {targetBranchName} did not point to a commit in repo {repo.Info.Path}.");
+                throw new ArgumentException($"Branch named {val} did not point to a commit in repo {repo.Info.Path}.");
             }
             return targetBranch.Tip.Sha;
         }

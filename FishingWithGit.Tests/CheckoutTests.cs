@@ -93,5 +93,38 @@ namespace FishingWithGit.Tests.Arguments
                     COMMAND_INDEX);
             }
         }
+
+        public static string[] GetSourceTreeInboundArgs_Sha()
+        {
+            return new string[]
+            {
+                "--no-pager",
+                "-c",
+                "color.branch=false",
+                "-c",
+                "color.diff=false",
+                "-c",
+                "color.status=false",
+                "-c",
+                "diff.mnemonicprefix=false",
+                "-c",
+                "core.quotepath=false",
+                "checkout",
+                Repository_Tools.TYPICAL_SHA
+            };
+        }
+
+        [Fact]
+        public static void HookSetCtor_Sha()
+        {
+            using (var repo = Repository_Tools.GetTypicalRepo())
+            {
+                var hook = CheckoutHooks.Factory(
+                    null,
+                    repo.Dir,
+                    GetSourceTreeInboundArgs_Sha().ToList(),
+                    COMMAND_INDEX);
+            }
+        }
     }
 }
