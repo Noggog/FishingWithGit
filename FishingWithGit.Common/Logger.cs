@@ -117,5 +117,25 @@ namespace FishingWithGit.Common
             }
             return false;
         }
+
+        public bool? LogErrorRetry(string err, string caption, bool showMessageBox)
+        {
+            this.WriteLine(err, error: true);
+            if (showMessageBox)
+            {
+                switch (MessageBox.Show(err, caption, MessageBoxButtons.AbortRetryIgnore))
+                {
+                    case DialogResult.Abort:
+                        return false;
+                    case DialogResult.Retry:
+                        return null;
+                    case DialogResult.Ignore:
+                        return true;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+            return false;
+        }
     }
 }
