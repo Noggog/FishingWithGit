@@ -12,12 +12,11 @@ namespace FishingWithGit
 {
     public class BaseWrapper
     {
-        StringBuilder sb = new StringBuilder();
         CommandType commandType;
         int commandIndex;
         List<string> args;
-        Stopwatch overallSw = new Stopwatch();
-        Stopwatch actualProcessSw = new Stopwatch();
+        Stopwatch overallSw;
+        Stopwatch actualProcessSw;
         public Logger Logger = new Logger("FishingWithGit");
         public Lazy<DirectoryInfo> MassHookDir = new Lazy<DirectoryInfo>(() =>
         {
@@ -37,6 +36,7 @@ namespace FishingWithGit
             try
             {
                 if (HandleIsFishing()) return 0;
+                overallSw = new Stopwatch();
                 overallSw.Start();
                 this.Logger.WriteLine(DateTime.Now.ToString());
                 this.Logger.WriteLine("Arguments:");
@@ -120,8 +120,15 @@ namespace FishingWithGit
             }
             finally
             {
-                overallSw.Stop();
-                this.Logger.WriteLine($"Command overall took {overallSw.ElapsedMilliseconds}ms.  Actual git command took {actualProcessSw.ElapsedMilliseconds}ms.  Fishing With Git and Hooks took {overallSw.ElapsedMilliseconds - actualProcessSw.ElapsedMilliseconds}ms");
+                if (overallSw != null)
+                {
+                    overallSw.Stop();
+                    this.Logger.WriteLine($"Command overall took {overallSw.ElapsedMilliseconds}ms.");
+                    if (actualProcessSw != null)
+                    {
+                        this.Logger.WriteLine($"Actual git command took {actualProcessSw.ElapsedMilliseconds}ms.  Fishing With Git and Hooks took {overallSw.ElapsedMilliseconds - actualProcessSw.ElapsedMilliseconds}ms");
+                    }
+                }
                 this.Logger.WriteLine("--------------------------------------------------------------------------------------------------------- Fishing With Git call done.");
                 if (this.Logger.ShouldLogToFile)
                 {
@@ -167,9 +174,9 @@ namespace FishingWithGit
 
         async Task<int> RunActualGit(ProcessStartInfo startInfo)
         {
-            int exitCode;
+            actualProcessSw = new Stopwatch();
             actualProcessSw.Start();
-            exitCode = await RunProcess(startInfo, hookIO: true);
+            int exitCode = await RunProcess(startInfo, hookIO: true);
             actualProcessSw.Stop();
             return exitCode;
         }
