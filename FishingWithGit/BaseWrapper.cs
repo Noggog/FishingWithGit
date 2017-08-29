@@ -20,17 +20,12 @@ namespace FishingWithGit
         TimeSpan preHookSpan;
         TimeSpan postHookSpan;
         public Logger Logger = new Logger("FishingWithGit");
-        public Lazy<DirectoryInfo> MassHookDir = new Lazy<DirectoryInfo>(() =>
-        {
-            var exe = new FileInfo(System.Reflection.Assembly.GetEntryAssembly().Location);
-            return new DirectoryInfo(Path.Combine(exe.Directory.FullName, Properties.Settings.Default.MassHookFolder));
-        });
 
         public BaseWrapper(string[] args)
         {
             this.args = args.ToList();
-            this.Logger.ShouldLogToFile = Properties.Settings.Default.ShouldLog;
-            this.Logger.WipeLogsOlderThanDays = Properties.Settings.Default.WipeLogsOlderThanDays;
+            this.Logger.ShouldLogToFile = Settings.Instance.ShouldLog;
+            this.Logger.WipeLogsOlderThanDays = Settings.Instance.WipeLogsOlderThanDays;
         }
 
         public async Task<int> Wrap(Stopwatch sw)
@@ -42,7 +37,7 @@ namespace FishingWithGit
                 overallSw.Start();
                 this.Logger.WriteLine(DateTime.Now.ToString());
                 this.Logger.WriteLine("Arguments:");
-                if (Properties.Settings.Default.PrintSeparateArgs)
+                if (Settings.Instance.PrintSeparateArgs)
                 {
                     foreach (var arg in args)
                     {
@@ -66,7 +61,7 @@ namespace FishingWithGit
                 this.Logger.WriteLine($"Starting logs.  Elapsed: {overallSw.ElapsedMilliseconds}ms");
                 this.Logger.ActivateAndFlushLogging();
                 this.Logger.WriteLine($"Silent?: {this.Logger.ConsoleSilent}.  Elapsed: {overallSw.ElapsedMilliseconds}ms");
-                if (Properties.Settings.Default.FireHookLogic)
+                if (Settings.Instance.FireHookLogic)
                 {
                     if (hook == null)
                     {
@@ -103,7 +98,7 @@ namespace FishingWithGit
                 {
                     return exitCode;
                 }
-                if (Properties.Settings.Default.FireHookLogic
+                if (Settings.Instance.FireHookLogic
                     && hook != null)
                 {
                     this.Logger.WriteLine("Firing posthooks.");
@@ -199,7 +194,7 @@ namespace FishingWithGit
                 return false;
             }
             var exePath = gitFile.FullName;
-            this.Logger.WriteLine("Target exe " + exePath);
+            this.Logger.WriteLine($"Target exe {exePath}ms.  Elapsed {overallSw.ElapsedMilliseconds}ms");
             startInfo.FileName = exePath;
             startInfo.RedirectStandardError = true;
             startInfo.RedirectStandardInput = true;
@@ -212,16 +207,16 @@ namespace FishingWithGit
         public bool GetGitPath(out FileInfo gitFile)
         {
             // Return if overridden
-            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.RealGitProgramPathOverride))
+            if (!string.IsNullOrWhiteSpace(Settings.Instance.RealGitProgramPathOverride))
             {
-                gitFile = new FileInfo(Properties.Settings.Default.RealGitProgramPathOverride);
+                gitFile = new FileInfo(Settings.Instance.RealGitProgramPathOverride);
                 return true;
             }
 
             // Return if cached
-            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.RealGitProgramPath))
+            if (!string.IsNullOrWhiteSpace(Settings.Instance.RealGitProgramPath))
             {
-                gitFile = new FileInfo(Properties.Settings.Default.RealGitProgramPath);
+                gitFile = new FileInfo(Settings.Instance.RealGitProgramPath);
                 if (gitFile.Exists) return true;
             }
 
@@ -243,9 +238,17 @@ namespace FishingWithGit
 
                         // Probably a real git install
                         gitFile = file;
-                        Properties.Settings.Default.RealGitProgramPath = file.FullName;
-                        Properties.Settings.Default.Upgrade();
-                        Properties.Settings.Default.Save();
+                        try
+                        {
+                            Settings.Instance.RealGitProgramPath = file.FullName;
+                        }
+                        catch (Exception ex)
+                        {
+                            this.Logger.WriteLine(
+                                $"Error saving settings. {ex}",
+                                error: false,
+                                writeToConsole: null);
+                        }
                         return true;
                     }
                 }
@@ -278,7 +281,7 @@ namespace FishingWithGit
                     await TypicalHookIO(process);
                 }
                 var task = Task.WhenAll(tasks);
-                if (task != await Task.WhenAny(task, Task.Delay(Properties.Settings.Default.ProcessTimeoutWarning)))
+                if (task != await Task.WhenAny(task, Task.Delay(Settings.Instance.ProcessTimeoutWarning)))
                 {
                     this.Logger.WriteLine("Process taking a long time: " + startInfo.FileName + " " + startInfo.Arguments, error: true);
                 }
@@ -605,13 +608,15 @@ namespace FishingWithGit
         public async Task<int> FireMassHooks(HookType type, params string[] args)
         {
             if (!CheckLocationFiringSwitch(HookLocation.Mass)) return 0;
-            if (!MassHookDir.Value.Exists)
+            var exe = new FileInfo(System.Reflection.Assembly.GetEntryAssembly().Location);
+            var massHookDir = new DirectoryInfo(Path.Combine(exe.Directory.FullName, Settings.Instance.MassHookFolder));
+            if (!massHookDir.Exists)
             {
-                this.Logger.WriteLine($"No mass hook folder at {MassHookDir.Value.FullName}.", writeToConsole: null);
+                this.Logger.WriteLine($"No mass hook folder at {massHookDir.FullName}.", writeToConsole: null);
                 return 0;
             }
-            foreach (var file in MassHookDir.Value.EnumerateFiles()
-                .Union(MassHookDir.Value.EnumerateDirectories().SelectMany((d) => d.EnumerateFiles())))
+            foreach (var file in massHookDir.EnumerateFiles()
+                .Union(massHookDir.EnumerateDirectories().SelectMany((d) => d.EnumerateFiles())))
             {
                 if (!file.Extension.ToUpper().Equals(".EXE")) continue;
                 var rawName = Path.GetFileNameWithoutExtension(file.Name);
@@ -647,11 +652,11 @@ namespace FishingWithGit
             switch (loc)
             {
                 case HookLocation.Normal:
-                    return Properties.Settings.Default.RunNormalFolderHooks;
+                    return Settings.Instance.RunNormalFolderHooks;
                 case HookLocation.InRepo:
-                    return Properties.Settings.Default.RunInRepoHooks;
+                    return Settings.Instance.RunInRepoHooks;
                 case HookLocation.Mass:
-                    return Properties.Settings.Default.RunMassHooks;
+                    return Settings.Instance.RunMassHooks;
                 default:
                     throw new NotImplementedException();
             }

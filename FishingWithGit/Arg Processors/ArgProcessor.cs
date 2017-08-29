@@ -31,7 +31,7 @@ namespace FishingWithGit
 
         public static void StripCArguments(List<string> args)
         {
-            if (!Properties.Settings.Default.CleanCArguments) return;
+            if (!Settings.Instance.CleanCArguments) return;
             int index;
             while ((index = args.IndexOf("-c")) != -1)
             {

@@ -10,7 +10,7 @@ namespace FishingWithGit
     {
         public override void Process(List<string> args)
         {
-            if (!Properties.Settings.Default.RemoveTemplateFromClone) return;
+            if (!Settings.Instance.RemoveTemplateFromClone) return;
             var tmp = args.ToList();
             args.Clear();
             args.AddRange(

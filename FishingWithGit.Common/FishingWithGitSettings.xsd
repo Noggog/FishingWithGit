@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="FishingWithGitSettings"
+    targetNamespace="http://tempuri.org/FishingWithGitSettings.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/FishingWithGitSettings.xsd"
+    xmlns:mstns="http://tempuri.org/FishingWithGitSettings.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="Settings" type="SettingsType" />
+
+  <xs:complexType name="SettingsType">
+    <xs:annotation>
+      <xs:documentation>
+        The root node of a Fishing With Git settings document.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:choice minOccurs="1" maxOccurs="1">
+        <xs:element name="RealGitProgramPath" type="xs:string" minOccurs="0" maxOccurs="1" >
+          <xs:annotation>
+            <xs:documentation>
+              Path to the git exe to forward commands to.  If doesn't exist, the program will try to locate via PATH, and then update this variable.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="ShouldLog" type="xs:boolean" minOccurs="0" maxOccurs="1" >
+          <xs:annotation>
+            <xs:documentation>
+              Should log normal lines.  When off, severe logs will still print.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="WipeLogsOlderThanDays" type="xs:byte" minOccurs="0" maxOccurs="1" >
+          <xs:annotation>
+            <xs:documentation>
+              How many days to wait before wiping older log content.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="FireHookLogic" type="xs:boolean" minOccurs="0" maxOccurs="1" >
+          <xs:annotation>
+            <xs:documentation>
+              Whether to fire any hooks.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="CleanCArguments" type="xs:boolean" minOccurs="0" maxOccurs="1" >
+          <xs:annotation>
+            <xs:documentation>
+              Whether to clean out -c arguments before passing to git
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="RemoveTemplateFromClone" type="xs:boolean" minOccurs="0" maxOccurs="1" >
+          <xs:annotation>
+            <xs:documentation>
+              Whether to clean --template arguments before passing to git
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="ProcessTimeoutWarning" type="xs:int" minOccurs="0" maxOccurs="1" >
+          <xs:annotation>
+            <xs:documentation>
+              Milliseconds to wait before seeing a process as timed out
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="PrintSeparateArgs" type="xs:boolean" minOccurs="0" maxOccurs="1" >
+          <xs:annotation>
+            <xs:documentation>
+              Whether to print incoming arguments on separate lines in the logs
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="RunMassHooks" type="xs:boolean" minOccurs="0" maxOccurs="1" >
+          <xs:annotation>
+            <xs:documentation>
+              Whether to run hooks located in the Mass Hooks folder
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="RealGitProgramPathOverride" type="xs:string" minOccurs="0" maxOccurs="1" >
+          <xs:annotation>
+            <xs:documentation>
+              Absolute invariable path to the git exe to forward commands to.  If doesn't exist, program will fail to run.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="RunInRepoHooks" type="xs:boolean" minOccurs="0" maxOccurs="1" >
+          <xs:annotation>
+            <xs:documentation>
+              Whether to run hooks located inside the tracked repo's hooks folder (this is not the typical hooks folder located in .git subfolder)
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="RunNormalFolderHooks" type="xs:boolean" minOccurs="0" maxOccurs="1" >
+          <xs:annotation>
+            <xs:documentation>
+              Whether to run hooks located inside the .git subfolder's hook folder.  This is the untracked stock hook location.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+    </xs:choice>
+  </xs:complexType>
+</xs:schema>

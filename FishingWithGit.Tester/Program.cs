@@ -18,6 +18,9 @@ namespace FishingWithGit.Tester
                 {
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
+                    System.Console.WriteLine($"BAKE Took {sw.ElapsedMilliseconds}ms");
+                    System.Console.WriteLine($"BAKE Took {sw.ElapsedMilliseconds}ms");
+                    System.Console.WriteLine($"BAKE Took {sw.ElapsedMilliseconds}ms");
                     //var pth = Environment.GetEnvironmentVariable("path", EnvironmentVariableTarget.Machine);
                     //var item = new FishingInstallerClass()
                     //{
@@ -26,6 +29,7 @@ namespace FishingWithGit.Tester
                     //item.AddToPath();
                     //item.RemoveFromPath();
                     BaseWrapper wrapper = new BaseWrapper(args);
+                    System.Console.WriteLine($"CTOR Took {sw.ElapsedMilliseconds}ms");
                     wrapper.Logger.AlwaysLog = true;
                     var result = await wrapper.Wrap(sw);
                     System.Console.WriteLine($"DONE OVERALL   Took {sw.ElapsedMilliseconds}ms");
