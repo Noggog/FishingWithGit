@@ -16,7 +16,7 @@ namespace FishingWithGit
         int commandIndex;
         List<string> args;
         Stopwatch overallSw;
-        Stopwatch actualProcessSw;
+        TimeSpan actualCommandSpan;
         public Logger Logger = new Logger("FishingWithGit");
         public Lazy<DirectoryInfo> MassHookDir = new Lazy<DirectoryInfo>(() =>
         {
@@ -124,9 +124,9 @@ namespace FishingWithGit
                 {
                     overallSw.Stop();
                     this.Logger.WriteLine($"Command overall took {overallSw.ElapsedMilliseconds}ms.");
-                    if (actualProcessSw != null)
+                    if (actualCommandSpan.TotalMilliseconds > 0)
                     {
-                        this.Logger.WriteLine($"Actual git command took {actualProcessSw.ElapsedMilliseconds}ms.  Fishing With Git and Hooks took {overallSw.ElapsedMilliseconds - actualProcessSw.ElapsedMilliseconds}ms");
+                        this.Logger.WriteLine($"Actual git command took {actualCommandSpan.TotalMilliseconds}ms.  Fishing With Git and Hooks took {overallSw.ElapsedMilliseconds - actualCommandSpan.TotalMilliseconds}ms");
                     }
                 }
                 this.Logger.WriteLine("--------------------------------------------------------------------------------------------------------- Fishing With Git call done.");
@@ -174,10 +174,10 @@ namespace FishingWithGit
 
         async Task<int> RunActualGit(ProcessStartInfo startInfo)
         {
-            actualProcessSw = new Stopwatch();
-            actualProcessSw.Start();
+            var startTime = overallSw.Elapsed;
             int exitCode = await RunProcess(startInfo, hookIO: true);
-            actualProcessSw.Stop();
+            var endTime = overallSw.Elapsed;
+            actualCommandSpan = endTime - startTime;
             return exitCode;
         }
 
