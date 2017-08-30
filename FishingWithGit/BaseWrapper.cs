@@ -31,12 +31,12 @@ namespace FishingWithGit
             this.Logger.WipeLogsOlderThanDays = Properties.Settings.Default.WipeLogsOlderThanDays;
         }
 
-        public async Task<int> Wrap()
+        public async Task<int> Wrap(Stopwatch sw)
         {
+            overallSw = sw;
             try
             {
                 if (HandleIsFishing()) return 0;
-                overallSw = new Stopwatch();
                 overallSw.Start();
                 this.Logger.WriteLine(DateTime.Now.ToString());
                 this.Logger.WriteLine("Arguments:");
@@ -120,14 +120,11 @@ namespace FishingWithGit
             }
             finally
             {
-                if (overallSw != null)
+                overallSw.Stop();
+                this.Logger.WriteLine($"Command overall took {overallSw.ElapsedMilliseconds}ms.");
+                if (actualCommandSpan.TotalMilliseconds > 0)
                 {
-                    overallSw.Stop();
-                    this.Logger.WriteLine($"Command overall took {overallSw.ElapsedMilliseconds}ms.");
-                    if (actualCommandSpan.TotalMilliseconds > 0)
-                    {
-                        this.Logger.WriteLine($"Actual git command took {actualCommandSpan.TotalMilliseconds}ms.  Fishing With Git and Hooks took {overallSw.ElapsedMilliseconds - actualCommandSpan.TotalMilliseconds}ms");
-                    }
+                    this.Logger.WriteLine($"Actual git command took {actualCommandSpan.TotalMilliseconds}ms.  Fishing With Git and Hooks took {overallSw.ElapsedMilliseconds - actualCommandSpan.TotalMilliseconds}ms");
                 }
                 this.Logger.WriteLine("--------------------------------------------------------------------------------------------------------- Fishing With Git call done.");
                 if (this.Logger.ShouldLogToFile)

@@ -27,8 +27,7 @@ namespace FishingWithGit.Tester
                     //item.RemoveFromPath();
                     BaseWrapper wrapper = new BaseWrapper(args);
                     wrapper.Logger.AlwaysLog = true;
-                    var result = await wrapper.Wrap();
-                    sw.Stop();
+                    var result = await wrapper.Wrap(sw);
                     System.Console.WriteLine($"DONE OVERALL   Took {sw.ElapsedMilliseconds}ms");
                 }
                 catch (Exception ex)
