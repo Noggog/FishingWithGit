@@ -17,6 +17,8 @@ namespace FishingWithGit
         List<string> args;
         Stopwatch overallSw;
         TimeSpan actualCommandSpan;
+        TimeSpan preHookSpan;
+        TimeSpan postHookSpan;
         public Logger Logger = new Logger("FishingWithGit");
         public Lazy<DirectoryInfo> MassHookDir = new Lazy<DirectoryInfo>(() =>
         {
@@ -70,7 +72,9 @@ namespace FishingWithGit
                     else
                     {
                         this.Logger.WriteLine("Firing prehooks.");
+                        var startTime = overallSw.Elapsed;
                         int? hookExitCode = await hook.PreCommand();
+                        preHookSpan = overallSw.Elapsed - startTime;
                         this.Logger.WriteLine("Fired prehooks.");
                         if (0 != (hookExitCode ?? 0))
                         {
@@ -100,7 +104,9 @@ namespace FishingWithGit
                     && hook != null)
                 {
                     this.Logger.WriteLine("Firing posthooks.");
+                    var startTime = overallSw.Elapsed;
                     int? hookExitCode = await hook.PostCommand();
+                    postHookSpan = overallSw.Elapsed - startTime;
                     this.Logger.WriteLine("Fired posthooks.");
                     if (0 != (hookExitCode ?? 0))
                     {
@@ -122,10 +128,19 @@ namespace FishingWithGit
             {
                 overallSw.Stop();
                 this.Logger.WriteLine($"Command overall took {overallSw.ElapsedMilliseconds}ms.");
+                if (preHookSpan.TotalMilliseconds > 0)
+                {
+                    this.Logger.WriteLine($"Pre hook took {preHookSpan.TotalMilliseconds}ms.");
+                }
                 if (actualCommandSpan.TotalMilliseconds > 0)
                 {
-                    this.Logger.WriteLine($"Actual git command took {actualCommandSpan.TotalMilliseconds}ms.  Fishing With Git and Hooks took {overallSw.ElapsedMilliseconds - actualCommandSpan.TotalMilliseconds}ms");
+                    this.Logger.WriteLine($"Actual git command took {actualCommandSpan.TotalMilliseconds}ms.");
                 }
+                if (postHookSpan.TotalMilliseconds > 0)
+                {
+                    this.Logger.WriteLine($"Post hook took {postHookSpan.TotalMilliseconds}ms.");
+                }
+                this.Logger.WriteLine($"Fishing With Git took {overallSw.ElapsedMilliseconds - preHookSpan.TotalMilliseconds - actualCommandSpan.TotalMilliseconds - postHookSpan.TotalMilliseconds}ms.");
                 this.Logger.WriteLine("--------------------------------------------------------------------------------------------------------- Fishing With Git call done.");
                 if (this.Logger.ShouldLogToFile)
                 {
