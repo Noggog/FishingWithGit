@@ -11,6 +11,7 @@ namespace FishingWithGit
     {
         public string OriginalTipSha;
         public string LandingSha;
+        public bool Skip;
         public bool Silent => false;
 
         public RebaseInProgressArgs()
@@ -19,6 +20,13 @@ namespace FishingWithGit
 
         public RebaseInProgressArgs(string[] args, int startingIndex = 0)
         {
+            if (args.Length < 1 + startingIndex)
+            {
+                throw new ArgumentException("An argument was expected but did not exist");
+            }
+            this.Skip = "--skip".Equals(args[0]);
+            if (Skip) return;
+
             if (args.Length < 2 + startingIndex)
             {
                 throw new ArgumentException("An argument was expected but did not exist");

@@ -52,22 +52,33 @@ namespace FishingWithGit
         {
             using (var repo = new Repository(repoDir.FullName))
             {
-                var targetBranch = repo.Branches[args[commandIndex + 1]];
-                if (targetBranch == null)
-                {
-                    throw new ArgumentException($"Target branch did not exist {args[commandIndex + 1]}");
-                }
                 var rebaseArgs = new RebaseArgs(
                     new string[]
                     {
                         args[commandIndex + 1]
                     });
-                var rebasePostArgs = new RebaseInProgressArgs(
-                    new string[]
+                RebaseInProgressArgs rebasePostArgs;
+                if (rebaseArgs.Skip)
+                {
+                    rebasePostArgs = new RebaseInProgressArgs()
                     {
-                        repo.Head.Tip.Sha,
-                        targetBranch.Tip.Sha
-                    });
+                        Skip = true
+                    };
+                }
+                else
+                {
+                    var targetBranch = repo.Branches[args[commandIndex + 1]];
+                    if (targetBranch == null)
+                    {
+                        throw new ArgumentException($"Target branch did not exist {args[commandIndex + 1]}");
+                    }
+                    rebasePostArgs = new RebaseInProgressArgs(
+                        new string[]
+                        {
+                            repo.Head.Tip.Sha,
+                            targetBranch.Tip.Sha
+                        });
+                }
                 return new RebaseHooks(
                     wrapper,
                     Type.Normal,

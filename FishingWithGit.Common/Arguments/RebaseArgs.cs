@@ -10,6 +10,7 @@ namespace FishingWithGit
     public class RebaseArgs : IGitHookArgs
     {
         public string TargetBranch;
+        public bool Skip;
         public bool Silent => false;
 
         public RebaseArgs()
@@ -23,7 +24,11 @@ namespace FishingWithGit
                 throw new ArgumentException("An argument was expected but did not exist");
             }
 
-            this.TargetBranch = args[0];
+            this.Skip = "--skip".Equals(args[0]);
+            if (!Skip)
+            {
+                this.TargetBranch = args[0];
+            }
         }
 
         public IEnumerator<string> GetEnumerator()
