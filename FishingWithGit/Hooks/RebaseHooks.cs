@@ -67,17 +67,30 @@ namespace FishingWithGit
                 }
                 else
                 {
+
                     var targetBranch = repo.Branches[args[commandIndex + 1]];
-                    if (targetBranch == null)
+                    if (targetBranch != null)
                     {
-                        throw new ArgumentException($"Target branch did not exist {args[commandIndex + 1]}");
+                        rebasePostArgs = new RebaseInProgressArgs(
+                            new string[]
+                            {
+                                repo.Head.Tip.Sha,
+                                targetBranch.Tip.Sha
+                            });
                     }
-                    rebasePostArgs = new RebaseInProgressArgs(
-                        new string[]
-                        {
-                            repo.Head.Tip.Sha,
-                            targetBranch.Tip.Sha
-                        });
+                    else if (repo.Lookup<Commit>(args[commandIndex + 1]) is Commit targetCommit)
+                    {
+                        rebasePostArgs = new RebaseInProgressArgs(
+                            new string[]
+                            {
+                                repo.Head.Tip.Sha,
+                                targetCommit.Sha
+                            });
+                    }
+                    else
+                    {
+                        throw new ArgumentException($"Target branch or sha did not exist {args[commandIndex + 1]}");
+                    }
                 }
                 return new RebaseHooks(
                     wrapper,

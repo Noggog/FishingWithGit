@@ -23,7 +23,7 @@ namespace FishingWithGit.Tests.Arguments
         public static void BasicArgs()
         {
             var args = new RebaseArgs(GetBasicOutgoingArgs());
-            Assert.Equal(TARGET_BRANCH, args.TargetBranch);
+            Assert.Equal(TARGET_BRANCH, args.Target);
         }
 
         public static string[] GetSourceTreeInboundArgs()
