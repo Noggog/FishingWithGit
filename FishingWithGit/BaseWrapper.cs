@@ -58,11 +58,14 @@ namespace FishingWithGit
                 this.Logger.WriteLine($"Command: {commandType.ToString()}", writeToConsole: null);
                 ProcessArgs();
                 GetMainCommand(out commandIndex);
+                this.Logger.WriteLine($"Working directory {Directory.GetCurrentDirectory()}.  Elapsed: {overallSw.ElapsedMilliseconds}ms");
                 if (!GetStartInfo(out var startInfo)) return -1;
+                this.Logger.WriteLine($"Getting hook.  Elapsed: {overallSw.ElapsedMilliseconds}ms");
                 HookSet hook = GetHook();
                 this.Logger.ConsoleSilent = hook?.Args.Silent ?? true;
-                this.Logger.WriteLine($"Silent?: {this.Logger.ConsoleSilent}");
+                this.Logger.WriteLine($"Starting logs.  Elapsed: {overallSw.ElapsedMilliseconds}ms");
                 this.Logger.ActivateAndFlushLogging();
+                this.Logger.WriteLine($"Silent?: {this.Logger.ConsoleSilent}.  Elapsed: {overallSw.ElapsedMilliseconds}ms");
                 if (Properties.Settings.Default.FireHookLogic)
                 {
                     if (hook == null)
@@ -161,21 +164,13 @@ namespace FishingWithGit
             return false;
         }
 
-        void GetCommandInfo(bool yell = false)
+        void GetCommandInfo()
         {
             string cmdStr = GetMainCommand(out commandIndex);
             if (commandIndex == -1)
             {
                 commandType = CommandType.unknown;
-                if (yell)
-                {
-                    this.Logger.WriteLine("No command found.");
-                    throw new ArgumentException("No command found.");
-                }
-                else
-                {
-                    return;
-                }
+                return;
             }
             if (!CommandTypeExt.TryParse(cmdStr, out commandType))
             {
@@ -186,6 +181,7 @@ namespace FishingWithGit
 
         async Task<int> RunActualGit(ProcessStartInfo startInfo)
         {
+            this.Logger.WriteLine($"Running actual command.  Elapsed: {overallSw.ElapsedMilliseconds}ms");
             var startTime = overallSw.Elapsed;
             int exitCode = await RunProcess(startInfo, hookIO: true);
             var endTime = overallSw.Elapsed;
@@ -197,7 +193,6 @@ namespace FishingWithGit
         {
             startInfo = new ProcessStartInfo();
             startInfo.Arguments = string.Join(" ", args);
-            this.Logger.WriteLine("Working directory " + Directory.GetCurrentDirectory());
             if (!GetGitPath(out var gitFile))
             {
                 this.Logger.WriteLine("Could not find git install.");
@@ -231,7 +226,7 @@ namespace FishingWithGit
             }
 
             // Query PATH for viable git installs
-            this.Logger.WriteLine("Querying PATH", writeToConsole: false);
+            this.Logger.WriteLine($"Querying PATH. Elapsed: {overallSw.ElapsedMilliseconds}ms", writeToConsole: false);
             string pathStr = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
             string[] paths = pathStr.Split(';');
             foreach (var path in paths)
