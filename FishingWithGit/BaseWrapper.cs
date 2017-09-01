@@ -126,7 +126,6 @@ namespace FishingWithGit
             finally
             {
                 overallSw.Stop();
-                this.Logger.WriteLine($"Command overall took {overallSw.ElapsedMilliseconds}ms.");
                 if (preHookSpan.TotalMilliseconds > 0)
                 {
                     this.Logger.WriteLine($"Pre hook took {preHookSpan.TotalMilliseconds}ms.");
@@ -140,6 +139,7 @@ namespace FishingWithGit
                     this.Logger.WriteLine($"Post hook took {postHookSpan.TotalMilliseconds}ms.");
                 }
                 this.Logger.WriteLine($"Fishing With Git took {overallSw.ElapsedMilliseconds - preHookSpan.TotalMilliseconds - actualCommandSpan.TotalMilliseconds - postHookSpan.TotalMilliseconds}ms.");
+                this.Logger.WriteLine($"Command overall took {overallSw.ElapsedMilliseconds}ms.");
                 this.Logger.WriteLine("--------------------------------------------------------------------------------------------------------- Fishing With Git call done.");
                 if (this.Logger.ShouldLogToFile)
                 {
