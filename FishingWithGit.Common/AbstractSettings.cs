@@ -57,15 +57,8 @@ namespace FishingWithGit.Common
             return true;
         }
 
-        public static bool GetXMLRelativeToExe(string path, out XElement elem)
+        public static XElement GetXML(FileInfo file)
         {
-            if (!GetSettingsRelativeToExe(path, out var file)
-                || !file.Exists)
-            {
-                elem = default(XElement);
-                return false;
-            }
-            
             XDocument xml;
             using (var stream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read))
             {
@@ -74,8 +67,7 @@ namespace FishingWithGit.Common
                     xml = XDocument.Parse(reader.ReadToEnd());
                 }
             }
-            elem = xml.Root;
-            return true;
+            return xml.Root;
         }
     }
 }

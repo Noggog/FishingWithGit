@@ -16,7 +16,7 @@ namespace FishingWithGit
         public static Settings Instance => GetSettings();
         public const string XMLNamespace = "http://tempuri.org/FishingWithGitSettings.xsd";
 
-        public string RealGitProgramPath;
+        public string RealGitProgramPath = string.Empty;
         public bool ShouldLog = true;
         public byte WipeLogsOlderThanDays = 1;
         public bool FireHookLogic = true;
@@ -26,9 +26,10 @@ namespace FishingWithGit
         public bool PrintSeparateArgs = false;
         public bool RunMassHooks = true;
         public string MassHookFolder = @"..\Mass Hooks\";
-        public string RealGitProgramPathOverride;
+        public string RealGitProgramPathOverride = string.Empty;
         public bool RunInRepoHooks = false;
         public bool RunNormalFolderHooks = true;
+        public string PathLoadedFrom;
 
         Settings()
         {
@@ -45,13 +46,20 @@ namespace FishingWithGit
 
         private static Settings CreateSettings()
         {
-            if (!GetXMLRelativeToExe("FishingWithGitSettings.xml", out var xml))
+            if (!GetSettingsRelativeToExe("FishingWithGitSettings.xml", out var file)
+                || !file.Exists)
             {
-                return new Settings();
+                return new Settings()
+                {
+                    PathLoadedFrom = file.FullName
+                };
             }
+
+            var xml = GetXML(file);
             
             var ret = new Settings()
             {
+                PathLoadedFrom = file.FullName,
                 RealGitProgramPath = GetString(xml, XName.Get(nameof(RealGitProgramPath), XMLNamespace), string.Empty),
                 ShouldLog = GetBool(xml, XName.Get(nameof(ShouldLog), XMLNamespace), true),
                 WipeLogsOlderThanDays = GetByte(xml, XName.Get(nameof(WipeLogsOlderThanDays), XMLNamespace), 1),
@@ -76,6 +84,7 @@ namespace FishingWithGit
                 return false;
             }
 
+            this.PathLoadedFrom = file.FullName;
             XDocument doc = new XDocument();
             doc.Add(new XElement(XName.Get("FishingWithGitSettings", XMLNamespace)));
             doc.Root.Add(new XElement(XName.Get(nameof(RealGitProgramPath), XMLNamespace), new XAttribute(VALUE, this.RealGitProgramPath)));

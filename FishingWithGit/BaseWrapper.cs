@@ -36,6 +36,7 @@ namespace FishingWithGit
                 if (HandleIsFishing()) return 0;
                 overallSw.Start();
                 this.Logger.WriteLine(DateTime.Now.ToString());
+                this.Logger.WriteLine($"Settings loaded from: {Settings.Instance.PathLoadedFrom}");
                 this.Logger.WriteLine("Arguments:");
                 if (Settings.Instance.PrintSeparateArgs)
                 {
@@ -237,17 +238,27 @@ namespace FishingWithGit
                         if (Utility.TestIfFishingEXE(file.FullName)) continue;
 
                         // Probably a real git install
+                        this.Logger.WriteLine($"Found git install at {file.FullName}. Elapsed: {overallSw.ElapsedMilliseconds}ms", writeToConsole: false);
                         gitFile = file;
+                        Settings.Instance.RealGitProgramPath = file.FullName;
                         try
                         {
-                            Settings.Instance.RealGitProgramPath = file.FullName;
+                            if (!Settings.Instance.SaveSettings())
+                            {
+                                this.Logger.WriteLine(
+                                    $"Could not save settings to {Settings.Instance.PathLoadedFrom}",
+                                    error: false);
+                            }
+                            else
+                            {
+                                this.Logger.WriteLine($"Saved settings to {Settings.Instance.PathLoadedFrom}");
+                            }
                         }
                         catch (Exception ex)
                         {
                             this.Logger.WriteLine(
                                 $"Error saving settings. {ex}",
-                                error: false,
-                                writeToConsole: null);
+                                error: false);
                         }
                         return true;
                     }
