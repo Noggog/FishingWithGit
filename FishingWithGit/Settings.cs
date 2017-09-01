@@ -15,6 +15,7 @@ namespace FishingWithGit
         private static Settings _settings;
         public static Settings Instance => GetSettings();
         public const string XMLNamespace = "http://tempuri.org/FishingWithGitSettings.xsd";
+        public const string SavePath = "FishingWithGit/FishingWithGitSettings.xml";
 
         public string RealGitProgramPath = string.Empty;
         public bool ShouldLog = true;
@@ -46,7 +47,7 @@ namespace FishingWithGit
 
         private static Settings CreateSettings()
         {
-            if (!GetSettingsRelativeToExe("FishingWithGitSettings.xml", out var file)
+            if (!GetSettingsLocation(SavePath, out var file)
                 || !file.Exists)
             {
                 return new Settings()
@@ -77,10 +78,11 @@ namespace FishingWithGit
             return ret;
         }
 
-        public bool SaveSettings()
+        public bool SaveSettings(out string err)
         {
-            if (!GetSettingsRelativeToExe("FishingWithGitSettings.xml", out var file))
+            if (!GetSettingsLocation(SavePath, out var file))
             {
+                err = "Could not locate target.";
                 return false;
             }
 
@@ -101,12 +103,18 @@ namespace FishingWithGit
             doc.Root.Add(new XElement(XName.Get(nameof(RunNormalFolderHooks), XMLNamespace), new XAttribute(VALUE, this.RunNormalFolderHooks)));
             try
             {
+                if (!file.Directory.Exists)
+                {
+                    file.Directory.Create();
+                }
                 doc.Save(file.FullName);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                err = ex.ToString();
                 return false;
             }
+            err = string.Empty;
             return true;
         }
     }

@@ -243,10 +243,10 @@ namespace FishingWithGit
                         Settings.Instance.RealGitProgramPath = file.FullName;
                         try
                         {
-                            if (!Settings.Instance.SaveSettings())
+                            if (!Settings.Instance.SaveSettings(out var err))
                             {
                                 this.Logger.WriteLine(
-                                    $"Could not save settings to {Settings.Instance.PathLoadedFrom}",
+                                    $"Could not save settings to {Settings.Instance.PathLoadedFrom}: {err}",
                                     error: false);
                             }
                             else

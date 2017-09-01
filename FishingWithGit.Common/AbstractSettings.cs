@@ -43,15 +43,10 @@ namespace FishingWithGit.Common
             return val;
         }
 
-        public static bool GetSettingsRelativeToExe(string path, out FileInfo file)
+        public static bool GetSettingsLocation(string path, out FileInfo file)
         {
-            var assemb = System.Reflection.Assembly.GetEntryAssembly();
-            if (assemb == null)
-            {
-                file = default(FileInfo);
-                return false;
-            }
-            var exe = new FileInfo(assemb.Location);
+            var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var exe = new FileInfo(localAppData);
             var fullPath = Path.Combine(exe.Directory.FullName, path);
             file = new FileInfo(fullPath);
             return true;
