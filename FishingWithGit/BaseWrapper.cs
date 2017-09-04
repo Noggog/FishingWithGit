@@ -36,7 +36,7 @@ namespace FishingWithGit
                 if (HandleIsFishing()) return 0;
                 overallSw.Start();
                 this.Logger.WriteLine(DateTime.Now.ToString());
-                this.Logger.WriteLine($"Settings loaded from: {Settings.Instance.PathLoadedFrom}");
+                this.Logger.WriteLine($"Settings loaded from: {Settings.Instance.PathLoadedFrom}.  Elapsed: {overallSw.ElapsedMilliseconds}ms");
                 this.Logger.WriteLine("Arguments:");
                 if (Settings.Instance.PrintSeparateArgs)
                 {
@@ -503,16 +503,12 @@ namespace FishingWithGit
             if (!file.Exists) return 0;
 
             this.Logger.WriteLine($"Firing Named Bash Hook {location} {type.HookName()} with args: {string.Join(" ", args)}", writeToConsole: null);
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
+            var start = overallSw.Elapsed;
             var exitCode = await RunProcess(
                 SetArgumentsOnStartInfo(
                     new ProcessStartInfo(file.FullName, string.Join(" ", args))),
                 hookIO: !this.Logger.ConsoleSilent);
-
-            sw.Stop();
-            this.Logger.WriteLine($"Fired Named Bash Hook {location} {type.HookName()}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
+            this.Logger.WriteLine($"Fired Named Bash Hook {location} {type.HookName()}.  Took {(overallSw.Elapsed - start).TotalMilliseconds}ms", writeToConsole: null);
             return exitCode;
         }
 
@@ -530,16 +526,12 @@ namespace FishingWithGit
                 if (HookTypeExt.IsHookName(rawName)) continue;
 
                 this.Logger.WriteLine($"Firing Untied Bash Hook {location} {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: null);
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-
+                var start = overallSw.Elapsed;
                 var exitCode = await this.RunProcess(
                     SetArgumentsOnStartInfo(
                         new ProcessStartInfo(file.FullName, string.Join(" ", args))),
                     hookIO: !this.Logger.ConsoleSilent);
-
-                sw.Stop();
-                this.Logger.WriteLine($"Fired Untied Bash Hook {location} {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
+                this.Logger.WriteLine($"Fired Untied Bash Hook {location} {type.HookName()} {file.Name}.  Took {(overallSw.Elapsed - start).TotalMilliseconds}ms", writeToConsole: null);
                 if (exitCode != 0)
                 {
                     return exitCode;
@@ -564,16 +556,12 @@ namespace FishingWithGit
             if (!file.Exists) return 0;
 
             this.Logger.WriteLine($"Firing Named Exe Hook {location} {type.HookName()} with args: {string.Join(" ", args)}", writeToConsole: null);
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
+            var start = overallSw.Elapsed;
             var exitCode = await this.RunProcess(
                 SetArgumentsOnStartInfo(
                     new ProcessStartInfo(file.FullName, string.Join(" ", args))),
                 hookIO: !this.Logger.ConsoleSilent);
-
-            sw.Stop();
-            this.Logger.WriteLine($"Fired Named Exe Hook {location} {type.HookName()}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
+            this.Logger.WriteLine($"Fired Named Exe Hook {location} {type.HookName()}.  Took {(overallSw.Elapsed - start).TotalMilliseconds}ms", writeToConsole: null);
             return exitCode;
         }
 
@@ -591,9 +579,7 @@ namespace FishingWithGit
                     if (HookTypeExt.IsHookName(rawName)) continue;
 
                     this.Logger.WriteLine($"Firing Untied Exe Hook {location} {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: null);
-                    Stopwatch sw = new Stopwatch();
-                    sw.Start();
-
+                    var start = overallSw.Elapsed;
                     var newArgs = new string[args.Length + 2];
                     newArgs[0] = type.HookName();
                     newArgs[1] = type.CommandString();
@@ -603,9 +589,7 @@ namespace FishingWithGit
                         SetArgumentsOnStartInfo(
                             new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))),
                         hookIO: !this.Logger.ConsoleSilent);
-
-                    sw.Stop();
-                    this.Logger.WriteLine($"Fired Untied Exe Hook {location} {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
+                    this.Logger.WriteLine($"Fired Untied Exe Hook {location} {type.HookName()} {file.Name}.  Took {(overallSw.Elapsed - start).TotalMilliseconds}ms", writeToConsole: null);
                     if (exitCode != 0)
                     {
                         return exitCode;
@@ -634,9 +618,7 @@ namespace FishingWithGit
                 if (HookTypeExt.IsHookName(rawName)) continue;
 
                 this.Logger.WriteLine($"Firing Mass Exe Hook {type.HookName()} {file.Name} with args: {string.Join(" ", args)}", writeToConsole: null);
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-
+                var start = overallSw.Elapsed;
                 var newArgs = new string[args.Length + 2];
                 newArgs[0] = type.HookName();
                 newArgs[1] = type.CommandString();
@@ -646,9 +628,7 @@ namespace FishingWithGit
                     SetArgumentsOnStartInfo(
                         new ProcessStartInfo(file.FullName, string.Join(" ", newArgs))),
                     hookIO: !this.Logger.ConsoleSilent);
-
-                sw.Stop();
-                this.Logger.WriteLine($"Fired Mass Exe Hook {type.HookName()} {file.Name}.  Took {sw.ElapsedMilliseconds}ms", writeToConsole: null);
+                this.Logger.WriteLine($"Fired Mass Exe Hook {type.HookName()} {file.Name}.  Took {(overallSw.Elapsed - start).TotalMilliseconds}ms", writeToConsole: null);
                 if (exitCode != 0)
                 {
                     return exitCode;
