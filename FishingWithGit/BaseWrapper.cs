@@ -35,7 +35,6 @@ namespace FishingWithGit
             {
                 if (HandleIsFishing()) return 0;
                 overallSw.Start();
-                this.Logger.WriteLine(DateTime.Now.ToString());
                 this.Logger.WriteLine($"Settings loaded from: {Settings.Instance.PathLoadedFrom}.  Elapsed: {overallSw.ElapsedMilliseconds}ms");
                 this.Logger.WriteLine("Arguments:");
                 if (Settings.Instance.PrintSeparateArgs)

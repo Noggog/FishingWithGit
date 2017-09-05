@@ -31,6 +31,7 @@ namespace FishingWithGit.Common
             {
                 Message = line,
                 ToConsole = writeToConsole,
+                Date = DateTime.Now,
                 Error = error
             });
         }
@@ -50,7 +51,7 @@ namespace FishingWithGit.Common
                         System.Console.WriteLine(item.Message);
                     }
                 }
-                sb.AppendLine(item.Message);
+                sb.AppendLine($"{item.Date.ToString("MM/dd HH:mm:ss.fff")}: {item.Message}");
             }
             else
             {

@@ -10,6 +10,7 @@ namespace FishingWithGit.Common
     {
         public string Message;
         public bool Error;
+        public DateTime Date;
         public bool? ToConsole;
     }
 }
