@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -67,7 +68,7 @@ namespace FishingWithGit.Common
             logBuffer.Clear();
         }
 
-        public void LogResults()
+        public void LogResults(Stopwatch sw, string appName)
         {
             try
             {
@@ -91,6 +92,7 @@ namespace FishingWithGit.Common
                 using (StreamWriter writer = File.AppendText(filePath))
                 {
                     writer.WriteLine(sb.ToString());
+                    writer.WriteLine($"------------------------------------  Elapsed {sw.ElapsedMilliseconds}ms ---------------------------------------------------- {appName} done.");
                 }
             }
             catch (Exception)

@@ -140,10 +140,9 @@ namespace FishingWithGit
                 }
                 this.Logger.WriteLine($"Fishing With Git took {overallSw.ElapsedMilliseconds - preHookSpan.TotalMilliseconds - actualCommandSpan.TotalMilliseconds - postHookSpan.TotalMilliseconds}ms.");
                 this.Logger.WriteLine($"Command overall took {overallSw.ElapsedMilliseconds}ms.");
-                this.Logger.WriteLine("--------------------------------------------------------------------------------------------------------- Fishing With Git call done.");
                 if (this.Logger.ShouldLogToFile)
                 {
-                    this.Logger.LogResults();
+                    this.Logger.LogResults(overallSw, "Fishing With Git");
                 }
             }
         }
@@ -283,13 +282,18 @@ namespace FishingWithGit
             {
                 throw new ArgumentException("File does not exist: " + file.FullName);
             }
+            var start = overallSw.Elapsed;
             using (var process = Process.Start(startInfo))
             {
-                List<Task> tasks = new List<Task>(3);
-                tasks.Add(Task.Run(() => process.WaitForExit()));
+                List<Task> tasks = new List<Task>(2);
+                tasks.Add(Task.Run(() =>
+                {
+                    process.WaitForExit();
+                    this.Logger.WriteLine($"Exited process. Elapsed: {(overallSw.Elapsed - start).TotalMilliseconds}ms", writeToConsole: false);
+                }));
                 if (hookIO)
                 {
-                    await TypicalHookIO(process);
+                    tasks.Add(TypicalHookIO(process));
                 }
                 var task = Task.WhenAll(tasks);
                 if (task != await Task.WhenAny(task, Task.Delay(Settings.Instance.ProcessTimeoutWarning)))
@@ -308,11 +312,12 @@ namespace FishingWithGit
             }
         }
 
-        private Task TypicalHookIO(Process proccess)
+        private async Task TypicalHookIO(Process proccess)
         {
             bool firstStandard = true;
             bool firstErr = true;
-            return HookIO(
+            var start = overallSw.Elapsed;
+            await HookIO(
                 proccess,
                 standard: (result) =>
                 {
@@ -338,6 +343,7 @@ namespace FishingWithGit
                         this.Logger.WriteLine(result, writeToConsole: true, error: true);
                     }
                 });
+            this.Logger.WriteLine($"Done reading IO.  Elapsed: {(overallSw.Elapsed - start).TotalMilliseconds}ms");
         }
 
         private Task HookIO(Process process, Action<string> standard, Action<string> err)
