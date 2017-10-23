@@ -11,6 +11,7 @@ namespace FishingWithGit
     {
         public string TargetBranch;
         public bool Deleting;
+        public bool Remote;
         public bool Silent
         {
             get
@@ -30,8 +31,12 @@ namespace FishingWithGit
                 return;
             }
 
-            this.TargetBranch = args[0];
+            if (!args[0].StartsWith("-"))
+            {
+                this.TargetBranch = args[0];
+            }
             this.Deleting = args.Contains("-D");
+            this.Remote = args.Contains("-r");
         }
 
         public IEnumerator<string> GetEnumerator()
