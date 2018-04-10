@@ -50,7 +50,7 @@ namespace FishingWithGit
 
         private static CheckoutArgs RetrieveNewArgs(List<string> args, DirectoryInfo repoDir, int commandIndex)
         {
-            string curSha, targetSha;
+            string curSha, targetSha, branchName;
             var argsList = args.ToList();
             var trackIndex = argsList.IndexOf("--track");
             using (var repo = new Repository(repoDir.FullName))
@@ -63,7 +63,9 @@ namespace FishingWithGit
                     {
                         throw new ArgumentException("Cannot run checkout hooks, as args are invald.  No branch name was found.");
                     }
-                    targetSha = GetTargetSha(repo, args[nameIndex]);
+                    var arg = args[nameIndex];
+                    targetSha = GetTargetSha(repo, arg);
+                    branchName = arg.Length == Constants.SHA_LENGTH ? null : arg;
                 }
                 else
                 { // Checking out a remote branch
@@ -72,7 +74,9 @@ namespace FishingWithGit
                         throw new ArgumentException($"Could not locate target remote branch name.");
                     }
 
-                    targetSha = GetTargetSha(repo, args[trackIndex + 1]);
+                    var arg = args[trackIndex + 1];
+                    targetSha = GetTargetSha(repo, arg);
+                    branchName = arg.Length == Constants.SHA_LENGTH ? null : arg;
                 }
             }
 
@@ -80,7 +84,8 @@ namespace FishingWithGit
                 new string[]
                 {
                     curSha,
-                    targetSha
+                    targetSha,
+                    branchName,
                 });
         }
 

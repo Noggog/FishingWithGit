@@ -10,6 +10,7 @@ namespace FishingWithGit
 {
     public class CheckoutArgs : IGitHookArgs
     {
+        public string BranchName;
         public string CurrentSha;
         public string TargetSha;
         public bool Silent => false;
@@ -36,12 +37,21 @@ namespace FishingWithGit
             {
                 throw new ArgumentException($"Checkout args for target sha was shorter than expected: {this.TargetSha.Length} {this.TargetSha}");
             }
+
+            if (args.Length >= 3)
+            {
+                this.BranchName = args[2];
+            }
         }
 
         public IEnumerator<string> GetEnumerator()
         {
             yield return CurrentSha;
             yield return TargetSha;
+            if (!string.IsNullOrWhiteSpace(this.BranchName))
+            {
+                yield return BranchName;
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
