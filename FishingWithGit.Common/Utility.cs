@@ -34,11 +34,11 @@ namespace FishingWithGit.Common
             return false;
         }
 
-        public static string StandardizePath(string path)
+        public static string StandardizePath(string path, string targetRelativePath)
         {
             if (path.StartsWith("../"))
             {
-                var f = new FileInfo(path);
+                var f = new FileInfo(Path.Combine(targetRelativePath, path));
                 path = f.FullName;
             }
             path = path.TrimEnd('\\');
