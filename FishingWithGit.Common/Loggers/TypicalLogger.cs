@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace FishingWithGit.Common
 {
-    public class Logger
+    public class TypicalLogger : ILogger
     {
         StringBuilder sb = new StringBuilder();
         bool logFlushed;
@@ -20,7 +20,7 @@ namespace FishingWithGit.Common
         public readonly string AppName;
         public bool ShouldLogToFile;
 
-        public Logger(string appName)
+        public TypicalLogger(string appName)
         {
             this.AppName = appName;
         }
